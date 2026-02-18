@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import FindRoommatePage from "./pages/FindRoommatePage";
 import PostRoomPage from "./pages/PostRoomPage";
 import ProfilePage from "./pages/ProfilePage";
+import DesignSystemPage from "./pages/DesignSystemPage";
 
 const pageVariants = {
     initial: { opacity: 0, y: 12 },
@@ -36,6 +37,7 @@ export default function App() {
                             <Route path="/post" element={<PostRoomPage />} />
                             <Route path="/profile" element={<ProfilePage />} />
                             <Route path="/profile/:id" element={<ProfilePage />} />
+                            <Route path="/design" element={<DesignSystemPage />} />
                         </Routes>
                     </motion.div>
                 </AnimatePresence>

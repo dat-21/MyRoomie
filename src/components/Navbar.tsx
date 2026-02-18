@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, Search, PlusCircle, User } from "lucide-react";
+import { Menu, X, Home, Search, PlusCircle, User, Palette } from "lucide-react";
 
 const navLinks = [
     { to: "/", label: "Home", icon: Home },
     { to: "/find", label: "Find Roommate", icon: Search },
     { to: "/post", label: "Post Room", icon: PlusCircle },
     { to: "/profile", label: "Profile", icon: User },
+    { to: "/design", label: "Design System", icon: Palette },
 ];
 
 export default function Navbar() {

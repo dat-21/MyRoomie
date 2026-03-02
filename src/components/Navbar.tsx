@@ -1,17 +1,22 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, Search, PlusCircle, User, Palette } from "lucide-react";
+import { Menu, X, Home, Search, PlusCircle, User, Palette, MessageCircle, Crown, Users, Building } from "lucide-react";
 
 const navLinks = [
     { to: "/", label: "Home", icon: Home },
     { to: "/find", label: "Find Roommate", icon: Search },
+    { to: "/rooms", label: "Rooms", icon: Building },
+    { to: "/matches", label: "Matches", icon: Users },
     { to: "/post", label: "Post Room", icon: PlusCircle },
-    { to: "/profile", label: "Profile", icon: User },
-    { to: "/design", label: "Design System", icon: Palette },
+    { to: "/premium", label: "Premium", icon: Crown },
 ];
 
-export default function Navbar() {
+interface NavbarProps {
+    onChatOpen?: () => void;
+}
+
+export default function Navbar({ onChatOpen }: NavbarProps) {
     const [mobileOpen, setMobileOpen] = useState(false);
     const location = useLocation();
 
@@ -53,15 +58,38 @@ export default function Navbar() {
                                 </Link>
                             );
                         })}
+
+                        {/* Chat button */}
+                        <button
+                            onClick={onChatOpen}
+                            className="relative ml-2 p-2 rounded-xl hover:bg-primary/10 transition-colors text-text-light hover:text-primary cursor-pointer border-0 bg-transparent"
+                            title="Messages"
+                        >
+                            <MessageCircle size={20} />
+                            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
+                                <span className="text-[9px] text-white font-bold">2</span>
+                            </span>
+                        </button>
                     </div>
 
                     {/* Mobile toggle */}
-                    <button
-                        onClick={() => setMobileOpen(!mobileOpen)}
-                        className="md:hidden p-2 rounded-xl hover:bg-primary/10 transition-colors text-text"
-                    >
-                        {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-                    </button>
+                    <div className="md:hidden flex items-center gap-2">
+                        <button
+                            onClick={onChatOpen}
+                            className="relative p-2 rounded-xl hover:bg-primary/10 transition-colors text-text cursor-pointer border-0 bg-transparent"
+                        >
+                            <MessageCircle size={20} />
+                            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
+                                <span className="text-[9px] text-white font-bold">2</span>
+                            </span>
+                        </button>
+                        <button
+                            onClick={() => setMobileOpen(!mobileOpen)}
+                            className="p-2 rounded-xl hover:bg-primary/10 transition-colors text-text cursor-pointer border-0 bg-transparent"
+                        >
+                            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -11,10 +12,17 @@ import {
     Users,
     MessageCircle,
     Home,
+    MapPin,
+    Eye,
+    ChevronRight,
+    BadgeCheck,
 } from "lucide-react";
 import { useInView } from "../hooks/useInView";
-import { roommates } from "../data/mockData";
-import RoommateCard from "../components/RoommateCard";
+import { roommates, rooms, formatCurrency } from "../data/mockData";
+import type { RoomListing } from "../data/mockData";
+import MatchCircle from "../components/MatchCircle";
+import Modal from "../components/Modal";
+import RoomDetailContent from "../components/RoomDetailContent";
 
 /* ─── Fade-in section wrapper ─── */
 function FadeSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -32,8 +40,92 @@ function FadeSection({ children, className = "", delay = 0 }: { children: React.
     );
 }
 
+/* ─── Nearby Room Item ─── */
+function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => void }) {
+    return (
+        <motion.button
+            whileHover={{ y: -2, scale: 1.01 }}
+            onClick={onClick}
+            className="w-full flex items-center gap-3 p-3 rounded-xl bg-transparent hover:bg-primary/5 hover:shadow-md hover:border-primary/20 border border-transparent transition-all cursor-pointer text-left"
+        >
+            <img
+                src={room.thumbnail}
+                alt={room.title}
+                className="w-20 h-16 rounded-xl object-cover flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+                <h4 className="text-sm font-semibold text-text truncate">{room.title}</h4>
+                <div className="flex items-center gap-1 text-text-muted mt-0.5">
+                    <MapPin size={11} />
+                    <span className="text-xs truncate">{room.district}</span>
+                </div>
+                <div className="flex items-center justify-between mt-1">
+                    <span className="text-xs font-semibold text-text">{formatCurrency(room.rent)}<span className="text-text-muted font-normal">/mo</span></span>
+                    <span className="text-[10px] text-text-muted">{room.distance}km away</span>
+                </div>
+            </div>
+            <div className="flex-shrink-0">
+                <MatchCircle value={room.matchScore} size="sm" />
+            </div>
+        </motion.button>
+    );
+}
+
+/* ─── Match Profile Item ─── */
+function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; index: number }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 + index * 0.1 }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="flex items-center gap-3 p-3 rounded-xl hover:bg-primary/5 hover:shadow-md border border-transparent hover:border-primary/20 transition-all"
+        >
+            <div className="relative flex-shrink-0">
+                <img src={roommate.avatar} alt={roommate.name} className="w-11 h-11 rounded-xl object-cover bg-primary/10" />
+                {roommate.verified && (
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-secondary rounded-full flex items-center justify-center">
+                        <BadgeCheck size={10} className="text-white" />
+                    </div>
+                )}
+            </div>
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-text truncate">{roommate.name}</span>
+                    <span className="text-[10px] text-text-muted">{roommate.age}y</span>
+                </div>
+                <p className="text-xs text-text-muted truncate">{roommate.occupation}</p>
+                <div className="flex flex-wrap gap-1 mt-1">
+                    {roommate.lifestyleTags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{tag}</span>
+                    ))}
+                    {roommate.lifestyleTags.length > 3 && (
+                        <span className="px-2 py-0.5 rounded-full bg-text-muted/10 text-text-muted text-[10px]">+{roommate.lifestyleTags.length - 3}</span>
+                    )}
+                </div>
+            </div>
+            <div className="flex flex-col items-center gap-1.5 flex-shrink-0">
+                <MatchCircle value={roommate.compatibility} size="sm" />
+                <Link to={`/profile/${roommate.id}`} onClick={(e) => e.stopPropagation()}>
+                    <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-r from-primary to-primary-light text-white text-[10px] font-medium cursor-pointer btn-glow"
+                    >
+                        <Eye size={10} /> View
+                    </motion.span>
+                </Link>
+            </div>
+        </motion.div>
+    );
+}
+
 /* ─── Hero ─── */
 function Hero() {
+    const [selectedRoom, setSelectedRoom] = useState<RoomListing | null>(null);
+    const topRooms = rooms.slice(0, 3);
+    const topMatches = [...roommates].sort((a, b) => b.compatibility - a.compatibility).slice(0, 3);
+
     return (
         <section className="relative min-h-[92vh] flex items-center overflow-hidden">
             {/* Animated background blobs */}
@@ -44,12 +136,13 @@ function Hero() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
-                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="grid lg:grid-cols-2 gap-12 items-start">
                     {/* Left */}
                     <motion.div
                         initial={{ opacity: 0, x: -40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8 }}
+                        className="pt-8"
                     >
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
@@ -111,28 +204,66 @@ function Hero() {
                         </div>
                     </motion.div>
 
-                    {/* Right — Preview cards */}
+                    {/* Right — 2 Stacked Cards */}
                     <motion.div
                         initial={{ opacity: 0, x: 40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="hidden lg:block relative"
+                        className="hidden lg:flex flex-col gap-5"
                     >
-                        <div className="space-y-4 max-w-md ml-auto">
-                            {roommates.slice(0, 2).map((r, i) => (
-                                <motion.div
-                                    key={r.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.6 + i * 0.2 }}
-                                >
-                                    <RoommateCard roommate={r} index={i} />
-                                </motion.div>
-                            ))}
-                        </div>
+                        {/* Card 1: Nearby Rooms */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="glass rounded-2xl overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between px-5 pt-4 pb-2">
+                                <h3 className="text-base font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
+                                    <Home size={16} className="text-primary" />
+                                    Nearby Rooms
+                                </h3>
+                                <Link to="/rooms" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
+                                    View All <ChevronRight size={14} />
+                                </Link>
+                            </div>
+                            <div className="px-3 pb-4 space-y-1">
+                                {topRooms.map((room) => (
+                                    <NearbyRoomItem key={room.id} room={room} onClick={() => setSelectedRoom(room)} />
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Card 2: Best Matches */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="glass rounded-2xl overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between px-5 pt-4 pb-2">
+                                <h3 className="text-base font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
+                                    <Users size={16} className="text-secondary" />
+                                    Best Matches
+                                </h3>
+                                <Link to="/matches" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
+                                    View All <ChevronRight size={14} />
+                                </Link>
+                            </div>
+                            <div className="px-3 pb-4 space-y-0.5">
+                                {topMatches.map((rm, i) => (
+                                    <MatchProfileItem key={rm.id} roommate={rm} index={i} />
+                                ))}
+                            </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             </div>
+
+            {/* Room Detail Modal */}
+            <Modal isOpen={!!selectedRoom} onClose={() => setSelectedRoom(null)} size="xl">
+                {selectedRoom && <RoomDetailContent room={selectedRoom} />}
+            </Modal>
         </section>
     );
 }

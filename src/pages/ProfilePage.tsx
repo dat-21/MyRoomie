@@ -17,9 +17,13 @@ import {
     Save,
     X,
     Heart,
+    UserPlus,
+    MessageCircle,
+    Check,
 } from "lucide-react";
 import { roommates, currentUser, formatCurrency, lifestyleOptions } from "../data/mockData";
 import { useCountUp } from "../hooks/useCountUp";
+import ChatPanel from "../components/ChatPanel";
 import type { Roommate } from "../data/mockData";
 
 /* ─── Preference item ─── */
@@ -71,6 +75,9 @@ function LargeCompatRing({ value }: { value: number }) {
 
 /* ─── Profile page for a roommate (view) ─── */
 function RoommateProfile({ person }: { person: Roommate }) {
+    const [connected, setConnected] = useState(false);
+    const [chatOpen, setChatOpen] = useState(false);
+
     return (
         <div className="min-h-screen pt-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -171,23 +178,44 @@ function RoommateProfile({ person }: { person: Roommate }) {
                     </div>
                 </motion.div>
 
-                {/* Contact CTA */}
+                {/* Connect / Message CTA */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="mt-6 flex justify-center"
+                    className="mt-6 flex justify-center gap-3"
                 >
-                    <motion.button
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.97 }}
-                        className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
-                    >
-                        <Heart size={18} />
-                        Connect with {person.name.split(" ")[0]}
-                    </motion.button>
+                    {connected ? (
+                        <>
+                            <span className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-secondary/10 text-secondary font-semibold text-base">
+                                <Check size={18} /> Connected
+                            </span>
+                            <motion.button
+                                whileHover={{ scale: 1.04 }}
+                                whileTap={{ scale: 0.97 }}
+                                onClick={() => setChatOpen(true)}
+                                className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
+                            >
+                                <MessageCircle size={18} />
+                                Message {person.name.split(" ")[0]}
+                            </motion.button>
+                        </>
+                    ) : (
+                        <motion.button
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => setConnected(true)}
+                            className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-secondary to-secondary-light text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
+                        >
+                            <UserPlus size={18} />
+                            Connect with {person.name.split(" ")[0]}
+                        </motion.button>
+                    )}
                 </motion.div>
             </div>
+
+            {/* Chat Panel */}
+            <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
         </div>
     );
 }
@@ -222,8 +250,8 @@ function OwnProfile() {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setEditing(!editing)}
                             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${editing
-                                    ? "bg-accent/10 text-accent"
-                                    : "bg-primary/10 text-primary"
+                                ? "bg-accent/10 text-accent"
+                                : "bg-primary/10 text-primary"
                                 }`}
                         >
                             {editing ? <X size={14} /> : <Pencil size={14} />}
@@ -299,8 +327,8 @@ function OwnProfile() {
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => toggleTag(tag)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer border-0 ${tags.includes(tag)
-                                            ? "bg-secondary text-white shadow-md"
-                                            : "bg-white/60 text-text-light hover:bg-secondary/10"
+                                        ? "bg-secondary text-white shadow-md"
+                                        : "bg-white/60 text-text-light hover:bg-secondary/10"
                                         }`}
                                 >
                                     {tag}

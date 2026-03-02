@@ -51,7 +51,7 @@ function LargeCompatRing({ value }: { value: number }) {
     return (
         <div className="relative w-32 h-32">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" strokeWidth="6" />
+                <circle cx="60" cy="60" r="54" fill="none" stroke="var(--color-divider)" strokeWidth="6" />
                 <circle
                     cx="60"
                     cy="60"

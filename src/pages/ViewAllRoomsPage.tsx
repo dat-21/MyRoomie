@@ -79,7 +79,7 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
                 <div className="flex items-center justify-between pt-2 border-t border-white/40">
                     <span className="text-sm font-bold text-text">{formatCurrency(room.rent)}<span className="text-xs font-normal text-text-muted">/mo</span></span>
                     <div className="flex items-center gap-1">
-                        <Star size={12} className="text-yellow-400 fill-yellow-400" />
+                        <Star size={12} className="text-gold fill-gold" />
                         <span className="text-xs font-medium text-text">{room.rating}</span>
                     </div>
                 </div>

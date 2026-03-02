@@ -25,13 +25,8 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
-                    <Link to="/" className="flex items-center gap-2 no-underline">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                            <span className="text-white font-bold text-sm font-[family-name:var(--font-family-heading)]">MR</span>
-                        </div>
-                        <span className="text-xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                            My <span className="text-primary">Roomie</span>
-                        </span>
+                    <Link to="/" className="flex-shrink-0 flex items-center no-underline">
+                        <img src="/logo(1).jpg" alt="My Roomie" className="h-14 w-auto object-contain" />
                     </Link>
 
                     {/* Desktop nav */}

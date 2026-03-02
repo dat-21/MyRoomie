@@ -223,8 +223,8 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                         )}
                                                         <div>
                                                             <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isMe
-                                                                    ? "bg-gradient-to-r from-secondary to-secondary-light text-white rounded-br-md"
-                                                                    : "bg-bg text-text rounded-bl-md"
+                                                                ? "bg-gradient-to-r from-secondary to-secondary-light text-white rounded-br-md"
+                                                                : "bg-bg text-text rounded-bl-md"
                                                                 }`}>
                                                                 {msg.text}
                                                             </div>
@@ -263,8 +263,8 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                 onClick={handleSend}
                                                 disabled={!newMessage.trim()}
                                                 className={`px-5 py-2.5 rounded-2xl font-medium text-sm flex items-center gap-2 cursor-pointer border-0 transition-all mb-0.5 ${newMessage.trim()
-                                                        ? "bg-gradient-to-r from-secondary to-secondary-light text-white shadow-md shadow-secondary/25"
-                                                        : "bg-gray-100 text-text-muted cursor-not-allowed"
+                                                    ? "bg-gradient-to-r from-secondary to-secondary-light text-white shadow-md shadow-secondary/25"
+                                                    : "bg-gray-100 text-text-muted cursor-not-allowed"
                                                     }`}
                                             >
                                                 Send <Send size={14} />

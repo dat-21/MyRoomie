@@ -22,7 +22,7 @@ function CompatibilityRing({ value, started }: { value: number; started: boolean
     return (
         <div className="relative w-16 h-16 flex-shrink-0">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="36" fill="none" stroke="#e5e7eb" strokeWidth="5" />
+                <circle cx="40" cy="40" r="36" fill="none" stroke="var(--color-divider)" strokeWidth="5" />
                 <circle
                     cx="40"
                     cy="40"

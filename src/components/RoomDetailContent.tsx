@@ -68,7 +68,7 @@ export default function RoomDetailContent({ room }: Props) {
                         {/* Title & Rating */}
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <Star size={16} className="text-yellow-400 fill-yellow-400" />
+                                <Star size={16} className="text-gold fill-gold" />
                                 <span className="text-sm font-semibold text-text">{room.rating}</span>
                                 <span className="text-sm text-text-muted">({room.reviewCount} reviews)</span>
                             </div>
@@ -150,7 +150,7 @@ export default function RoomDetailContent({ room }: Props) {
                         {/* Reviews */}
                         <div>
                             <div className="flex items-center gap-2 mb-3">
-                                <Star size={18} className="text-yellow-400 fill-yellow-400" />
+                                <Star size={18} className="text-gold fill-gold" />
                                 <span className="text-lg font-bold text-text">{room.rating}</span>
                                 <span className="text-text-muted">{room.reviewCount} reviews</span>
                             </div>

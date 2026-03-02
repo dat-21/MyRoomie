@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Spline Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #30e8ba;
+  --color-background-light: #f6f8f7;
+  --color-background-dark: #11211d;
+}
+
+@layer base {
+  body {
+    @apply bg-background-light text-slate-900 font-sans antialiased;
+  }
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.blob-bg {
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(48, 232, 186, 0.15) 0%, transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(48, 232, 186, 0.1) 0%, transparent 25%);
+}

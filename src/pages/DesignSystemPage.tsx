@@ -166,11 +166,11 @@ export default function DesignSystemPage() {
                                     Primary Colors
                                 </h3>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                                    <ColorSwatch name="Primary" hex="#4A90E2" variable="--color-primary" />
-                                    <ColorSwatch name="Primary Light" hex="#6BA5E9" variable="--color-primary-light" />
-                                    <ColorSwatch name="Primary Dark" hex="#3578C7" variable="--color-primary-dark" />
-                                    <ColorSwatch name="Secondary" hex="#2EC4B6" variable="--color-secondary" />
-                                    <ColorSwatch name="Accent" hex="#FF6B6B" variable="--color-accent" />
+                                    <ColorSwatch name="Primary" hex="#2A9D8F" variable="--color-primary" />
+                                    <ColorSwatch name="Primary Light" hex="#3AB5A6" variable="--color-primary-light" />
+                                    <ColorSwatch name="Primary Dark" hex="#1F7A6E" variable="--color-primary-dark" />
+                                    <ColorSwatch name="Secondary" hex="#5CC8B3" variable="--color-secondary" />
+                                    <ColorSwatch name="Accent" hex="#17B2A5" variable="--color-accent" />
                                 </div>
                             </div>
 
@@ -180,11 +180,11 @@ export default function DesignSystemPage() {
                                     Neutrals & Backgrounds
                                 </h3>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                                    <ColorSwatch name="Background" hex="#F7F9FC" variable="--color-bg" className="border border-gray-200" />
-                                    <ColorSwatch name="Card BG" hex="rgba(255,255,255,0.7)" variable="--color-bg-card" className="border border-gray-200" />
-                                    <ColorSwatch name="Text" hex="#1F2D3D" variable="--color-text" />
-                                    <ColorSwatch name="Text Light" hex="#5A6B7F" variable="--color-text-light" />
-                                    <ColorSwatch name="Text Muted" hex="#8B9CB5" variable="--color-text-muted" />
+                                    <ColorSwatch name="Background" hex="#F5FAF9" variable="--color-bg" className="border border-gray-200" />
+                                    <ColorSwatch name="Card BG" hex="rgba(255,255,255,0.72)" variable="--color-bg-card" className="border border-gray-200" />
+                                    <ColorSwatch name="Text" hex="#1A3C37" variable="--color-text" />
+                                    <ColorSwatch name="Text Light" hex="#4A6B65" variable="--color-text-light" />
+                                    <ColorSwatch name="Text Muted" hex="#8AA8A2" variable="--color-text-muted" />
                                 </div>
                             </div>
 

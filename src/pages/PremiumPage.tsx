@@ -63,7 +63,7 @@ function RoleTabs({ role, setRole }: { role: Role; setRole: (r: Role) => void })
                         {role === tab.id && (
                             <motion.div
                                 layoutId="roleTabBg"
-                                className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary via-purple-500 to-secondary"
+                                className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary to-secondary"
                                 transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                             />
                         )}
@@ -87,9 +87,9 @@ function PremiumHero({ role }: { role: Role }) {
         <section className="relative min-h-[60vh] flex items-center overflow-hidden">
             {/* Gradient blobs */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-gradient-to-br from-primary/30 to-purple-400/20 rounded-full blur-[150px] animate-pulse" />
-                <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-gradient-to-br from-secondary/20 to-purple-300/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
-                <div className="absolute bottom-0 left-1/2 w-[400px] h-[400px] bg-gradient-to-br from-purple-400/10 to-primary/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "3.5s" }} />
+                <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-gradient-to-br from-primary/30 to-primary-dark/20 rounded-full blur-[150px] animate-pulse" />
+                <div className="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-gradient-to-br from-secondary/20 to-primary-300/15 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: "2s" }} />
+                <div className="absolute bottom-0 left-1/2 w-[400px] h-[400px] bg-gradient-to-br from-accent/10 to-primary/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "3.5s" }} />
             </div>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
@@ -102,9 +102,9 @@ function PremiumHero({ role }: { role: Role }) {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 to-purple-400/10 text-primary text-sm font-medium mb-6 border border-primary/20"
+                        className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-medium mb-6 border border-primary/20"
                     >
-                        <Crown size={16} className="text-yellow-500" />
+                        <Crown size={16} className="text-accent" />
                         {isStudent ? "Gói Sinh viên" : "Gói Chủ trọ"}
                     </motion.div>
 
@@ -112,14 +112,14 @@ function PremiumHero({ role }: { role: Role }) {
                         {isStudent ? (
                             <>
                                 Tìm bạn cùng phòng{" "}
-                                <span className="bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
+                                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                                     hoàn hảo.
                                 </span>
                             </>
                         ) : (
                             <>
                                 Tiếp cận sinh viên{" "}
-                                <span className="bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
+                                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                                     nhanh hơn.
                                 </span>
                             </>
@@ -141,7 +141,7 @@ function PremiumHero({ role }: { role: Role }) {
                     >
                         {isStudent
                             ? [
-                                { icon: Bot, label: "AI Gợi ý thông minh", color: "text-purple-500" },
+                                { icon: Bot, label: "AI Gợi ý thông minh", color: "text-accent" },
                                 { icon: MessageCircle, label: "Nhắn tin không giới hạn", color: "text-secondary" },
                                 { icon: Shield, label: "Hồ sơ xác minh", color: "text-primary" },
                             ].map((item) => (
@@ -151,7 +151,7 @@ function PremiumHero({ role }: { role: Role }) {
                                 </div>
                             ))
                             : [
-                                { icon: Megaphone, label: "Đẩy tin trang nhất", color: "text-yellow-500" },
+                                { icon: Megaphone, label: "Đẩy tin trang nhất", color: "text-gold" },
                                 { icon: Unlock, label: "Mở khóa liên hệ", color: "text-accent" },
                                 { icon: TrendingUp, label: "Tăng tỷ lệ tiếp cận", color: "text-primary" },
                             ].map((item) => (
@@ -189,7 +189,7 @@ function StudentComparison() {
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Miễn phí vs <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Trả phí</span>
+                        Miễn phí vs <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trả phí</span>
                     </h2>
                     <p className="mt-3 text-text-light">Xem bạn đang bỏ lỡ gì</p>
                 </FadeSection>
@@ -199,7 +199,7 @@ function StudentComparison() {
                         <div className="grid grid-cols-3 text-center py-4 border-b border-white/20">
                             <div className="text-sm font-semibold text-text">Tính năng</div>
                             <div className="text-sm font-semibold text-text-muted">Miễn phí</div>
-                            <div className="text-sm font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Trả phí</div>
+                            <div className="text-sm font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trả phí</div>
                         </div>
                         {features.map((f, i) => {
                             const Icon = f.icon;
@@ -293,18 +293,18 @@ function StudentPricing() {
     return (
         <section className="py-20 relative">
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/10 to-purple-400/10 rounded-full blur-[150px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-[150px]" />
             </div>
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-50 text-purple-600 text-xs font-medium mb-4 border border-purple-200">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-dark text-xs font-medium mb-4 border border-primary-100">
                         <GraduationCap size={14} />
                         Dành cho Sinh viên
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
                         Mở khóa tính năng{" "}
-                        <span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Tìm bạn cùng phòng</span>
+                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Tìm bạn cùng phòng</span>
                     </h2>
                     <p className="mt-3 text-text-light">Nhắn tin, kết nối, tìm người phù hợp nhất</p>
                 </FadeSection>
@@ -321,7 +321,7 @@ function StudentPricing() {
                             >
                                 {plan.badge && (
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-primary to-purple-500 text-white text-xs font-semibold shadow-lg whitespace-nowrap">
+                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-xs font-semibold shadow-lg whitespace-nowrap">
                                             {plan.badge}
                                         </span>
                                     </div>
@@ -354,7 +354,7 @@ function StudentPricing() {
                                     </div>
                                     {plan.hasAI ? (
                                         <div className="flex items-center gap-2 text-sm text-text">
-                                            <Bot size={14} className="text-purple-500 flex-shrink-0" />
+                                            <Bot size={14} className="text-accent flex-shrink-0" />
                                             <span className="font-medium">AI gợi ý bạn cùng phòng</span>
                                         </div>
                                     ) : (
@@ -373,7 +373,7 @@ function StudentPricing() {
                                     whileHover={{ scale: 1.03 }}
                                     whileTap={{ scale: 0.97 }}
                                     className={`w-full py-3 rounded-2xl font-semibold text-sm cursor-pointer border-0 transition-all ${plan.popular
-                                        ? "bg-gradient-to-r from-primary via-purple-500 to-secondary text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 btn-glow premium-glow"
+                                        ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 btn-glow premium-glow"
                                         : "bg-primary/10 text-primary hover:bg-primary/20"
                                         }`}
                                 >
@@ -429,18 +429,18 @@ function LandlordBoostPricing() {
     return (
         <section className="py-20 relative">
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-yellow-200/15 to-orange-200/10 rounded-full blur-[150px]" />
+                <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-gold-light/15 to-gold/10 rounded-full blur-[150px]" />
             </div>
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-50 text-yellow-700 text-xs font-medium mb-4 border border-yellow-200">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/10 text-gold-dark text-xs font-medium mb-4 border border-gold-light/30">
                         <Megaphone size={14} />
                         Đẩy tin & Giữ trang nhất
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
                         Đẩy tin lên{" "}
-                        <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">trang nhất</span>
+                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">trang nhất</span>
                     </h2>
                     <p className="mt-3 text-text-light">Tin của bạn sẽ hiển thị ưu tiên, nổi bật hơn trong 24 giờ</p>
                 </FadeSection>
@@ -451,20 +451,20 @@ function LandlordBoostPricing() {
                             <motion.div
                                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
                                 className={`relative rounded-3xl p-6 transition-all duration-300 h-full flex flex-col ${plan.popular
-                                    ? "premium-glass border-2 border-yellow-400/30 shadow-xl shadow-yellow-500/10"
+                                    ? "premium-glass border-2 border-gold/30 shadow-xl shadow-gold/10"
                                     : "glass hover:shadow-lg"
                                     }`}
                             >
                                 {plan.badge && (
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold shadow-lg whitespace-nowrap">
+                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-gold to-gold-dark text-white text-xs font-semibold shadow-lg whitespace-nowrap">
                                             {plan.badge}
                                         </span>
                                     </div>
                                 )}
 
                                 <div className="text-center pt-2">
-                                    <Megaphone size={24} className="mx-auto text-yellow-500 mb-2" />
+                                    <Megaphone size={24} className="mx-auto text-gold mb-2" />
                                     <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)]">{plan.name}</h3>
                                     <div className="mt-3">
                                         <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
@@ -480,7 +480,7 @@ function LandlordBoostPricing() {
                                 <div className="space-y-2.5 mt-5 mb-5 flex-1">
                                     {plan.features.map((f) => (
                                         <div key={f} className="flex items-start gap-2 text-sm text-text-light">
-                                            <Check size={16} className="text-yellow-500 flex-shrink-0 mt-0.5" />
+                                            <Check size={16} className="text-gold flex-shrink-0 mt-0.5" />
                                             {f}
                                         </div>
                                     ))}
@@ -490,8 +490,8 @@ function LandlordBoostPricing() {
                                     whileHover={{ scale: 1.03 }}
                                     whileTap={{ scale: 0.97 }}
                                     className={`w-full py-3 rounded-2xl font-semibold text-sm cursor-pointer border-0 transition-all ${plan.popular
-                                        ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/25 hover:shadow-xl btn-glow"
-                                        : "bg-yellow-500/10 text-yellow-700 hover:bg-yellow-500/20"
+                                        ? "bg-gradient-to-r from-gold to-gold-dark text-white shadow-lg shadow-gold/25 hover:shadow-xl btn-glow"
+                                        : "bg-gold/10 text-gold-dark hover:bg-gold/20"
                                         }`}
                                 >
                                     Mua ngay
@@ -544,7 +544,7 @@ function LandlordContactPricing() {
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 text-teal-700 text-xs font-medium mb-4 border border-teal-200">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-50 text-primary-dark text-xs font-medium mb-4 border border-secondary-100">
                         <Unlock size={14} />
                         Mở khóa liên hệ Sinh viên
                     </div>
@@ -707,7 +707,7 @@ function Testimonials({ role }: { role: Role }) {
                             >
                                 <div className="flex gap-1 mb-3">
                                     {Array(review.rating).fill(0).map((_, j) => (
-                                        <Star key={j} size={14} className="text-yellow-400 fill-yellow-400" />
+                                        <Star key={j} size={14} className="text-gold fill-gold" />
                                     ))}
                                 </div>
                                 <p className="text-sm text-text-light leading-relaxed mb-4">"{review.text}"</p>
@@ -797,7 +797,7 @@ function BottomCTA({ role }: { role: Role }) {
                 <FadeSection>
                     <div className="relative rounded-3xl p-10 sm:p-16 text-center overflow-hidden">
                         {/* Gradient background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-500 to-secondary opacity-90" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary opacity-90" />
                         <div className="absolute inset-0 bg-black/10" />
 
                         {/* Floating shapes */}
@@ -807,8 +807,8 @@ function BottomCTA({ role }: { role: Role }) {
 
                         <div className="relative z-10">
                             {role === "student"
-                                ? <GraduationCap size={40} className="text-yellow-300 mx-auto mb-4" />
-                                : <Building2 size={40} className="text-yellow-300 mx-auto mb-4" />
+                                ? <GraduationCap size={40} className="text-secondary-light mx-auto mb-4" />
+                                : <Building2 size={40} className="text-secondary-light mx-auto mb-4" />
                             }
                             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-[family-name:var(--font-family-heading)]">
                                 {role === "student" ? "Sẵn sàng tìm bạn cùng phòng?" : "Sẵn sàng lấp phòng trống?"}

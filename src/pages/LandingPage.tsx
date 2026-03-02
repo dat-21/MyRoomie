@@ -127,7 +127,7 @@ function Hero() {
     const topMatches = [...roommates].sort((a, b) => b.compatibility - a.compatibility).slice(0, 3);
 
     return (
-        <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+        <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-20">
             {/* Animated background blobs */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse" />

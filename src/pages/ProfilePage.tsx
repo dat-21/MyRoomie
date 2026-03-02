@@ -79,7 +79,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
     const [chatOpen, setChatOpen] = useState(false);
 
     return (
-        <div className="min-h-screen pt-20">
+        <div className="min-h-screen pt-28">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
                 {/* Hero */}
                 <motion.div

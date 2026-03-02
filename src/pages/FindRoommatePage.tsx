@@ -114,8 +114,8 @@ export default function FindRoommatePage() {
                             key={g}
                             onClick={() => setFilters((p) => ({ ...p, gender: g }))}
                             className={`py-2 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${filters.gender === g
-                                    ? "bg-primary text-white shadow-md shadow-primary/20"
-                                    : "bg-white/60 text-text-light hover:bg-primary/10"
+                                ? "bg-primary text-white shadow-md shadow-primary/20"
+                                : "bg-white/60 text-text-light hover:bg-primary/10"
                                 }`}
                         >
                             {g}
@@ -183,8 +183,8 @@ export default function FindRoommatePage() {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => toggleTag(tag)}
                             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer border-0 ${filters.lifestyleTags.includes(tag)
-                                    ? "bg-secondary text-white shadow-md shadow-secondary/20"
-                                    : "bg-white/60 text-text-light hover:bg-secondary/10"
+                                ? "bg-secondary text-white shadow-md shadow-secondary/20"
+                                : "bg-white/60 text-text-light hover:bg-secondary/10"
                                 }`}
                         >
                             {tag}
@@ -205,7 +205,7 @@ export default function FindRoommatePage() {
     );
 
     return (
-        <div className="min-h-screen pt-20">
+        <div className="min-h-screen pt-28">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Page header */}
                 <motion.div

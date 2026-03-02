@@ -92,7 +92,7 @@ export default function PostRoomPage() {
 
     if (submitted) {
         return (
-            <div className="min-h-screen pt-20 flex items-center justify-center">
+            <div className="min-h-screen pt-28 flex items-center justify-center">
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -121,7 +121,7 @@ export default function PostRoomPage() {
     }
 
     return (
-        <div className="min-h-screen pt-20">
+        <div className="min-h-screen pt-28">
             <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
                 {/* Page header */}
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -241,8 +241,8 @@ export default function PostRoomPage() {
                                                         key={type}
                                                         onClick={() => update("roomType", type)}
                                                         className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${formData.roomType === type
-                                                                ? "bg-primary text-white shadow-md"
-                                                                : "bg-white/60 text-text-light hover:bg-primary/10"
+                                                            ? "bg-primary text-white shadow-md"
+                                                            : "bg-white/60 text-text-light hover:bg-primary/10"
                                                             }`}
                                                     >
                                                         {type}
@@ -297,8 +297,8 @@ export default function PostRoomPage() {
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={() => toggleTag(tag)}
                                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer border-0 ${formData.lifestyleExpectations.includes(tag)
-                                                        ? "bg-secondary text-white shadow-md shadow-secondary/20"
-                                                        : "bg-white/60 text-text-light hover:bg-secondary/10"
+                                                    ? "bg-secondary text-white shadow-md shadow-secondary/20"
+                                                    : "bg-white/60 text-text-light hover:bg-secondary/10"
                                                     }`}
                                             >
                                                 {tag}
@@ -391,8 +391,8 @@ export default function PostRoomPage() {
                         onClick={prev}
                         disabled={currentStep === 0}
                         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all cursor-pointer border-0 ${currentStep === 0
-                                ? "bg-white/40 text-text-muted cursor-not-allowed"
-                                : "bg-white/70 text-text hover:bg-white/90 shadow-md"
+                            ? "bg-white/40 text-text-muted cursor-not-allowed"
+                            : "bg-white/70 text-text hover:bg-white/90 shadow-md"
                             }`}
                     >
                         <ChevronLeft size={16} />

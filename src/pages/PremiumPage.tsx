@@ -843,7 +843,7 @@ export default function PremiumPage() {
     const [role, setRole] = useState<Role>("student");
 
     return (
-        <div className="min-h-screen pt-16">
+        <div className="min-h-screen pt-28">
             <PremiumHero role={role} />
 
             {/* Role Tabs */}

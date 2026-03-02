@@ -12,6 +12,10 @@ import DesignSystemPage from "./pages/DesignSystemPage";
 import ViewAllRoomsPage from "./pages/ViewAllRoomsPage";
 import ViewAllMatchesPage from "./pages/ViewAllMatchesPage";
 import PremiumPage from "./pages/PremiumPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import LandlordHomePage from "./pages/LandlordHomePage";
+import { useAuth } from "./contexts/AuthContext";
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
@@ -22,10 +26,14 @@ const pageVariants = {
 export default function App() {
   const location = useLocation();
   const [chatOpen, setChatOpen] = useState(false);
+  const { user } = useAuth();
+
+  const isAuthPage = ["login", "register"].includes(location.pathname.replace("/", ""));
+  const isLandlord = user?.role === "landlord";
 
   return (
     <div className="min-h-screen flex flex-col bg-bg">
-      <Navbar onChatOpen={() => setChatOpen(true)} />
+      {!isAuthPage && <Navbar onChatOpen={() => setChatOpen(true)} />}
 
       <main className="flex-1">
         <AnimatePresence mode="wait">
@@ -38,7 +46,7 @@ export default function App() {
             transition={{ duration: 0.3 }}
           >
             <Routes location={location}>
-              <Route path="/" element={<LandingPage />} />
+              <Route path="/" element={isLandlord ? <LandlordHomePage /> : <LandingPage />} />
               <Route path="/find" element={<FindRoommatePage />} />
               <Route path="/post" element={<PostRoomPage />} />
               <Route path="/profile" element={<ProfilePage />} />
@@ -47,15 +55,17 @@ export default function App() {
               <Route path="/rooms" element={<ViewAllRoomsPage />} />
               <Route path="/matches" element={<ViewAllMatchesPage />} />
               <Route path="/premium" element={<PremiumPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
       </main>
 
-      <Footer />
+      {!isAuthPage && <Footer />}
 
       {/* Global Chat Panel */}
-      <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />
+      {!isAuthPage && <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />}
     </div>
   );
 }

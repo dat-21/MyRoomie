@@ -64,7 +64,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.08 }}
             whileHover={{ y: -6, transition: { duration: 0.25 } }}
-            className="glass rounded-2xl p-5 flex flex-col gap-4 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300"
+            className="glass rounded-2xl p-5 flex flex-col gap-4 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300 h-full"
         >
             {/* Header */}
             <div className="flex items-start gap-4">
@@ -104,7 +104,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
             </p>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 flex-1 content-start">
                 {roommate.lifestyleTags.slice(0, 4).map((tag) => (
                     <Tag key={tag} label={tag} />
                 ))}
@@ -116,7 +116,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/40">
+            <div className="flex items-center justify-between pt-2 border-t border-white/40 mt-auto">
                 <div className="space-y-1">
                     <div className="flex items-center gap-1.5 text-text-light">
                         <span className="text-xs font-medium">

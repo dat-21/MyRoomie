@@ -254,10 +254,12 @@ export default function ViewAllMatchesPage() {
                         ) : (
                             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                 {filtered.map((rm, i) => (
-                                    <div key={rm.id} className="relative">
-                                        <RoommateCard roommate={rm} index={i} />
+                                    <div key={rm.id} className="relative flex flex-col">
+                                        <div className="flex-1 flex flex-col">
+                                            <RoommateCard roommate={rm} index={i} />
+                                        </div>
                                         {/* Connect/Message overlay */}
-                                        <div className="flex gap-2 mt-2">
+                                        <div className="flex gap-2 mt-2 flex-shrink-0">
                                             {connectedIds.has(rm.id) ? (
                                                 <>
                                                     <span className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-secondary/10 text-secondary text-xs font-medium">

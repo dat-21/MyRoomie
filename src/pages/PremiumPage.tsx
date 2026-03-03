@@ -48,8 +48,8 @@ function RoleTabs({ role, setRole }: { role: Role; setRole: (r: Role) => void })
         <div className="flex justify-center mb-12">
             <div className="inline-flex rounded-2xl p-1.5 glass-strong">
                 {[
-                    { id: "student" as Role, label: "Sinh viên", icon: GraduationCap, desc: "Tìm bạn cùng phòng" },
-                    { id: "landlord" as Role, label: "Chủ trọ", icon: Building2, desc: "Quản lý phòng trọ" },
+                    { id: "student" as Role, label: "Student", icon: GraduationCap, desc: "Find roommates" },
+                    { id: "landlord" as Role, label: "Landlord", icon: Building2, desc: "Manage rentals" },
                 ].map((tab) => (
                     <motion.button
                         key={tab.id}
@@ -105,22 +105,22 @@ function PremiumHero({ role }: { role: Role }) {
                         className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-medium mb-6 border border-primary/20"
                     >
                         <Crown size={16} className="text-accent" />
-                        {isStudent ? "Gói Sinh viên" : "Gói Chủ trọ"}
+                        {isStudent ? "Student Plan" : "Landlord Plan"}
                     </motion.div>
 
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight font-[family-name:var(--font-family-heading)]">
                         {isStudent ? (
                             <>
-                                Tìm bạn cùng phòng{" "}
+                                Find your{" "}
                                 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                    hoàn hảo.
+                                    perfect roommate.
                                 </span>
                             </>
                         ) : (
                             <>
-                                Tiếp cận sinh viên{" "}
+                                Reach students{" "}
                                 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                    nhanh hơn.
+                                    faster.
                                 </span>
                             </>
                         )}
@@ -128,8 +128,8 @@ function PremiumHero({ role }: { role: Role }) {
 
                     <p className="mt-6 text-lg text-text-light leading-relaxed max-w-2xl mx-auto">
                         {isStudent
-                            ? <>Mở khóa tính năng tìm bạn cùng phòng — nhắn tin trực tiếp, gợi ý AI thông minh, kết nối <strong className="text-text">nhanh hơn 3 lần</strong>.</>
-                            : <>Đẩy tin lên trang nhất, mở khóa liên hệ sinh viên — <strong className="text-text">tăng tỷ lệ lấp phòng</strong> hiệu quả.</>
+                            ? <>Unlock roommate-finding features — direct messaging, smart AI suggestions, connect <strong className="text-text">3x faster</strong>.</>
+                            : <>Boost your listing to the top, unlock student contacts — <strong className="text-text">increase occupancy rate</strong> effectively.</>
                         }
                     </p>
 
@@ -141,9 +141,9 @@ function PremiumHero({ role }: { role: Role }) {
                     >
                         {isStudent
                             ? [
-                                { icon: Bot, label: "AI Gợi ý thông minh", color: "text-accent" },
-                                { icon: MessageCircle, label: "Nhắn tin không giới hạn", color: "text-secondary" },
-                                { icon: Shield, label: "Hồ sơ xác minh", color: "text-primary" },
+                                { icon: Bot, label: "Smart AI Suggestions", color: "text-accent" },
+                                { icon: MessageCircle, label: "Unlimited Messaging", color: "text-secondary" },
+                                { icon: Shield, label: "Verified Profile", color: "text-primary" },
                             ].map((item) => (
                                 <div key={item.label} className="flex items-center gap-2">
                                     <item.icon size={18} className={item.color} />
@@ -151,9 +151,9 @@ function PremiumHero({ role }: { role: Role }) {
                                 </div>
                             ))
                             : [
-                                { icon: Megaphone, label: "Đẩy tin trang nhất", color: "text-gold" },
-                                { icon: Unlock, label: "Mở khóa liên hệ", color: "text-accent" },
-                                { icon: TrendingUp, label: "Tăng tỷ lệ tiếp cận", color: "text-primary" },
+                                { icon: Megaphone, label: "Boost to Front Page", color: "text-gold" },
+                                { icon: Unlock, label: "Unlock Contacts", color: "text-accent" },
+                                { icon: TrendingUp, label: "Increase Reach", color: "text-primary" },
                             ].map((item) => (
                                 <div key={item.label} className="flex items-center gap-2">
                                     <item.icon size={18} className={item.color} />
@@ -169,19 +169,19 @@ function PremiumHero({ role }: { role: Role }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SINH VIÊN — Pricing & Comparison
+   STUDENT — Pricing & Comparison
    ═══════════════════════════════════════════════════════════ */
 
 function StudentComparison() {
     const features = [
-        { name: "Tìm bạn cùng phòng", free: "Chỉ xem hồ sơ", premium: "Đầy đủ", icon: Users },
-        { name: "Nhắn tin", free: false, premium: true, icon: MessageCircle },
-        { name: "Gợi ý AI thông minh", free: false, premium: "Gói có AI", icon: Bot },
-        { name: "Xem chi tiết lối sống", free: "Cơ bản", premium: "Đầy đủ", icon: Heart },
-        { name: "Ai đã xem hồ sơ bạn", free: false, premium: true, icon: Eye },
-        { name: "Đẩy hồ sơ lên top", free: false, premium: true, icon: TrendingUp },
-        { name: "Bộ lọc nâng cao", free: false, premium: true, icon: Sparkles },
-        { name: "Badge xác minh", free: false, premium: true, icon: Shield },
+        { name: "Find Roommates", free: "View profiles only", premium: "Full access", icon: Users },
+        { name: "Messaging", free: false, premium: true, icon: MessageCircle },
+        { name: "Smart AI Suggestions", free: false, premium: "AI plans only", icon: Bot },
+        { name: "Lifestyle Details", free: "Basic", premium: "Full", icon: Heart },
+        { name: "Who Viewed Your Profile", free: false, premium: true, icon: Eye },
+        { name: "Boost Profile to Top", free: false, premium: true, icon: TrendingUp },
+        { name: "Advanced Filters", free: false, premium: true, icon: Sparkles },
+        { name: "Verified Badge", free: false, premium: true, icon: Shield },
     ];
 
     return (
@@ -189,17 +189,17 @@ function StudentComparison() {
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Miễn phí vs <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trả phí</span>
+                        Free vs <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Premium</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Xem bạn đang bỏ lỡ gì</p>
+                    <p className="mt-3 text-text-light">See what you're missing</p>
                 </FadeSection>
 
                 <FadeSection delay={0.1}>
                     <div className="premium-glass rounded-2xl overflow-hidden">
                         <div className="grid grid-cols-3 text-center py-4 border-b border-white/20">
-                            <div className="text-sm font-semibold text-text">Tính năng</div>
-                            <div className="text-sm font-semibold text-text-muted">Miễn phí</div>
-                            <div className="text-sm font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Trả phí</div>
+                            <div className="text-sm font-semibold text-text">Feature</div>
+                            <div className="text-sm font-semibold text-text-muted">Free</div>
+                            <div className="text-sm font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Premium</div>
                         </div>
                         {features.map((f, i) => {
                             const Icon = f.icon;
@@ -246,10 +246,10 @@ function StudentPricing() {
     const plans = [
         {
             id: "1w-noai",
-            name: "1 Tuần",
-            subtitle: "Không AI",
+            name: "1 Week",
+            subtitle: "No AI",
             price: 49000,
-            duration: "7 ngày",
+            duration: "7 days",
             contacts: 15,
             hasAI: false,
             badge: null,
@@ -257,10 +257,10 @@ function StudentPricing() {
         },
         {
             id: "1w-ai",
-            name: "1 Tuần + AI",
-            subtitle: "Có AI gợi ý",
+            name: "1 Week + AI",
+            subtitle: "With AI suggestions",
             price: 69000,
-            duration: "7 ngày",
+            duration: "7 days",
             contacts: 15,
             hasAI: true,
             badge: null,
@@ -268,24 +268,24 @@ function StudentPricing() {
         },
         {
             id: "1m-noai",
-            name: "1 Tháng",
-            subtitle: "Không AI",
+            name: "1 Month",
+            subtitle: "No AI",
             price: 149000,
-            duration: "30 ngày",
+            duration: "30 days",
             contacts: 60,
             hasAI: false,
-            badge: "Phổ biến nhất",
+            badge: "Most Popular",
             popular: true,
         },
         {
             id: "1m-ai",
-            name: "1 Tháng + AI",
-            subtitle: "Có AI gợi ý",
+            name: "1 Month + AI",
+            subtitle: "With AI suggestions",
             price: 169000,
-            duration: "30 ngày",
+            duration: "30 days",
             contacts: 60,
             hasAI: true,
-            badge: "Đáng giá nhất",
+            badge: "Best Value",
             popular: false,
         },
     ];
@@ -300,13 +300,13 @@ function StudentPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-dark text-xs font-medium mb-4 border border-primary-100">
                         <GraduationCap size={14} />
-                        Dành cho Sinh viên
+                        For Students
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Mở khóa tính năng{" "}
-                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Tìm bạn cùng phòng</span>
+                        Unlock{" "}
+                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Roommate Finder</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Nhắn tin, kết nối, tìm người phù hợp nhất</p>
+                    <p className="mt-3 text-text-light">Message, connect, and find your best match</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
@@ -334,7 +334,7 @@ function StudentPricing() {
                                         <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
                                             {new Intl.NumberFormat("vi-VN").format(plan.price)}
                                         </span>
-                                        <span className="text-text-muted text-sm">đ</span>
+                                        <span className="text-text-muted text-sm"> VND</span>
                                     </div>
                                     <p className="text-xs text-text-muted mt-1">{plan.duration}</p>
                                 </div>
@@ -342,30 +342,30 @@ function StudentPricing() {
                                 <div className="space-y-2.5 mt-5 mb-5 flex-1">
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Send size={14} className="text-secondary flex-shrink-0" />
-                                        Nhắn tin tới <strong className="text-text">{plan.contacts} người</strong>
+                                        Message up to <strong className="text-text">{plan.contacts} people</strong>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Users size={14} className="text-secondary flex-shrink-0" />
-                                        Xem hồ sơ đầy đủ
+                                        View full profiles
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Sparkles size={14} className="text-secondary flex-shrink-0" />
-                                        Bộ lọc nâng cao
+                                        Advanced filters
                                     </div>
                                     {plan.hasAI ? (
                                         <div className="flex items-center gap-2 text-sm text-text">
                                             <Bot size={14} className="text-accent flex-shrink-0" />
-                                            <span className="font-medium">AI gợi ý bạn cùng phòng</span>
+                                            <span className="font-medium">AI roommate suggestions</span>
                                         </div>
                                     ) : (
                                         <div className="flex items-center gap-2 text-sm text-text-muted/50">
                                             <Bot size={14} className="flex-shrink-0" />
-                                            <span className="line-through">AI gợi ý</span>
+                                            <span className="line-through">AI suggestions</span>
                                         </div>
                                     )}
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Eye size={14} className="text-secondary flex-shrink-0" />
-                                        Xem ai đã xem hồ sơ
+                                        See who viewed your profile
                                     </div>
                                 </div>
 
@@ -377,7 +377,7 @@ function StudentPricing() {
                                         : "bg-primary/10 text-primary hover:bg-primary/20"
                                         }`}
                                 >
-                                    Mua ngay
+                                    Buy Now
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -389,39 +389,39 @@ function StudentPricing() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   CHỦ TRỌ — Pricing sections
+   LANDLORD — Pricing sections
    ═══════════════════════════════════════════════════════════ */
 
 function LandlordBoostPricing() {
     const plans = [
         {
             id: "single",
-            name: "Đẩy 1 tin",
+            name: "Boost 1 Listing",
             price: 19000,
-            unit: "/tin",
-            duration: "24 giờ hiển thị trang nhất",
+            unit: "/listing",
+            duration: "24-hour front page visibility",
             badge: null,
             popular: false,
             features: [
-                "Tin nổi bật trang nhất 24h",
-                "Badge \"Đang đẩy\" nổi bật",
-                "Tăng lượt xem gấp 5x",
+                "Featured on front page for 24h",
+                "\"Boosted\" badge highlight",
+                "5x more views",
             ],
         },
         {
             id: "bundle",
-            name: "Gói 10 tin",
+            name: "10-Listing Bundle",
             price: 149000,
-            unit: "/gói",
-            duration: "10 tin × 24 giờ mỗi tin",
-            badge: "Tiết kiệm 21%",
+            unit: "/bundle",
+            duration: "10 listings × 24h each",
+            badge: "Save 21%",
             popular: true,
             features: [
-                "10 lượt đẩy tin (dùng dần)",
-                "Mỗi tin hiển thị trang nhất 24h",
-                "Badge \"Đang đẩy\" nổi bật",
-                "Tăng lượt xem gấp 5x",
-                "Chỉ ~14,900đ/tin",
+                "10 boost credits (use anytime)",
+                "Each listing featured for 24h",
+                "\"Boosted\" badge highlight",
+                "5x more views",
+                "Only ~14,900 VND/listing",
             ],
         },
     ];
@@ -436,13 +436,13 @@ function LandlordBoostPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/10 text-gold-dark text-xs font-medium mb-4 border border-gold-light/30">
                         <Megaphone size={14} />
-                        Đẩy tin & Giữ trang nhất
+                        Boost & Stay on Top
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Đẩy tin lên{" "}
-                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">trang nhất</span>
+                        Boost your listing to the{" "}
+                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">front page</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Tin của bạn sẽ hiển thị ưu tiên, nổi bật hơn trong 24 giờ</p>
+                    <p className="mt-3 text-text-light">Your listing will be prioritized and highlighted for 24 hours</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
@@ -470,7 +470,7 @@ function LandlordBoostPricing() {
                                         <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
                                             {new Intl.NumberFormat("vi-VN").format(plan.price)}
                                         </span>
-                                        <span className="text-text-muted text-sm">đ{plan.unit}</span>
+                                        <span className="text-text-muted text-sm"> VND{plan.unit}</span>
                                     </div>
                                     <p className="text-xs text-text-muted mt-1.5 flex items-center justify-center gap-1">
                                         <Clock size={12} /> {plan.duration}
@@ -494,7 +494,7 @@ function LandlordBoostPricing() {
                                         : "bg-gold/10 text-gold-dark hover:bg-gold/20"
                                         }`}
                                 >
-                                    Mua ngay
+                                    Buy Now
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -509,30 +509,30 @@ function LandlordContactPricing() {
     const plans = [
         {
             id: "free",
-            name: "Miễn phí",
+            name: "Free",
             price: 0,
             contacts: 3,
             badge: null,
             popular: false,
-            perContact: "Miễn phí",
+            perContact: "Free",
         },
         {
             id: "30",
-            name: "30 Liên hệ",
+            name: "30 Contacts",
             price: 99000,
             contacts: 30,
-            badge: "Phổ biến nhất",
+            badge: "Most Popular",
             popular: true,
-            perContact: "~3,300đ/liên hệ",
+            perContact: "~3,300 VND/contact",
         },
         {
             id: "100",
-            name: "100 Liên hệ",
+            name: "100 Contacts",
             price: 249000,
             contacts: 100,
-            badge: "Tiết kiệm nhất",
+            badge: "Best Value",
             popular: false,
-            perContact: "~2,490đ/liên hệ",
+            perContact: "~2,490 VND/contact",
         },
     ];
 
@@ -546,13 +546,13 @@ function LandlordContactPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-50 text-primary-dark text-xs font-medium mb-4 border border-secondary-100">
                         <Unlock size={14} />
-                        Mở khóa liên hệ Sinh viên
+                        Unlock Student Contacts
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Mở khóa{" "}
-                        <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">liên hệ sinh viên</span>
+                        Unlock{" "}
+                        <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">student contacts</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Xem số điện thoại, email để liên hệ trực tiếp với sinh viên</p>
+                    <p className="mt-3 text-text-light">View phone numbers and emails to contact students directly</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-3 gap-6 items-stretch">
@@ -580,13 +580,13 @@ function LandlordContactPricing() {
                                     <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)]">{plan.name}</h3>
                                     <div className="mt-3">
                                         {plan.price === 0 ? (
-                                            <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">0đ</span>
+                                            <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">0 VND</span>
                                         ) : (
                                             <>
                                                 <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
                                                     {new Intl.NumberFormat("vi-VN").format(plan.price)}
                                                 </span>
-                                                <span className="text-text-muted text-sm">đ</span>
+                                                <span className="text-text-muted text-sm"> VND</span>
                                             </>
                                         )}
                                     </div>
@@ -596,21 +596,21 @@ function LandlordContactPricing() {
                                 <div className="space-y-2.5 mt-5 mb-5 flex-1">
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Check size={16} className="text-secondary flex-shrink-0" />
-                                        Mở khóa <strong className="text-text">{plan.contacts} liên hệ</strong> sinh viên
+                                        Unlock <strong className="text-text">{plan.contacts} student</strong> contacts
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Check size={16} className="text-secondary flex-shrink-0" />
-                                        Xem SĐT, email đầy đủ
+                                        View full phone & email
                                     </div>
                                     {plan.price > 0 && (
                                         <>
                                             <div className="flex items-center gap-2 text-sm text-text-light">
                                                 <Check size={16} className="text-secondary flex-shrink-0" />
-                                                Liên hệ không hết hạn
+                                                Contacts never expire
                                             </div>
                                             <div className="flex items-center gap-2 text-sm text-text-light">
                                                 <Check size={16} className="text-secondary flex-shrink-0" />
-                                                Ưu tiên hiển thị phòng
+                                                Priority listing display
                                             </div>
                                         </>
                                     )}
@@ -626,7 +626,7 @@ function LandlordContactPricing() {
                                             : "bg-secondary/10 text-secondary hover:bg-secondary/20"
                                         }`}
                                 >
-                                    {plan.id === "free" ? "Đang sử dụng" : "Nâng cấp"}
+                                    {plan.id === "free" ? "Current Plan" : "Upgrade"}
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -642,22 +642,22 @@ function Testimonials({ role }: { role: Role }) {
     const studentReviews = [
         {
             name: "Minh T.",
-            role: "Sinh viên CNTT",
-            text: "Gói 1 tháng + AI giúp mình tìm được bạn ở ghép chỉ trong 2 ngày. AI gợi ý cực chuẩn!",
+            role: "IT Student",
+            text: "The 1-month + AI plan helped me find a roommate in just 2 days. The AI suggestions were spot on!",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=MinhT",
             rating: 5,
         },
         {
             name: "Linh N.",
-            role: "Sinh viên Kinh tế",
-            text: "Chỉ 49k mà nhắn tin được 15 người, tìm được bạn cùng phòng hợp tính cách lắm.",
+            role: "Business Student",
+            text: "Only 49k and I could message 15 people. Found a roommate with a perfectly matching personality.",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=LinhN",
             rating: 5,
         },
         {
             name: "Hana K.",
-            role: "Sinh viên Ngoại ngữ",
-            text: "Mình dùng gói có AI, nó gợi ý 3 bạn phù hợp nhất, mình chọn được người ưng rồi!",
+            role: "Language Student",
+            text: "I used the AI plan — it suggested 3 best matches, and I found the perfect roommate!",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=HanaK",
             rating: 5,
         },
@@ -665,23 +665,23 @@ function Testimonials({ role }: { role: Role }) {
 
     const landlordReviews = [
         {
-            name: "Anh Tuấn",
-            role: "Chủ trọ Q. Ngũ Hành Sơn",
-            text: "Đẩy tin 24h mà có ngay 5 sinh viên liên hệ. Gói 10 tin tiết kiệm hơn nhiều so với lẻ.",
+            name: "Tuan A.",
+            role: "Landlord, Ngu Hanh Son",
+            text: "Boosted for 24h and got 5 student inquiries right away. The 10-listing bundle saves so much more.",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhTuan",
             rating: 5,
         },
         {
-            name: "Chị Hoa",
-            role: "Chủ trọ Hải Châu",
-            text: "Gói 30 liên hệ quá đáng giá, chỉ 99k mà liên hệ được nhiều sinh viên, lấp phòng nhanh.",
+            name: "Hoa N.",
+            role: "Landlord, Hai Chau",
+            text: "The 30-contact pack is amazing value — only 99k and I could reach so many students. Rooms filled fast.",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=ChiHoa",
             rating: 5,
         },
         {
-            name: "Anh Đức",
-            role: "Chủ trọ Thanh Khê",
-            text: "Phòng trọ của mình luôn đầy nhờ đẩy tin trang nhất. Rất đáng đầu tư.",
+            name: "Duc T.",
+            role: "Landlord, Thanh Khe",
+            text: "My rooms are always full thanks to front-page boosting. Totally worth the investment.",
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhDuc",
             rating: 5,
         },
@@ -694,7 +694,7 @@ function Testimonials({ role }: { role: Role }) {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        {role === "student" ? "Sinh viên" : "Chủ trọ"} <span className="text-secondary">nói gì?</span>
+                        What {role === "student" ? "students" : "landlords"} <span className="text-secondary">say</span>
                     </h2>
                 </FadeSection>
 
@@ -732,17 +732,17 @@ function FAQ({ role }: { role: Role }) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     const studentFaqs = [
-        { q: "Tôi có thể hủy gói bất cứ lúc nào không?", a: "Gói của bạn sẽ hoạt động đến khi hết thời hạn (7 ngày hoặc 30 ngày). Không có gia hạn tự động." },
-        { q: "Khác biệt giữa gói có AI và không AI?", a: "Gói có AI sẽ sử dụng thuật toán AI để phân tích lối sống, sở thích và đề xuất những bạn cùng phòng phù hợp nhất. Gói không AI bạn tự tìm kiếm và nhắn tin." },
-        { q: "15 người / 60 người nghĩa là gì?", a: "Đó là số người bạn có thể nhắn tin liên hệ trong gói. Ví dụ gói 1 tuần cho phép nhắn tin tới 15 người khác nhau." },
-        { q: "Phương thức thanh toán nào được chấp nhận?", a: "Chúng tôi chấp nhận MoMo, ZaloPay, thẻ ngân hàng nội địa và chuyển khoản." },
+        { q: "Can I cancel my plan at any time?", a: "Your plan remains active until it expires (7 days or 30 days). There is no auto-renewal." },
+        { q: "What's the difference between AI and non-AI plans?", a: "AI plans use an AI algorithm to analyze lifestyle and preferences, then suggest the most compatible roommates. Non-AI plans let you search and message on your own." },
+        { q: "What does 15 people / 60 people mean?", a: "That's the number of people you can message during your plan. For example, the 1-week plan allows messaging up to 15 different people." },
+        { q: "What payment methods are accepted?", a: "We accept MoMo, ZaloPay, domestic bank cards, and bank transfers." },
     ];
 
     const landlordFaqs = [
-        { q: "Đẩy tin 24 giờ hoạt động như thế nào?", a: "Khi đẩy tin, bài đăng phòng của bạn sẽ hiển thị ưu tiên ở trang nhất trong 24 giờ, kèm badge \"Đang đẩy\" nổi bật, tăng lượt xem gấp 5 lần." },
-        { q: "Gói 10 tin có thể dùng dần không?", a: "Có! Bạn mua gói 10 tin và sử dụng dần. Mỗi khi đẩy 1 tin sẽ trừ 1 lượt. Lượt đẩy không có thời hạn sử dụng." },
-        { q: "Mở khóa liên hệ sinh viên là gì?", a: "Thông tin liên hệ (SĐT, email) của sinh viên sẽ bị ẩn. Bạn cần mở khóa để xem. Gói miễn phí cho xem 3 liên hệ, muốn nhiều hơn cần nâng cấp." },
-        { q: "Liên hệ đã mở có hết hạn không?", a: "Không. Khi bạn đã mở khóa liên hệ của một sinh viên, bạn sẽ xem được vĩnh viễn." },
+        { q: "How does the 24-hour boost work?", a: "When you boost a listing, it will be displayed as a priority on the front page for 24 hours, with a \"Boosted\" badge, increasing views by up to 5x." },
+        { q: "Can I use the 10-listing bundle gradually?", a: "Yes! You purchase the 10-listing bundle and use credits over time. Each boost deducts 1 credit. Credits never expire." },
+        { q: "What does unlocking student contacts mean?", a: "Student contact info (phone, email) is hidden by default. You need to unlock it to view. The free plan includes 3 contacts — upgrade for more." },
+        { q: "Do unlocked contacts expire?", a: "No. Once you unlock a student's contact info, you can view it permanently." },
     ];
 
     const faqs = role === "student" ? studentFaqs : landlordFaqs;
@@ -752,7 +752,7 @@ function FAQ({ role }: { role: Role }) {
             <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Câu hỏi <span className="text-primary">thường gặp</span>
+                        Frequently Asked <span className="text-primary">Questions</span>
                     </h2>
                 </FadeSection>
 
@@ -811,12 +811,12 @@ function BottomCTA({ role }: { role: Role }) {
                                 : <Building2 size={40} className="text-secondary-light mx-auto mb-4" />
                             }
                             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-[family-name:var(--font-family-heading)]">
-                                {role === "student" ? "Sẵn sàng tìm bạn cùng phòng?" : "Sẵn sàng lấp phòng trống?"}
+                                {role === "student" ? "Ready to find your roommate?" : "Ready to fill your vacancies?"}
                             </h2>
                             <p className="text-white/80 max-w-lg mx-auto mb-8 text-lg">
                                 {role === "student"
-                                    ? "Hàng ngàn sinh viên đã tìm được bạn cùng phòng lý tưởng. Đến lượt bạn!"
-                                    : "Đẩy tin, mở khóa liên hệ — lấp đầy phòng trống nhanh chóng."
+                                    ? "Thousands of students have found their ideal roommate. It's your turn!"
+                                    : "Boost listings, unlock contacts — fill your rooms quickly."
                                 }
                             </p>
                             <motion.button
@@ -825,10 +825,10 @@ function BottomCTA({ role }: { role: Role }) {
                                 className="btn-glow premium-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                             >
                                 <Sparkles size={18} />
-                                {role === "student" ? "Mua gói ngay" : "Nâng cấp ngay"}
+                                {role === "student" ? "Get Started Now" : "Upgrade Now"}
                             </motion.button>
                             <p className="text-white/50 text-xs mt-4">
-                                {role === "student" ? "Không gia hạn tự động · Thanh toán 1 lần" : "Lượt đẩy tin không hết hạn · Liên hệ mở vĩnh viễn"}
+                                {role === "student" ? "No auto-renewal · One-time payment" : "Boost credits never expire · Contacts unlocked forever"}
                             </p>
                         </div>
                     </div>

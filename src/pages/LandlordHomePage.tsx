@@ -15,6 +15,8 @@ import {
     MapPin,
     Building,
     Star,
+    Search,
+    ExternalLink,
 } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { rooms, formatCurrency } from "../data/mockData";
@@ -67,9 +69,9 @@ const myRooms = rooms.slice(0, 3).map((r, i) => ({
 }));
 
 const tenantRequests = [
-    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hải Châu", budget: "3.5M - 4.5M đ", time: "2 giờ trước", status: "new" as const },
-    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Sơn Trà", budget: "3M - 4M đ", time: "5 giờ trước", status: "new" as const },
-    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngũ Hành Sơn", budget: "2.5M - 3.5M đ", time: "1 ngày trước", status: "viewed" as const },
+    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hai Chau", budget: "3.5M - 4.5M VND", time: "2 hours ago", status: "new" as const },
+    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Son Tra", budget: "3M - 4M VND", time: "5 hours ago", status: "new" as const },
+    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngu Hanh Son", budget: "2.5M - 3.5M VND", time: "1 day ago", status: "viewed" as const },
 ];
 
 /* ─── Hero Section (Landlord) ─── */
@@ -109,7 +111,7 @@ function LandlordHero() {
                         </h1>
 
                         <p className="mt-6 text-lg text-text-light leading-relaxed max-w-lg">
-                            Quản lý phòng, theo dõi yêu cầu thuê và kết nối với người thuê phù hợp — tất cả trong một nền tảng.
+                            Manage rooms, track rental requests, and connect with the right tenants — all in one platform.
                         </p>
 
                         <div className="flex flex-wrap gap-4 mt-8">
@@ -144,10 +146,10 @@ function LandlordHero() {
                         transition={{ duration: 0.8, delay: 0.3 }}
                         className="hidden lg:grid grid-cols-2 gap-4"
                     >
-                        <StatCard icon={Home} value="3" label="Phòng đã đăng" color="from-primary to-primary-light" delay={0.4} />
-                        <StatCard icon={Eye} value="256" label="Lượt xem" color="from-secondary to-secondary-light" delay={0.5} />
-                        <StatCard icon={Users} value="15" label="Yêu cầu thuê" color="from-accent to-accent-light" delay={0.6} />
-                        <StatCard icon={MessageCircle} value="8" label="Tin nhắn mới" color="from-primary-dark to-primary" delay={0.7} />
+                        <StatCard icon={Home} value="3" label="Rooms Posted" color="from-primary to-primary-light" delay={0.4} />
+                        <StatCard icon={Eye} value="256" label="Total Views" color="from-secondary to-secondary-light" delay={0.5} />
+                        <StatCard icon={Users} value="15" label="Rental Requests" color="from-accent to-accent-light" delay={0.6} />
+                        <StatCard icon={MessageCircle} value="8" label="New Messages" color="from-primary-dark to-primary" delay={0.7} />
                     </motion.div>
                 </div>
             </div>
@@ -164,12 +166,12 @@ function MyRoomsSection() {
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                Phòng <span className="text-primary">Đã Đăng</span>
+                                My <span className="text-primary">Listings</span>
                             </h2>
-                            <p className="text-text-light text-sm mt-1">Quản lý danh sách phòng cho thuê của bạn</p>
+                            <p className="text-text-light text-sm mt-1">Manage your rental room listings</p>
                         </div>
                         <Link to="/post" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
-                            Đăng phòng mới <ChevronRight size={16} />
+                            Post New Room <ChevronRight size={16} />
                         </Link>
                     </div>
                 </FadeSection>
@@ -187,7 +189,7 @@ function MyRoomsSection() {
                                         ? "bg-green-100 text-green-700"
                                         : "bg-yellow-100 text-yellow-700"
                                         }`}>
-                                        {room.status === "active" ? "Đang hoạt động" : "Chờ duyệt"}
+                                        {room.status === "active" ? "Active" : "Pending"}
                                     </span>
                                 </div>
                                 <div className="p-5">
@@ -199,7 +201,7 @@ function MyRoomsSection() {
                                         {room.district}
                                     </div>
                                     <div className="text-lg font-bold text-primary mb-3">
-                                        {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">/tháng</span>
+                                        {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">/month</span>
                                     </div>
                                     <div className="flex items-center justify-between pt-3 border-t border-border/50">
                                         <div className="flex items-center gap-4 text-xs text-text-muted">
@@ -226,12 +228,12 @@ function TenantRequestsSection() {
                     <div className="flex items-center justify-between mb-8">
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                Yêu Cầu <span className="text-secondary">Thuê Mới</span>
+                                New <span className="text-secondary">Rental Requests</span>
                             </h2>
-                            <p className="text-text-light text-sm mt-1">Người thuê quan tâm đến phòng của bạn</p>
+                            <p className="text-text-light text-sm mt-1">Tenants interested in your rooms</p>
                         </div>
                         <Link to="/matches" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
-                            Xem tất cả <ChevronRight size={16} />
+                            View All <ChevronRight size={16} />
                         </Link>
                     </div>
                 </FadeSection>
@@ -248,7 +250,7 @@ function TenantRequestsSection() {
                                     <div className="flex items-center gap-2">
                                         <span className="font-semibold text-text text-sm">{req.name}</span>
                                         {req.status === "new" && (
-                                            <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent text-[10px] font-semibold">Mới</span>
+                                            <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent text-[10px] font-semibold">New</span>
                                         )}
                                     </div>
                                     <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
@@ -264,7 +266,7 @@ function TenantRequestsSection() {
                                             whileTap={{ scale: 0.95 }}
                                             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-xs font-medium cursor-pointer border-0 shadow-sm"
                                         >
-                                            <Eye size={13} /> Xem
+                                            <Eye size={13} /> View
                                         </motion.button>
                                     </Link>
                                 </div>
@@ -282,22 +284,22 @@ function QuickActions() {
     const actions = [
         {
             icon: PlusCircle,
-            title: "Đăng phòng mới",
-            desc: "Thêm phòng cho thuê để tiếp cận người thuê phù hợp.",
+            title: "Post New Room",
+            desc: "Add a rental listing to reach the right tenants.",
             to: "/post",
             color: "from-primary to-primary-light",
         },
         {
             icon: TrendingUp,
-            title: "Nâng cấp Premium",
-            desc: "Hiển thị ưu tiên và tiếp cận nhiều người thuê hơn.",
+            title: "Upgrade to Premium",
+            desc: "Get priority display and reach more tenants.",
             to: "/premium",
             color: "from-secondary to-secondary-light",
         },
         {
             icon: MessageCircle,
-            title: "Tin nhắn",
-            desc: "Trả lời tin nhắn từ người thuê quan tâm.",
+            title: "Messages",
+            desc: "Reply to messages from interested tenants.",
             to: "#",
             color: "from-accent to-accent-light",
         },
@@ -308,7 +310,7 @@ function QuickActions() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-10">
                     <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Thao Tác <span className="text-primary">Nhanh</span>
+                        Quick <span className="text-primary">Actions</span>
                     </h2>
                 </FadeSection>
 
@@ -330,7 +332,7 @@ function QuickActions() {
                                         </h3>
                                         <p className="text-sm text-text-light leading-relaxed">{action.desc}</p>
                                         <div className="mt-4 flex items-center justify-center gap-1 text-primary text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                                            Đi tới <ArrowRight size={14} />
+                                            Go <ArrowRight size={14} />
                                         </div>
                                     </motion.div>
                                 </Link>
@@ -338,6 +340,105 @@ function QuickActions() {
                         );
                     })}
                 </div>
+            </div>
+        </section>
+    );
+}
+
+/* ─── Browse Other Rooms on Platform ─── */
+function BrowseOtherRooms() {
+    // Exclude rooms already owned by the landlord (first 3 are "my rooms")
+    const otherRooms = rooms.slice(3);
+    const [showAll, setShowAll] = useState(false);
+    const displayedRooms = showAll ? otherRooms : otherRooms.slice(0, 3);
+
+    return (
+        <section className="py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <FadeSection>
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
+                                Browse <span className="text-secondary">Other Listings</span>
+                            </h2>
+                            <p className="text-text-light text-sm mt-1">See what other landlords are posting on the platform</p>
+                        </div>
+                        <Link to="/rooms" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
+                            View All Rooms <ChevronRight size={16} />
+                        </Link>
+                    </div>
+                </FadeSection>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {displayedRooms.map((room, i) => (
+                        <FadeSection key={room.id} delay={i * 0.1}>
+                            <Link to={`/rooms/${room.id}`} className="no-underline">
+                                <motion.div
+                                    whileHover={{ y: -6 }}
+                                    className="glass rounded-2xl overflow-hidden group cursor-pointer h-full"
+                                >
+                                    <div className="relative">
+                                        <img src={room.thumbnail} alt={room.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                        {room.verified && (
+                                            <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold flex items-center gap-1">
+                                                <CheckCircle2 size={12} /> Verified
+                                            </span>
+                                        )}
+                                        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs font-medium backdrop-blur-sm">
+                                            {room.matchScore}% match
+                                        </div>
+                                    </div>
+                                    <div className="p-5">
+                                        <h3 className="font-semibold text-text text-base mb-1 font-[family-name:var(--font-family-heading)] truncate group-hover:text-primary transition-colors">
+                                            {room.title}
+                                        </h3>
+                                        <div className="flex items-center gap-1 text-text-muted text-xs mb-2">
+                                            <MapPin size={12} />
+                                            {room.district}
+                                        </div>
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="text-lg font-bold text-primary">
+                                                {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">/month</span>
+                                            </div>
+                                            <div className="flex items-center gap-1 text-xs text-text-muted">
+                                                <Star size={12} className="text-gold fill-gold" />
+                                                {room.rating}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-xs text-text-muted">
+                                            <span className="px-2 py-0.5 rounded-full bg-primary/8">{room.roomType}</span>
+                                            <span>{room.area} m²</span>
+                                            <span>{room.bedrooms} bed · {room.bathrooms} bath</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 pt-3 mt-3 border-t border-border/50">
+                                            <img src={room.owner.avatar} alt={room.owner.name} className="w-6 h-6 rounded-full" />
+                                            <span className="text-xs text-text-muted">by {room.owner.name}</span>
+                                            <span className="ml-auto text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                                                View Details <ExternalLink size={11} />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            </Link>
+                        </FadeSection>
+                    ))}
+                </div>
+
+                {otherRooms.length > 3 && !showAll && (
+                    <FadeSection delay={0.3}>
+                        <div className="text-center mt-8">
+                            <motion.button
+                                whileHover={{ scale: 1.03 }}
+                                whileTap={{ scale: 0.97 }}
+                                onClick={() => setShowAll(true)}
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary/10 text-primary font-semibold text-sm cursor-pointer border-0 hover:bg-primary/20 transition-colors"
+                            >
+                                <Search size={16} />
+                                Show More Listings
+                            </motion.button>
+                        </div>
+                    </FadeSection>
+                )}
             </div>
         </section>
     );
@@ -353,10 +454,10 @@ function LandlordCTA() {
                         <div className="absolute inset-0 bg-black/10" />
                         <div className="relative z-10">
                             <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-[family-name:var(--font-family-heading)]">
-                                Tối ưu hiệu quả cho thuê phòng
+                                Maximize your rental efficiency
                             </h2>
                             <p className="text-white/80 max-w-lg mx-auto mb-8 text-lg">
-                                Nâng cấp Premium để phòng được ưu tiên hiển thị và nhận nhiều yêu cầu thuê hơn.
+                                Upgrade to Premium for priority listing display and more rental requests.
                             </p>
                             <Link to="/premium">
                                 <motion.button
@@ -365,7 +466,7 @@ function LandlordCTA() {
                                     className="btn-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                                 >
                                     <Star size={18} />
-                                    Nâng cấp ngay
+                                    Upgrade Now
                                 </motion.button>
                             </Link>
                         </div>
@@ -382,6 +483,7 @@ export default function LandlordHomePage() {
         <div>
             <LandlordHero />
             <MyRoomsSection />
+            <BrowseOtherRooms />
             <TenantRequestsSection />
             <QuickActions />
             <LandlordCTA />

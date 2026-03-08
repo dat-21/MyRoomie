@@ -56,10 +56,10 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
                 className="w-20 h-16 rounded-xl object-cover flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-text truncate">{room.title}</h4>
+                <h4 className="text-sm font-semibold text-text truncate">{t(`room.${room.id}.title`, room.title)}</h4>
                 <div className="flex items-center gap-1 text-text-muted mt-0.5">
                     <MapPin size={11} />
-                    <span className="text-xs truncate">{room.district}</span>
+                    <span className="text-xs truncate">{t(`roomDistrict.${room.district}`, room.district)}</span>
                 </div>
                 <div className="flex items-center justify-between mt-1">
                     <span className="text-xs font-semibold text-text">{formatCurrency(room.rent)}<span className="text-text-muted font-normal">{t('common.perMonth')}</span></span>
@@ -97,7 +97,7 @@ function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; 
                     <span className="text-sm font-semibold text-text truncate">{roommate.name}</span>
                     <span className="text-[10px] text-text-muted">{roommate.age}y</span>
                 </div>
-                <p className="text-xs text-text-muted truncate">{roommate.occupation}</p>
+                <p className="text-xs text-text-muted truncate">{t(`occupation.${roommate.occupation}`, roommate.occupation)}</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                     {roommate.lifestyleTags.slice(0, 3).map((tag) => (
                         <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{t(`lifestyle.${tag}`, tag)}</span>

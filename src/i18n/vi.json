@@ -63,7 +63,7 @@
     "share": "Chia sẻ",
     "send": "Gửi",
     "perMonthShort": "/tháng",
-    "kmAway": "{{distance}}km cách đây",
+    "kmAway": "cách đây {{distance}}km",
     "roommatesFound": "{{count}} bạn cùng phòng",
     "roommateFound": "{{count}} bạn cùng phòng"
   },
@@ -611,5 +611,102 @@
     "copyright": "© 2026 My Roomie. Bảo lưu mọi quyền.",
     "madeWith": "Được tạo với",
     "inDaNang": "tại Đà Nẵng"
+  },
+  "occupation": {
+    "Software Developer": "Lập trình viên",
+    "University Student": "Sinh viên đại học",
+    "Marketing Manager": "Quản lý Marketing",
+    "Graphic Designer": "Thiết kế đồ họa",
+    "Data Analyst": "Phân tích dữ liệu",
+    "English Teacher": "Giáo viên tiếng Anh",
+    "UX Designer": "Thiết kế UX",
+    "Software Dev": "Lập trình viên",
+    "Marketing": "Marketing",
+    "Tech Lead": "Trưởng nhóm kỹ thuật",
+    "Student": "Sinh viên"
+  },
+  "district": {
+    "Hai Chau, Da Nang": "Hải Châu, Đà Nẵng",
+    "Son Tra, Da Nang": "Sơn Trà, Đà Nẵng",
+    "Ngu Hanh Son, Da Nang": "Ngũ Hành Sơn, Đà Nẵng",
+    "Thanh Khe, Da Nang": "Thanh Khê, Đà Nẵng",
+    "Cam Le, Da Nang": "Cẩm Lệ, Đà Nẵng",
+    "Lien Chieu, Da Nang": "Liên Chiểu, Đà Nẵng",
+    "Da Nang": "Đà Nẵng"
+  },
+  "bio": {
+    "1": "Người yêu công nghệ thân thiện, thích những buổi tối yên tĩnh và đi bộ vào cuối tuần. Tìm bạn cùng phòng tôn trọng để ở ghép căn hộ 2 phòng ngủ.",
+    "2": "Sinh viên kinh doanh năm 3 tại ĐH Đà Nẵng. Mình thích nấu ăn, đọc sách và trò chuyện thú vị. Tìm bạn nữ ở ghép.",
+    "3": "Dân công sở yêu lướt sóng và không khí biển. Mình ngăn nắp, hòa đồng và dễ tính. Muốn ở ghép căn hộ hiện đại gần biển.",
+    "4": "Tâm hồn sáng tạo, làm việc tại nhà là chính. Mình hướng nội nhưng thân thiện. Tìm bạn cùng phòng bình tĩnh và tôn trọng.",
+    "5": "Dân chuyên nghiệp cẩn thận, thích giữ mọi thứ gọn gàng. Mình thích board game và brunch cuối tuần. Bạn cùng phòng lý tưởng là người đáng tin và vui vẻ.",
+    "6": "Giáo viên đam mê và thích du lịch. Mình thích yoga, trà xanh và chợ cuối tuần. Tìm bạn cùng phòng tích cực và cởi mở.",
+    "7": "Sinh viên kỹ thuật thích chơi game và đi chơi cùng bạn bè. Mình thoải mái và linh hoạt với nội quy nhà.",
+    "8": "Dân thiết kế chuyên nghiệp, yêu thẩm mỹ và sự ngăn nắp. Mình hay nấu ăn và thích marathon Netflix. Hãy biến căn hộ thành tổ ấm nhé!",
+    "current": "Đang tìm bạn cùng phòng hợp tính ở Đà Nẵng. Mình gọn gàng, thân thiện và thích cân bằng công việc-cuộc sống."
+  },
+  "preference": {
+    "Early Bird (10pm - 6am)": "Dậy sớm (22h - 6h)",
+    "Night Owl (12am - 8am)": "Cú đêm (0h - 8h)",
+    "Night Owl (1am - 9am)": "Cú đêm (1h - 9h)",
+    "Night Owl (1am - 10am)": "Cú đêm (1h - 10h)",
+    "Moderate (11pm - 7am)": "Trung bình (23h - 7h)",
+    "Very Clean": "Rất sạch sẽ",
+    "Clean": "Sạch sẽ",
+    "Moderate": "Trung bình",
+    "Quiet": "Yên tĩnh",
+    "Very Quiet": "Rất yên tĩnh",
+    "Occasionally": "Thỉnh thoảng",
+    "Rarely": "Hiếm khi",
+    "Often": "Thường xuyên",
+    "Daily": "Hàng ngày",
+    "Sometimes": "Đôi khi",
+    "No": "Không",
+    "Yes": "Có",
+    "No Pets": "Không thú cưng",
+    "Cat Friendly": "Thích mèo",
+    "Dog Friendly": "Thích chó"
+  },
+  "room": {
+    "r1": {
+      "title": "Studio tràn nắng gần Cầu Rồng",
+      "description": "Chào mừng đến căn hộ studio thoáng đãng tại trung tâm Đà Nẵng. Chỉ 5 phút đi bộ đến Cầu Rồng, xung quanh là quán cà phê và ẩm thực đường phố sôi động. Căn hộ có cửa sổ lớn đón nhiều ánh sáng tự nhiên, tạo không gian ấm áp và thân thiện.\n\nPhù hợp cho sinh viên hoặc người đi làm trẻ, tòa nhà an ninh với camera 24/7 và thẻ từ. Gần ĐH Duy Tân (1.5km) và Chợ Hàn (1km)."
+    },
+    "r2": {
+      "title": "Căn hộ hiện đại tại Hải Châu",
+      "description": "Căn hộ hiện đại thiết kế đẹp tại trung tâm Hải Châu. Đi bộ đến quán cà phê, nhà hàng và bãi biển. Hoàn hảo cho người trẻ đi làm yêu thích cuộc sống hiện đại."
+    },
+    "r3": {
+      "title": "Phòng ấm cúng gần biển Mỹ Khê",
+      "description": "Chỉ 3 phút đi bộ đến biển Mỹ Khê! Phòng ghép ấm cúng hoàn hảo cho những ai yêu biển và sinh viên. Khu vực yên tĩnh, thanh bình với nhiều quán ăn địa phương."
+    },
+    "r4": {
+      "title": "Penthouse cao cấp tầm nhìn thành phố",
+      "description": "Penthouse tuyệt đẹp với tầm nhìn toàn cảnh thành phố. Nội thất cao cấp với hệ thống nhà thông minh. Hoàn hảo cho dân chuyên nghiệp muốn trải nghiệm sống tốt nhất tại Đà Nẵng."
+    },
+    "r5": {
+      "title": "Phòng sinh viên giá rẻ",
+      "description": "Phòng trọ sinh viên giá rẻ gần ĐH Bách khoa Đà Nẵng. Đơn giản nhưng sạch sẽ và thoải mái. Rất phù hợp cho sinh viên tiết kiệm."
+    },
+    "r6": {
+      "title": "Gác xép ven sông tại Cẩm Lệ",
+      "description": "Gác xép ven sông tuyệt đẹp với tầm nhìn sông Hàn. Nội thất hiện đại phong cách công nghiệp. Khu phố yên tĩnh, hoàn hảo cho người làm việc từ xa."
+    }
+  },
+  "roomDistrict": {
+    "Son Tra": "Sơn Trà",
+    "Hai Chau": "Hải Châu",
+    "Ngu Hanh Son": "Ngũ Hành Sơn",
+    "Thanh Khe": "Thanh Khê",
+    "Cam Le": "Cẩm Lệ",
+    "Lien Chieu": "Liên Chiểu"
+  },
+  "roomLocation": {
+    "Son Tra District, Da Nang, Vietnam": "Quận Sơn Trà, Đà Nẵng, Việt Nam",
+    "Hai Chau District, Da Nang, Vietnam": "Quận Hải Châu, Đà Nẵng, Việt Nam",
+    "Ngu Hanh Son District, Da Nang, Vietnam": "Quận Ngũ Hành Sơn, Đà Nẵng, Việt Nam",
+    "Thanh Khe District, Da Nang, Vietnam": "Quận Thanh Khê, Đà Nẵng, Việt Nam",
+    "Cam Le District, Da Nang, Vietnam": "Quận Cẩm Lệ, Đà Nẵng, Việt Nam",
+    "Lien Chieu District, Da Nang, Vietnam": "Quận Liên Chiểu, Đà Nẵng, Việt Nam"
   }
 }

@@ -90,10 +90,10 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
                         </h3>
                         <span className="text-xs text-text-muted">{roommate.age}y</span>
                     </div>
-                    <p className="text-xs text-text-light mt-0.5">{roommate.occupation}</p>
+                    <p className="text-xs text-text-light mt-0.5">{t(`occupation.${roommate.occupation}`, roommate.occupation)}</p>
                     <div className="flex items-center gap-1 mt-1 text-text-muted">
                         <MapPin size={12} />
-                        <span className="text-xs">{roommate.location}</span>
+                        <span className="text-xs">{t(`district.${roommate.location}`, roommate.location)}</span>
                     </div>
                 </div>
 
@@ -102,7 +102,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
 
             {/* Bio */}
             <p className="text-sm text-text-light leading-relaxed line-clamp-2">
-                {roommate.bio}
+                {t(`bio.${roommate.id}`, roommate.bio)}
             </p>
 
             {/* Tags */}

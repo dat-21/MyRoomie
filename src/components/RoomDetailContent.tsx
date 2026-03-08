@@ -74,10 +74,10 @@ export default function RoomDetailContent({ room }: Props) {
                                 <span className="text-sm font-semibold text-text">{room.rating}</span>
                                 <span className="text-sm text-text-muted">({room.reviewCount} {t('roomDetail.reviews')})</span>
                             </div>
-                            <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{room.title}</h2>
+                            <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{t(`room.${room.id}.title`, room.title)}</h2>
                             <div className="flex items-center gap-1.5 mt-1 text-text-muted">
                                 <MapPin size={14} />
-                                <span className="text-sm">{room.location}</span>
+                                <span className="text-sm">{t(`roomLocation.${room.location}`, room.location)}</span>
                             </div>
                         </div>
 
@@ -107,7 +107,7 @@ export default function RoomDetailContent({ room }: Props) {
                                             <img src={rm.avatar} alt={rm.name} className="w-10 h-10 rounded-xl bg-primary/10" />
                                             <div className="flex-1 min-w-0">
                                                 <div className="text-sm font-semibold text-text">{rm.name}</div>
-                                                <div className="text-xs text-text-muted">{rm.occupation} · {rm.age}y</div>
+                                                <div className="text-xs text-text-muted">{t(`occupation.${rm.occupation}`, rm.occupation)} · {rm.age}y</div>
                                                 <div className="flex flex-wrap gap-1 mt-1">
                                                     {rm.tags.map((tag) => (
                                                         <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{t(`lifestyle.${tag}`, tag)}</span>
@@ -124,7 +124,7 @@ export default function RoomDetailContent({ room }: Props) {
                         {/* About */}
                         <div>
                             <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">{t('roomDetail.aboutThisPlace')}</h3>
-                            <p className="text-sm text-text-light leading-relaxed whitespace-pre-line">{room.description}</p>
+                            <p className="text-sm text-text-light leading-relaxed whitespace-pre-line">{t(`room.${room.id}.description`, room.description)}</p>
                         </div>
 
                         {/* Amenities */}

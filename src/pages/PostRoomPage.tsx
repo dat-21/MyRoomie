@@ -14,6 +14,7 @@ import {
     Check,
     Send,
 } from "lucide-react";
+import { PiMoneyWavy } from "react-icons/pi";
 import { lifestyleOptions } from "../data/mockData";
 
 interface FormData {
@@ -222,7 +223,7 @@ export default function PostRoomPage() {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-text mb-1.5">
-                                                <DollarSign size={14} className="inline mr-1" />{t('postRoom.rent')}
+                                                <PiMoneyWavy size={17} className="inline mr-1" />{t('postRoom.rent')}
                                             </label>
                                             <input
                                                 type="number"

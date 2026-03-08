@@ -610,5 +610,102 @@
     "copyright": "© 2026 My Roomie. All rights reserved.",
     "madeWith": "Made with",
     "inDaNang": "in Da Nang"
+  },
+  "occupation": {
+    "Software Developer": "Software Developer",
+    "University Student": "University Student",
+    "Marketing Manager": "Marketing Manager",
+    "Graphic Designer": "Graphic Designer",
+    "Data Analyst": "Data Analyst",
+    "English Teacher": "English Teacher",
+    "UX Designer": "UX Designer",
+    "Software Dev": "Software Dev",
+    "Marketing": "Marketing",
+    "Tech Lead": "Tech Lead",
+    "Student": "Student"
+  },
+  "district": {
+    "Hai Chau, Da Nang": "Hai Chau, Da Nang",
+    "Son Tra, Da Nang": "Son Tra, Da Nang",
+    "Ngu Hanh Son, Da Nang": "Ngu Hanh Son, Da Nang",
+    "Thanh Khe, Da Nang": "Thanh Khe, Da Nang",
+    "Cam Le, Da Nang": "Cam Le, Da Nang",
+    "Lien Chieu, Da Nang": "Lien Chieu, Da Nang",
+    "Da Nang": "Da Nang"
+  },
+  "bio": {
+    "1": "Friendly tech enthusiast who enjoys quiet evenings and weekend hikes. Looking for a respectful roommate to share a 2-bedroom apartment.",
+    "2": "Third-year business student at UD. I love cooking, reading, and having meaningful conversations. Looking for a female roommate.",
+    "3": "Working professional with a love for surfing and beach vibes. I'm organized, social, and easy-going. Open to sharing a modern apartment near the beach.",
+    "4": "Creative soul who works from home most days. I'm introverted but friendly. Looking for a calm and respectful roommate.",
+    "5": "Detail-oriented professional who keeps things tidy. I love board games and weekend brunches. Ideal roommate is someone reliable and fun.",
+    "6": "Passionate educator and traveler. I enjoy yoga, green tea, and weekend markets. Looking for a positive and open-minded roommate.",
+    "7": "Engineering student who loves gaming and hanging out with friends. I'm laidback and flexible with house rules.",
+    "8": "Design-focused professional who appreciates aesthetics and tidiness. I cook often and love a good Netflix marathon. Let's make our apartment feel like home!",
+    "current": "Looking for a compatible roommate in Da Nang. I'm tidy, friendly, and enjoy a good work-life balance."
+  },
+  "preference": {
+    "Early Bird (10pm - 6am)": "Early Bird (10pm - 6am)",
+    "Night Owl (12am - 8am)": "Night Owl (12am - 8am)",
+    "Night Owl (1am - 9am)": "Night Owl (1am - 9am)",
+    "Night Owl (1am - 10am)": "Night Owl (1am - 10am)",
+    "Moderate (11pm - 7am)": "Moderate (11pm - 7am)",
+    "Very Clean": "Very Clean",
+    "Clean": "Clean",
+    "Moderate": "Moderate",
+    "Quiet": "Quiet",
+    "Very Quiet": "Very Quiet",
+    "Occasionally": "Occasionally",
+    "Rarely": "Rarely",
+    "Often": "Often",
+    "Daily": "Daily",
+    "Sometimes": "Sometimes",
+    "No": "No",
+    "Yes": "Yes",
+    "No Pets": "No Pets",
+    "Cat Friendly": "Cat Friendly",
+    "Dog Friendly": "Dog Friendly"
+  },
+  "room": {
+    "r1": {
+      "title": "Sunny Studio near Dragon Bridge",
+      "description": "Welcome to our sunny and spacious studio apartment located in the heart of Da Nang. Just a 5-minute walk to the iconic Dragon Bridge and surrounded by vibrant cafes and street food stalls. The apartment features large windows that let in plenty of natural light, creating a warm and inviting atmosphere.\n\nIdeal for students or young professionals, the building is secure with 24/7 camera surveillance and key card access. We are located near Duy Tan University (1.5km) and the Han Market (1km)."
+    },
+    "r2": {
+      "title": "Modern Apartment in Hai Chau",
+      "description": "A beautifully designed modern apartment in the center of Hai Chau. Walking distance to cafes, restaurants, and the beach. Perfect for young professionals who appreciate contemporary living."
+    },
+    "r3": {
+      "title": "Cozy Room near My Khe Beach",
+      "description": "Just 3 minutes walk from My Khe Beach! A cozy shared room perfect for beach lovers and students. The area is quiet and peaceful, with many local food options nearby."
+    },
+    "r4": {
+      "title": "Premium Penthouse View",
+      "description": "Stunning penthouse with panoramic city views. Premium finishes throughout with smart home integration. Perfect for professionals who want the best living experience in Da Nang."
+    },
+    "r5": {
+      "title": "Budget-Friendly Student Room",
+      "description": "Affordable student housing near Da Nang University of Technology. Simple but clean and comfortable. Great for students on a budget."
+    },
+    "r6": {
+      "title": "Riverside Loft in Cam Le",
+      "description": "Beautiful riverside loft with stunning views of the Han River. Modern interior with an industrial-chic design. Quiet neighborhood perfect for remote workers."
+    }
+  },
+  "roomDistrict": {
+    "Son Tra": "Son Tra",
+    "Hai Chau": "Hai Chau",
+    "Ngu Hanh Son": "Ngu Hanh Son",
+    "Thanh Khe": "Thanh Khe",
+    "Cam Le": "Cam Le",
+    "Lien Chieu": "Lien Chieu"
+  },
+  "roomLocation": {
+    "Son Tra District, Da Nang, Vietnam": "Son Tra District, Da Nang, Vietnam",
+    "Hai Chau District, Da Nang, Vietnam": "Hai Chau District, Da Nang, Vietnam",
+    "Ngu Hanh Son District, Da Nang, Vietnam": "Ngu Hanh Son District, Da Nang, Vietnam",
+    "Thanh Khe District, Da Nang, Vietnam": "Thanh Khe District, Da Nang, Vietnam",
+    "Cam Le District, Da Nang, Vietnam": "Cam Le District, Da Nang, Vietnam",
+    "Lien Chieu District, Da Nang, Vietnam": "Lien Chieu District, Da Nang, Vietnam"
   }
 }

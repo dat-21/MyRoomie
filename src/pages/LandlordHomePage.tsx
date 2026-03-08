@@ -70,9 +70,9 @@ const myRooms = rooms.slice(0, 3).map((r, i) => ({
 }));
 
 const tenantRequests = [
-    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hai Chau", budget: "3.5M - 4.5M VND", timeKey: "landlordHome.hoursAgo", timeCount: 2, status: "new" as const },
-    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Son Tra", budget: "3M - 4M VND", timeKey: "landlordHome.hoursAgo", timeCount: 5, status: "new" as const },
-    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngu Hanh Son", budget: "2.5M - 3.5M VND", timeKey: "landlordHome.dayAgo", timeCount: 1, status: "viewed" as const },
+    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hai Chau", budgetMin: 3500000, budgetMax: 4500000, timeKey: "landlordHome.hoursAgo", timeCount: 2, status: "new" as const },
+    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Son Tra", budgetMin: 3000000, budgetMax: 4000000, timeKey: "landlordHome.hoursAgo", timeCount: 5, status: "new" as const },
+    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngu Hanh Son", budgetMin: 2500000, budgetMax: 3500000, timeKey: "landlordHome.dayAgo", timeCount: 1, status: "viewed" as const },
 ];
 
 /* ─── Hero Section (Landlord) ─── */
@@ -195,11 +195,11 @@ function MyRoomsSection() {
                                 </div>
                                 <div className="p-5">
                                     <h3 className="font-semibold text-text text-base mb-1 font-[family-name:var(--font-family-heading)] truncate">
-                                        {room.title}
+                                        {t(`room.${room.id}.title`, room.title)}
                                     </h3>
                                     <div className="flex items-center gap-1 text-text-muted text-xs mb-3">
                                         <MapPin size={12} />
-                                        {room.district}
+                                        {t(`roomDistrict.${room.district}`, room.district)}
                                     </div>
                                     <div className="text-lg font-bold text-primary mb-3">
                                         {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">{t('landlordHome.perMonth')}</span>
@@ -255,7 +255,7 @@ function TenantRequestsSection() {
                                     </div>
                                     <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
                                         <span className="flex items-center gap-1"><MapPin size={11} /> {req.area}</span>
-                                        <span>{t('landlordHome.budgetLabel', { budget: req.budget })}</span>
+                                        <span>{t('landlordHome.budgetLabel', { budget: `${formatCurrency(req.budgetMin)} - ${formatCurrency(req.budgetMax)}` })}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 flex-shrink-0">
@@ -388,11 +388,11 @@ function BrowseOtherRooms() {
                                     </div>
                                     <div className="p-5">
                                         <h3 className="font-semibold text-text text-base mb-1 font-[family-name:var(--font-family-heading)] truncate group-hover:text-primary transition-colors">
-                                            {room.title}
+                                            {t(`room.${room.id}.title`, room.title)}
                                         </h3>
                                         <div className="flex items-center gap-1 text-text-muted text-xs mb-2">
                                             <MapPin size={12} />
-                                            {room.district}
+                                            {t(`roomDistrict.${room.district}`, room.district)}
                                         </div>
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="text-lg font-bold text-primary">

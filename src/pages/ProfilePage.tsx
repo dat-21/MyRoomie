@@ -112,10 +112,10 @@ function RoommateProfile({ person }: { person: Roommate }) {
                                 <span className="text-sm text-text-muted">{person.age}y, {person.gender}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-3 text-sm text-text-light mt-1">
-                                <span className="flex items-center gap-1"><Briefcase size={14} />{person.occupation}</span>
-                                <span className="flex items-center gap-1"><MapPin size={14} />{person.location}</span>
+                                <span className="flex items-center gap-1"><Briefcase size={14} />{t(`occupation.${person.occupation}`, person.occupation)}</span>
+                                <span className="flex items-center gap-1"><MapPin size={14} />{t(`district.${person.location}`, person.location)}</span>
                             </div>
-                            <p className="mt-4 text-sm text-text-light leading-relaxed">{person.bio}</p>
+                            <p className="mt-4 text-sm text-text-light leading-relaxed">{t(`bio.${person.id}`, person.bio)}</p>
 
                             <div className="flex flex-wrap gap-4 mt-4 text-sm">
                                 <div>
@@ -171,13 +171,13 @@ function RoommateProfile({ person }: { person: Roommate }) {
                         {t('profile.livingPreferences')}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-x-8">
-                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={person.preferences.sleepSchedule} />
-                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={person.preferences.cleanliness} />
-                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={person.preferences.noise} />
-                        <PrefItem icon={Users} label={t('profile.guests')} value={person.preferences.guests} />
-                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={person.preferences.smoking} />
-                        <PrefItem icon={Dog} label={t('profile.pets')} value={person.preferences.pets} />
-                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={person.preferences.cooking} />
+                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={t(`preference.${person.preferences.sleepSchedule}`, person.preferences.sleepSchedule)} />
+                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={t(`preference.${person.preferences.cleanliness}`, person.preferences.cleanliness)} />
+                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={t(`preference.${person.preferences.noise}`, person.preferences.noise)} />
+                        <PrefItem icon={Users} label={t('profile.guests')} value={t(`preference.${person.preferences.guests}`, person.preferences.guests)} />
+                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={t(`preference.${person.preferences.smoking}`, person.preferences.smoking)} />
+                        <PrefItem icon={Dog} label={t('profile.pets')} value={t(`preference.${person.preferences.pets}`, person.preferences.pets)} />
+                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={t(`preference.${person.preferences.cooking}`, person.preferences.cooking)} />
                     </div>
                 </motion.div>
 
@@ -285,8 +285,8 @@ function OwnProfile() {
                                 <span className="text-sm text-text-muted">{currentUser.age}y, {currentUser.gender}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-3 text-sm text-text-light mt-1">
-                                <span className="flex items-center gap-1"><Briefcase size={14} />{currentUser.occupation}</span>
-                                <span className="flex items-center gap-1"><MapPin size={14} />{currentUser.location}</span>
+                                <span className="flex items-center gap-1"><Briefcase size={14} />{t(`occupation.${currentUser.occupation}`, currentUser.occupation)}</span>
+                                <span className="flex items-center gap-1"><MapPin size={14} />{t(`district.${currentUser.location}`, currentUser.location)}</span>
                             </div>
 
                             {editing ? (
@@ -297,7 +297,7 @@ function OwnProfile() {
                                     className="w-full mt-4 px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                                 />
                             ) : (
-                                <p className="mt-4 text-sm text-text-light leading-relaxed">{bio}</p>
+                                <p className="mt-4 text-sm text-text-light leading-relaxed">{editing ? bio : t(`bio.current`, bio)}</p>
                             )}
 
                             <div className="flex flex-wrap gap-4 mt-4 text-sm">
@@ -365,13 +365,13 @@ function OwnProfile() {
                         {t('profile.livingPreferences')}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-x-8">
-                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={currentUser.preferences.sleepSchedule} />
-                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={currentUser.preferences.cleanliness} />
-                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={currentUser.preferences.noise} />
-                        <PrefItem icon={Users} label={t('profile.guests')} value={currentUser.preferences.guests} />
-                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={currentUser.preferences.smoking} />
-                        <PrefItem icon={Dog} label={t('profile.pets')} value={currentUser.preferences.pets} />
-                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={currentUser.preferences.cooking} />
+                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={t(`preference.${currentUser.preferences.sleepSchedule}`, currentUser.preferences.sleepSchedule)} />
+                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={t(`preference.${currentUser.preferences.cleanliness}`, currentUser.preferences.cleanliness)} />
+                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={t(`preference.${currentUser.preferences.noise}`, currentUser.preferences.noise)} />
+                        <PrefItem icon={Users} label={t('profile.guests')} value={t(`preference.${currentUser.preferences.guests}`, currentUser.preferences.guests)} />
+                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={t(`preference.${currentUser.preferences.smoking}`, currentUser.preferences.smoking)} />
+                        <PrefItem icon={Dog} label={t('profile.pets')} value={t(`preference.${currentUser.preferences.pets}`, currentUser.preferences.pets)} />
+                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={t(`preference.${currentUser.preferences.cooking}`, currentUser.preferences.cooking)} />
                     </div>
                 </motion.div>
 

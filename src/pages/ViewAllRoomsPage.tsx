@@ -89,10 +89,10 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
 
             {/* Content */}
             <div className="p-4 space-y-2">
-                <h3 className="text-sm font-semibold text-text font-[family-name:var(--font-family-heading)] truncate">{room.title}</h3>
+                <h3 className="text-sm font-semibold text-text font-[family-name:var(--font-family-heading)] truncate">{t(`room.${room.id}.title`, room.title)}</h3>
                 <div className="flex items-center gap-1 text-text-muted">
                     <MapPin size={12} />
-                    <span className="text-xs truncate">{room.district}</span>
+                    <span className="text-xs truncate">{t(`roomDistrict.${room.district}`, room.district)}</span>
                     <span className="text-xs ml-auto">{t('common.kmAway', { distance: room.distance })}</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-text-light">

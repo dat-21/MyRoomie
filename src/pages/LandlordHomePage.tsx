@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -76,6 +77,7 @@ const tenantRequests = [
 
 /* ─── Hero Section (Landlord) ─── */
 function LandlordHero() {
+    const { t } = useTranslation();
     return (
         <section className="relative min-h-[70vh] flex items-center overflow-hidden pt-20">
             {/* Background blobs */}
@@ -100,18 +102,18 @@ function LandlordHero() {
                             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
                         >
                             <Building size={16} />
-                            Landlord Dashboard
+                            {t('landlordHome.badge')}
                         </motion.div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold text-text leading-tight font-[family-name:var(--font-family-heading)]">
-                            Manage Your{" "}
+                            {t('landlordHome.heroTitle1')}{" "}
                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                Rental Easily
+                                {t('landlordHome.heroTitle2')}
                             </span>
                         </h1>
 
                         <p className="mt-6 text-lg text-text-light leading-relaxed max-w-lg">
-                            Manage rooms, track rental requests, and connect with the right tenants — all in one platform.
+                            {t('landlordHome.heroDesc')}
                         </p>
 
                         <div className="flex flex-wrap gap-4 mt-8">
@@ -122,7 +124,7 @@ function LandlordHero() {
                                     className="btn-glow flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-shadow cursor-pointer border-0 text-base"
                                 >
                                     <PlusCircle size={18} />
-                                    Post a Room
+                                    {t('landlordHome.postRoom')}
                                 </motion.button>
                             </Link>
 
@@ -133,7 +135,7 @@ function LandlordHero() {
                                     className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white/70 text-text font-semibold shadow-md hover:shadow-lg border border-white/40 backdrop-blur-sm transition-all cursor-pointer text-base"
                                 >
                                     <Users size={18} className="text-secondary" />
-                                    View Tenant Requests
+                                    {t('landlordHome.viewTenantRequests')}
                                 </motion.button>
                             </Link>
                         </div>
@@ -146,10 +148,10 @@ function LandlordHero() {
                         transition={{ duration: 0.8, delay: 0.3 }}
                         className="hidden lg:grid grid-cols-2 gap-4"
                     >
-                        <StatCard icon={Home} value="3" label="Rooms Posted" color="from-primary to-primary-light" delay={0.4} />
-                        <StatCard icon={Eye} value="256" label="Total Views" color="from-secondary to-secondary-light" delay={0.5} />
-                        <StatCard icon={Users} value="15" label="Rental Requests" color="from-accent to-accent-light" delay={0.6} />
-                        <StatCard icon={MessageCircle} value="8" label="New Messages" color="from-primary-dark to-primary" delay={0.7} />
+                        <StatCard icon={Home} value="3" label={t('landlordHome.roomsPosted')} color="from-primary to-primary-light" delay={0.4} />
+                        <StatCard icon={Eye} value="256" label={t('landlordHome.totalViews')} color="from-secondary to-secondary-light" delay={0.5} />
+                        <StatCard icon={Users} value="15" label={t('landlordHome.rentalRequests')} color="from-accent to-accent-light" delay={0.6} />
+                        <StatCard icon={MessageCircle} value="8" label={t('landlordHome.newMessages')} color="from-primary-dark to-primary" delay={0.7} />
                     </motion.div>
                 </div>
             </div>
@@ -159,19 +161,18 @@ function LandlordHero() {
 
 /* ─── My Rooms Section ─── */
 function MyRoomsSection() {
+    const { t } = useTranslation();
     return (
         <section className="py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection>
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                My <span className="text-primary">Listings</span>
-                            </h2>
-                            <p className="text-text-light text-sm mt-1">Manage your rental room listings</p>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]" dangerouslySetInnerHTML={{ __html: t('landlordHome.myListingsTitle') }} />
+                            <p className="text-text-light text-sm mt-1">{t('landlordHome.myListingsDesc')}</p>
                         </div>
                         <Link to="/post" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
-                            Post New Room <ChevronRight size={16} />
+                            {t('landlordHome.postNewRoom')} <ChevronRight size={16} />
                         </Link>
                     </div>
                 </FadeSection>
@@ -189,7 +190,7 @@ function MyRoomsSection() {
                                         ? "bg-green-100 text-green-700"
                                         : "bg-yellow-100 text-yellow-700"
                                         }`}>
-                                        {room.status === "active" ? "Active" : "Pending"}
+                                        {room.status === "active" ? t('landlordHome.active') : t('landlordHome.pending')}
                                     </span>
                                 </div>
                                 <div className="p-5">
@@ -201,12 +202,12 @@ function MyRoomsSection() {
                                         {room.district}
                                     </div>
                                     <div className="text-lg font-bold text-primary mb-3">
-                                        {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">/month</span>
+                                        {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">{t('landlordHome.perMonth')}</span>
                                     </div>
                                     <div className="flex items-center justify-between pt-3 border-t border-border/50">
                                         <div className="flex items-center gap-4 text-xs text-text-muted">
-                                            <span className="flex items-center gap-1"><Eye size={13} /> {room.views} views</span>
-                                            <span className="flex items-center gap-1"><MessageCircle size={13} /> {room.inquiries} inquiries</span>
+                                            <span className="flex items-center gap-1"><Eye size={13} /> {t('landlordHome.viewsCount', { count: room.views })}</span>
+                                            <span className="flex items-center gap-1"><MessageCircle size={13} /> {t('landlordHome.inquiriesCount', { count: room.inquiries })}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -221,19 +222,18 @@ function MyRoomsSection() {
 
 /* ─── Tenant Requests Section ─── */
 function TenantRequestsSection() {
+    const { t } = useTranslation();
     return (
         <section className="py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection>
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                New <span className="text-secondary">Rental Requests</span>
-                            </h2>
-                            <p className="text-text-light text-sm mt-1">Tenants interested in your rooms</p>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]" dangerouslySetInnerHTML={{ __html: t('landlordHome.newRequestsTitle') }} />
+                            <p className="text-text-light text-sm mt-1">{t('landlordHome.rentalRequestsDesc')}</p>
                         </div>
                         <Link to="/matches" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
-                            View All <ChevronRight size={16} />
+                            {t('landlordHome.viewAll')} <ChevronRight size={16} />
                         </Link>
                     </div>
                 </FadeSection>
@@ -250,12 +250,12 @@ function TenantRequestsSection() {
                                     <div className="flex items-center gap-2">
                                         <span className="font-semibold text-text text-sm">{req.name}</span>
                                         {req.status === "new" && (
-                                            <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent text-[10px] font-semibold">New</span>
+                                            <span className="px-2 py-0.5 rounded-full bg-accent/15 text-accent text-[10px] font-semibold">{t('landlordHome.newBadge')}</span>
                                         )}
                                     </div>
                                     <div className="flex items-center gap-3 text-xs text-text-muted mt-1">
                                         <span className="flex items-center gap-1"><MapPin size={11} /> {req.area}</span>
-                                        <span>Budget: {req.budget}</span>
+                                        <span>{t('landlordHome.budgetLabel', { budget: req.budget })}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 flex-shrink-0">
@@ -266,7 +266,7 @@ function TenantRequestsSection() {
                                             whileTap={{ scale: 0.95 }}
                                             className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-xs font-medium cursor-pointer border-0 shadow-sm"
                                         >
-                                            <Eye size={13} /> View
+                                            <Eye size={13} /> {t('landlordHome.viewBtn')}
                                         </motion.button>
                                     </Link>
                                 </div>
@@ -281,25 +281,26 @@ function TenantRequestsSection() {
 
 /* ─── Quick Actions ─── */
 function QuickActions() {
+    const { t } = useTranslation();
     const actions = [
         {
             icon: PlusCircle,
-            title: "Post New Room",
-            desc: "Add a rental listing to reach the right tenants.",
+            titleKey: "landlordHome.postNewRoomAction",
+            descKey: "landlordHome.postNewRoomDesc",
             to: "/post",
             color: "from-primary to-primary-light",
         },
         {
             icon: TrendingUp,
-            title: "Upgrade to Premium",
-            desc: "Get priority display and reach more tenants.",
+            titleKey: "landlordHome.upgradePremium",
+            descKey: "landlordHome.upgradePremiumDesc",
             to: "/premium",
             color: "from-secondary to-secondary-light",
         },
         {
             icon: MessageCircle,
-            title: "Messages",
-            desc: "Reply to messages from interested tenants.",
+            titleKey: "landlordHome.messagesAction",
+            descKey: "landlordHome.messagesDesc",
             to: "#",
             color: "from-accent to-accent-light",
         },
@@ -309,16 +310,14 @@ function QuickActions() {
         <section className="py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-10">
-                    <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Quick <span className="text-primary">Actions</span>
-                    </h2>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]" dangerouslySetInnerHTML={{ __html: t('landlordHome.quickActionsTitle') }} />
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-3 gap-6">
                     {actions.map((action, i) => {
                         const Icon = action.icon;
                         return (
-                            <FadeSection key={action.title} delay={i * 0.12}>
+                            <FadeSection key={action.titleKey} delay={i * 0.12}>
                                 <Link to={action.to} className="no-underline">
                                     <motion.div
                                         whileHover={{ y: -6, scale: 1.02 }}
@@ -328,11 +327,11 @@ function QuickActions() {
                                             <Icon size={24} className="text-white" />
                                         </div>
                                         <h3 className="text-base font-semibold text-text mb-2 font-[family-name:var(--font-family-heading)]">
-                                            {action.title}
+                                            {t(action.titleKey)}
                                         </h3>
-                                        <p className="text-sm text-text-light leading-relaxed">{action.desc}</p>
+                                        <p className="text-sm text-text-light leading-relaxed">{t(action.descKey)}</p>
                                         <div className="mt-4 flex items-center justify-center gap-1 text-primary text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                                            Go <ArrowRight size={14} />
+                                            {t('landlordHome.go')} <ArrowRight size={14} />
                                         </div>
                                     </motion.div>
                                 </Link>
@@ -347,6 +346,7 @@ function QuickActions() {
 
 /* ─── Browse Other Rooms on Platform ─── */
 function BrowseOtherRooms() {
+    const { t } = useTranslation();
     // Exclude rooms already owned by the landlord (first 3 are "my rooms")
     const otherRooms = rooms.slice(3);
     const [showAll, setShowAll] = useState(false);
@@ -358,13 +358,11 @@ function BrowseOtherRooms() {
                 <FadeSection>
                     <div className="flex items-center justify-between mb-8">
                         <div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                Browse <span className="text-secondary">Other Listings</span>
-                            </h2>
-                            <p className="text-text-light text-sm mt-1">See what other landlords are posting on the platform</p>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]" dangerouslySetInnerHTML={{ __html: t('landlordHome.browseOtherTitle') }} />
+                            <p className="text-text-light text-sm mt-1">{t('landlordHome.browseOtherDesc')}</p>
                         </div>
                         <Link to="/rooms" className="flex items-center gap-1.5 text-sm text-primary font-medium hover:text-primary-dark transition-colors no-underline">
-                            View All Rooms <ChevronRight size={16} />
+                            {t('landlordHome.viewAllRooms')} <ChevronRight size={16} />
                         </Link>
                     </div>
                 </FadeSection>
@@ -381,11 +379,11 @@ function BrowseOtherRooms() {
                                         <img src={room.thumbnail} alt={room.title} className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
                                         {room.verified && (
                                             <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold flex items-center gap-1">
-                                                <CheckCircle2 size={12} /> Verified
+                                                <CheckCircle2 size={12} /> {t('landlordHome.verified')}
                                             </span>
                                         )}
                                         <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs font-medium backdrop-blur-sm">
-                                            {room.matchScore}% match
+                                            {t('landlordHome.matchPercent', { score: room.matchScore })}
                                         </div>
                                     </div>
                                     <div className="p-5">
@@ -398,7 +396,7 @@ function BrowseOtherRooms() {
                                         </div>
                                         <div className="flex items-center justify-between mb-3">
                                             <div className="text-lg font-bold text-primary">
-                                                {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">/month</span>
+                                                {formatCurrency(room.rent)}<span className="text-sm font-normal text-text-muted">{t('landlordHome.perMonth')}</span>
                                             </div>
                                             <div className="flex items-center gap-1 text-xs text-text-muted">
                                                 <Star size={12} className="text-gold fill-gold" />
@@ -408,13 +406,13 @@ function BrowseOtherRooms() {
                                         <div className="flex items-center gap-2 text-xs text-text-muted">
                                             <span className="px-2 py-0.5 rounded-full bg-primary/8">{room.roomType}</span>
                                             <span>{room.area} m²</span>
-                                            <span>{room.bedrooms} bed · {room.bathrooms} bath</span>
+                                            <span>{t('landlordHome.bedBath', { bed: room.bedrooms, bath: room.bathrooms })}</span>
                                         </div>
                                         <div className="flex items-center gap-2 pt-3 mt-3 border-t border-border/50">
                                             <img src={room.owner.avatar} alt={room.owner.name} className="w-6 h-6 rounded-full" />
-                                            <span className="text-xs text-text-muted">by {room.owner.name}</span>
+                                            <span className="text-xs text-text-muted">{t('landlordHome.byOwner', { name: room.owner.name })}</span>
                                             <span className="ml-auto text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                                                View Details <ExternalLink size={11} />
+                                                {t('landlordHome.viewDetails')} <ExternalLink size={11} />
                                             </span>
                                         </div>
                                     </div>
@@ -434,7 +432,7 @@ function BrowseOtherRooms() {
                                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary/10 text-primary font-semibold text-sm cursor-pointer border-0 hover:bg-primary/20 transition-colors"
                             >
                                 <Search size={16} />
-                                Show More Listings
+                                {t('landlordHome.showMoreListings')}
                             </motion.button>
                         </div>
                     </FadeSection>
@@ -446,6 +444,7 @@ function BrowseOtherRooms() {
 
 /* ─── CTA for Landlord ─── */
 function LandlordCTA() {
+    const { t } = useTranslation();
     return (
         <section className="py-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -454,10 +453,10 @@ function LandlordCTA() {
                         <div className="absolute inset-0 bg-black/10" />
                         <div className="relative z-10">
                             <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-[family-name:var(--font-family-heading)]">
-                                Maximize your rental efficiency
+                                {t('landlordHome.ctaTitle')}
                             </h2>
                             <p className="text-white/80 max-w-lg mx-auto mb-8 text-lg">
-                                Upgrade to Premium for priority listing display and more rental requests.
+                                {t('landlordHome.ctaDesc')}
                             </p>
                             <Link to="/premium">
                                 <motion.button
@@ -466,7 +465,7 @@ function LandlordCTA() {
                                     className="btn-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                                 >
                                     <Star size={18} />
-                                    Upgrade Now
+                                    {t('landlordHome.upgradeNow')}
                                 </motion.button>
                             </Link>
                         </div>

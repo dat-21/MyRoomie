@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X, Search, MessageCircle, UserPlus, Check } from "lucide-react";
 import { roommates, lifestyleOptions, formatCurrency } from "../data/mockData";
@@ -32,6 +33,7 @@ const smokingOptions = ["All", "No", "Yes"];
 const genderOptions = ["All", "Male", "Female", "Non-binary"];
 
 export default function ViewAllMatchesPage() {
+    const { t } = useTranslation();
     const [filters, setFilters] = useState<Filters>(defaultFilters);
     const [sortBy, setSortBy] = useState<SortOption>("compatibility");
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -84,14 +86,14 @@ export default function ViewAllMatchesPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
-                    <SlidersHorizontal size={18} /> Filters
+                    <SlidersHorizontal size={18} /> {t('common.filters')}
                 </h3>
-                <button onClick={resetFilters} className="text-xs text-primary font-medium cursor-pointer bg-transparent border-0 hover:underline">Reset</button>
+                <button onClick={resetFilters} className="text-xs text-primary font-medium cursor-pointer bg-transparent border-0 hover:underline">{t('common.reset')}</button>
             </div>
 
             {/* Gender */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Gender</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('matchesPage.gender')}</label>
                 <div className="flex flex-wrap gap-2">
                     {genderOptions.map((g) => (
                         <button
@@ -108,7 +110,7 @@ export default function ViewAllMatchesPage() {
 
             {/* Sleep Schedule */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Sleep Schedule</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('matchesPage.sleepSchedule')}</label>
                 <div className="flex flex-wrap gap-2">
                     {sleepOptions.map((s) => (
                         <button
@@ -125,7 +127,7 @@ export default function ViewAllMatchesPage() {
 
             {/* Cleanliness */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Cleanliness</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('matchesPage.cleanliness')}</label>
                 <div className="flex flex-wrap gap-2">
                     {cleanlinessOptions.map((c) => (
                         <button
@@ -142,7 +144,7 @@ export default function ViewAllMatchesPage() {
 
             {/* Smoking */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Smoking</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('matchesPage.smoking')}</label>
                 <div className="flex flex-wrap gap-2">
                     {smokingOptions.map((s) => (
                         <button
@@ -159,7 +161,7 @@ export default function ViewAllMatchesPage() {
 
             {/* Lifestyle Tags */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Lifestyle</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('matchesPage.lifestyle')}</label>
                 <div className="flex flex-wrap gap-2">
                     {lifestyleOptions.slice(0, 12).map((tag) => (
                         <button
@@ -182,9 +184,9 @@ export default function ViewAllMatchesPage() {
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <h1 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Best <span className="text-secondary">Matches</span>
+                        {t('matchesPage.title1')} <span className="text-secondary">{t('matchesPage.title2')}</span>
                     </h1>
-                    <p className="text-text-light mt-2">Find roommates who share your lifestyle</p>
+                    <p className="text-text-light mt-2">{t('matchesPage.subtitle')}</p>
                 </motion.div>
 
                 {/* Search & Sort */}
@@ -193,7 +195,7 @@ export default function ViewAllMatchesPage() {
                         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                             type="text"
-                            placeholder="Search matches..."
+                            placeholder={t('matchesPage.searchPlaceholder')}
                             value={filters.search}
                             onChange={(e) => setFilters((p) => ({ ...p, search: e.target.value }))}
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl glass text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 border-0"
@@ -205,16 +207,16 @@ export default function ViewAllMatchesPage() {
                             onChange={(e) => setSortBy(e.target.value as SortOption)}
                             className="px-4 py-2.5 rounded-xl glass text-sm text-text cursor-pointer border-0 focus:outline-none"
                         >
-                            <option value="compatibility">Best Match</option>
-                            <option value="budget-low">Lowest Budget</option>
-                            <option value="budget-high">Highest Budget</option>
-                            <option value="date">Move-in Date</option>
+                            <option value="compatibility">{t('matchesPage.sortBestMatch')}</option>
+                            <option value="budget-low">{t('matchesPage.sortBudgetLow')}</option>
+                            <option value="budget-high">{t('matchesPage.sortBudgetHigh')}</option>
+                            <option value="date">{t('matchesPage.sortMoveIn')}</option>
                         </select>
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl glass text-sm text-text cursor-pointer border-0"
                         >
-                            <SlidersHorizontal size={16} /> Filters
+                            <SlidersHorizontal size={16} /> {t('common.filters')}
                         </button>
                     </div>
                 </div>
@@ -244,12 +246,12 @@ export default function ViewAllMatchesPage() {
 
                     {/* Grid */}
                     <div className="flex-1">
-                        <p className="text-sm text-text-muted mb-4">{filtered.length} matches found</p>
+                        <p className="text-sm text-text-muted mb-4">{filtered.length} {t('matchesPage.matchesFound')}</p>
                         {filtered.length === 0 ? (
                             <div className="text-center py-20">
                                 <div className="text-6xl mb-4">👥</div>
-                                <h3 className="text-lg font-semibold text-text mb-2">No matches found</h3>
-                                <p className="text-sm text-text-muted">Try adjusting your filters</p>
+                                <h3 className="text-lg font-semibold text-text mb-2">{t('matchesPage.noMatches')}</h3>
+                                <p className="text-sm text-text-muted">{t('matchesPage.tryAdjusting')}</p>
                             </div>
                         ) : (
                             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -263,7 +265,7 @@ export default function ViewAllMatchesPage() {
                                             {connectedIds.has(rm.id) ? (
                                                 <>
                                                     <span className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-secondary/10 text-secondary text-xs font-medium">
-                                                        <Check size={14} /> Connected
+                                                        <Check size={14} /> {t('matchesPage.connected')}
                                                     </span>
                                                     <motion.button
                                                         whileHover={{ scale: 1.03 }}
@@ -271,7 +273,7 @@ export default function ViewAllMatchesPage() {
                                                         onClick={() => handleMessage(rm.id)}
                                                         className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-xs font-medium cursor-pointer border-0 btn-glow"
                                                     >
-                                                        <MessageCircle size={14} /> Message
+                                                        <MessageCircle size={14} /> {t('matchesPage.message')}
                                                     </motion.button>
                                                 </>
                                             ) : (
@@ -281,7 +283,7 @@ export default function ViewAllMatchesPage() {
                                                     onClick={() => handleConnect(rm.id)}
                                                     className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-secondary to-secondary-light text-white text-xs font-medium cursor-pointer border-0 btn-glow"
                                                 >
-                                                    <UserPlus size={14} /> Connect
+                                                    <UserPlus size={14} /> {t('matchesPage.connect')}
                                                 </motion.button>
                                             )}
                                         </div>

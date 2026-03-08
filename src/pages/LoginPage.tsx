@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const { login } = useAuth();
+    const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +21,7 @@ export default function LoginPage() {
         setError("");
 
         if (!email || !password) {
-            setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+            setError(t('login.errorRequired'));
             return;
         }
 
@@ -29,10 +31,10 @@ export default function LoginPage() {
             if (success) {
                 navigate("/");
             } else {
-                setError("Email hoặc mật khẩu không đúng.");
+                setError(t('login.errorInvalid'));
             }
         } catch {
-            setError("Đã có lỗi xảy ra. Vui lòng thử lại.");
+            setError(t('login.errorGeneral'));
         } finally {
             setLoading(false);
         }
@@ -67,10 +69,10 @@ export default function LoginPage() {
 
                     <div className="text-center mb-8">
                         <h1 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                            Chào mừng trở lại!
+                            {t('login.welcomeBack')}
                         </h1>
                         <p className="text-text-light text-sm mt-2">
-                            Đăng nhập để tìm người ở ghép hoàn hảo tại Đà Nẵng.
+                            {t('login.loginSubtitle')}
                         </p>
                     </div>
 
@@ -87,7 +89,7 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-text mb-1.5">Email</label>
+                            <label className="block text-sm font-medium text-text mb-1.5">{t('login.email')}</label>
                             <div className="relative">
                                 <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
                                 <input
@@ -102,7 +104,7 @@ export default function LoginPage() {
 
                         {/* Password */}
                         <div>
-                            <label className="block text-sm font-medium text-text mb-1.5">Mật khẩu</label>
+                            <label className="block text-sm font-medium text-text mb-1.5">{t('login.password')}</label>
                             <div className="relative">
                                 <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
                                 <input
@@ -131,10 +133,10 @@ export default function LoginPage() {
                                     onChange={(e) => setRemember(e.target.checked)}
                                     className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 accent-primary cursor-pointer"
                                 />
-                                <span className="text-sm text-text-light">Ghi nhớ đăng nhập</span>
+                                <span className="text-sm text-text-light">{t('login.rememberMe')}</span>
                             </label>
                             <button type="button" className="text-sm text-primary hover:text-primary-dark transition-colors bg-transparent border-0 cursor-pointer font-medium">
-                                Quên mật khẩu?
+                                {t('login.forgotPassword')}
                             </button>
                         </div>
 
@@ -151,7 +153,7 @@ export default function LoginPage() {
                             ) : (
                                 <>
                                     <LogIn size={18} />
-                                    Đăng nhập
+                                    {t('login.loginButton')}
                                 </>
                             )}
                         </motion.button>
@@ -160,9 +162,9 @@ export default function LoginPage() {
                     {/* Register link */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-text-light">
-                            Chưa có tài khoản?{" "}
+                            {t('login.noAccount')}{" "}
                             <Link to="/register" className="text-primary font-semibold hover:text-primary-dark transition-colors no-underline">
-                                Đăng ký ngay
+                                {t('login.registerNow')}
                             </Link>
                         </p>
                     </div>

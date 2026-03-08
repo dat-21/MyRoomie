@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import {
     MapPin,
@@ -75,6 +76,7 @@ function LargeCompatRing({ value }: { value: number }) {
 
 /* ─── Profile page for a roommate (view) ─── */
 function RoommateProfile({ person }: { person: Roommate }) {
+    const { t } = useTranslation();
     const [connected, setConnected] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
 
@@ -116,12 +118,12 @@ function RoommateProfile({ person }: { person: Roommate }) {
 
                             <div className="flex flex-wrap gap-4 mt-4 text-sm">
                                 <div>
-                                    <span className="text-text-muted">Budget: </span>
+                                    <span className="text-text-muted">{t('profile.budget')}: </span>
                                     <span className="font-medium text-text">{formatCurrency(person.budget.min)} - {formatCurrency(person.budget.max)}</span>
                                 </div>
                                 <div className="flex items-center gap-1">
                                     <Calendar size={14} className="text-text-muted" />
-                                    <span className="text-text-muted">Move-in: </span>
+                                    <span className="text-text-muted">{t('profile.moveIn')}: </span>
                                     <span className="font-medium text-text">
                                         {new Date(person.moveInDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                                     </span>
@@ -142,7 +144,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                 >
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                         <Heart size={18} className="text-accent" />
-                        Lifestyle
+                        {t('profile.lifestyle')}
                     </h2>
                     <div className="flex flex-wrap gap-2">
                         {person.lifestyleTags.map((tag) => (
@@ -188,7 +190,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                     {connected ? (
                         <>
                             <span className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-secondary/10 text-secondary font-semibold text-base">
-                                <Check size={18} /> Connected
+                                <Check size={18} /> {t('profile.connected')}
                             </span>
                             <motion.button
                                 whileHover={{ scale: 1.04 }}
@@ -197,7 +199,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                                 className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
                             >
                                 <MessageCircle size={18} />
-                                Message {person.name.split(" ")[0]}
+                                {t('profile.messageUser')} {person.name.split(" ")[0]}
                             </motion.button>
                         </>
                     ) : (
@@ -208,7 +210,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                             className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-secondary to-secondary-light text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
                         >
                             <UserPlus size={18} />
-                            Connect with {person.name.split(" ")[0]}
+                            {t('profile.connectWith')} {person.name.split(" ")[0]}
                         </motion.button>
                     )}
                 </motion.div>
@@ -222,6 +224,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
 
 /* ─── Own Profile (editable) ─── */
 function OwnProfile() {
+    const { t } = useTranslation();
     const [editing, setEditing] = useState(false);
     const [bio, setBio] = useState(currentUser.bio);
     const [tags, setTags] = useState(currentUser.lifestyleTags);
@@ -243,7 +246,7 @@ function OwnProfile() {
                 >
                     <div className="flex items-start justify-between mb-6">
                         <h1 className="text-2xl sm:text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                            My <span className="text-primary">Profile</span>
+                            {t('profile.my')} <span className="text-primary">{t('profile.profileHighlight')}</span>
                         </h1>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
@@ -255,7 +258,7 @@ function OwnProfile() {
                                 }`}
                         >
                             {editing ? <X size={14} /> : <Pencil size={14} />}
-                            {editing ? "Cancel" : "Edit Profile"}
+                            {editing ? t('profile.cancelEdit') : t('profile.editProfile')}
                         </motion.button>
                     </div>
 
@@ -298,7 +301,7 @@ function OwnProfile() {
 
                             <div className="flex flex-wrap gap-4 mt-4 text-sm">
                                 <div>
-                                    <span className="text-text-muted">Budget: </span>
+                                    <span className="text-text-muted">{t('profile.budget')}: </span>
                                     <span className="font-medium text-text">{formatCurrency(currentUser.budget.min)} - {formatCurrency(currentUser.budget.max)}</span>
                                 </div>
                             </div>
@@ -315,7 +318,7 @@ function OwnProfile() {
                 >
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                         <Heart size={18} className="text-accent" />
-                        My Lifestyle
+                        {t('profile.myLifestyle')}
                     </h2>
 
                     {editing ? (
@@ -358,16 +361,16 @@ function OwnProfile() {
                     className="glass rounded-3xl p-6 sm:p-8 mt-6"
                 >
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)]">
-                        Living Preferences
+                        {t('profile.livingPreferences')}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-x-8">
-                        <PrefItem icon={Moon} label="Sleep Schedule" value={currentUser.preferences.sleepSchedule} />
-                        <PrefItem icon={Sparkles} label="Cleanliness" value={currentUser.preferences.cleanliness} />
-                        <PrefItem icon={Volume2} label="Noise Level" value={currentUser.preferences.noise} />
-                        <PrefItem icon={Users} label="Guests" value={currentUser.preferences.guests} />
-                        <PrefItem icon={Cigarette} label="Smoking" value={currentUser.preferences.smoking} />
-                        <PrefItem icon={Dog} label="Pets" value={currentUser.preferences.pets} />
-                        <PrefItem icon={CookingPot} label="Cooking" value={currentUser.preferences.cooking} />
+                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={currentUser.preferences.sleepSchedule} />
+                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={currentUser.preferences.cleanliness} />
+                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={currentUser.preferences.noise} />
+                        <PrefItem icon={Users} label={t('profile.guests')} value={currentUser.preferences.guests} />
+                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={currentUser.preferences.smoking} />
+                        <PrefItem icon={Dog} label={t('profile.pets')} value={currentUser.preferences.pets} />
+                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={currentUser.preferences.cooking} />
                     </div>
                 </motion.div>
 
@@ -379,10 +382,10 @@ function OwnProfile() {
                     className="glass rounded-3xl p-6 sm:p-8 mt-6"
                 >
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)]">
-                        Matching Score Preview
+                        {t('profile.matchingPreview')}
                     </h2>
                     <p className="text-sm text-text-light mb-4">
-                        Here's how you match with some potential roommates:
+                        {t('profile.matchingPreviewDesc')}
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         {roommates.slice(0, 4).map((r) => (
@@ -409,7 +412,7 @@ function OwnProfile() {
                             className="btn-glow flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-gradient-to-r from-secondary to-secondary-light text-white font-semibold shadow-lg hover:shadow-xl transition-shadow cursor-pointer border-0 text-base"
                         >
                             <Save size={18} />
-                            Save Changes
+                            {t('profile.saveChanges')}
                         </motion.button>
                     </motion.div>
                 )}
@@ -420,6 +423,7 @@ function OwnProfile() {
 
 /* ─── Main Profile Page ─── */
 export default function ProfilePage() {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
 
     // If an id is provided, show that roommate's profile
@@ -429,8 +433,8 @@ export default function ProfilePage() {
             return (
                 <div className="min-h-screen pt-20 flex items-center justify-center">
                     <div className="text-center">
-                        <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">Profile Not Found</h2>
-                        <p className="text-text-light mt-2">This user doesn't exist or has been removed.</p>
+                        <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{t('profile.profileNotFound')}</h2>
+                        <p className="text-text-light mt-2">{t('profile.profileNotFoundDesc')}</p>
                     </div>
                 </div>
             );

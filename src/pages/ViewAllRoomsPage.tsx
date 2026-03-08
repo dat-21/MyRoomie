@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, SlidersHorizontal, X, ArrowUpDown, Search, Bed, Bath, Maximize, Star, BadgeCheck } from "lucide-react";
 import { rooms, formatCurrency } from "../data/mockData";
@@ -89,6 +90,7 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
 }
 
 export default function ViewAllRoomsPage() {
+    const { t } = useTranslation();
     const [filters, setFilters] = useState<Filters>(defaultFilters);
     const [sortBy, setSortBy] = useState<SortOption>("match");
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -131,14 +133,14 @@ export default function ViewAllRoomsPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
-                    <SlidersHorizontal size={18} /> Filters
+                    <SlidersHorizontal size={18} /> {t('common.filters')}
                 </h3>
-                <button onClick={resetFilters} className="text-xs text-primary font-medium cursor-pointer bg-transparent border-0 hover:underline">Reset</button>
+                <button onClick={resetFilters} className="text-xs text-primary font-medium cursor-pointer bg-transparent border-0 hover:underline">{t('common.reset')}</button>
             </div>
 
             {/* Budget */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Budget Range</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('roomsPage.budgetRange')}</label>
                 <div className="flex items-center gap-2">
                     <input
                         type="number"
@@ -160,7 +162,7 @@ export default function ViewAllRoomsPage() {
 
             {/* Distance */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Max Distance: {filters.distance}km</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('roomsPage.maxDistance')}: {filters.distance}km</label>
                 <input
                     type="range"
                     min="0.5"
@@ -174,7 +176,7 @@ export default function ViewAllRoomsPage() {
 
             {/* Room Type */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Room Type</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('roomsPage.roomType')}</label>
                 <div className="flex flex-wrap gap-2">
                     {roomTypes.map((rt) => (
                         <button
@@ -191,7 +193,7 @@ export default function ViewAllRoomsPage() {
 
             {/* Move-in Date */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Move-in Before</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('roomsPage.moveInBefore')}</label>
                 <input
                     type="date"
                     value={filters.moveInDate}
@@ -202,7 +204,7 @@ export default function ViewAllRoomsPage() {
 
             {/* Amenities */}
             <div>
-                <label className="text-sm font-medium text-text mb-2 block">Amenities</label>
+                <label className="text-sm font-medium text-text mb-2 block">{t('roomsPage.amenities')}</label>
                 <div className="flex flex-wrap gap-2">
                     {amenityOptions.map((a) => (
                         <button
@@ -225,9 +227,9 @@ export default function ViewAllRoomsPage() {
                 {/* Header */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <h1 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Nearby <span className="text-primary">Rooms</span>
+                        {t('roomsPage.title1')} <span className="text-primary">{t('roomsPage.title2')}</span>
                     </h1>
-                    <p className="text-text-light mt-2">Find your perfect living space in Da Nang</p>
+                    <p className="text-text-light mt-2">{t('roomsPage.subtitle')}</p>
                 </motion.div>
 
                 {/* Search & Sort Bar */}
@@ -236,7 +238,7 @@ export default function ViewAllRoomsPage() {
                         <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                             type="text"
-                            placeholder="Search rooms..."
+                            placeholder={t('roomsPage.searchPlaceholder')}
                             value={filters.search}
                             onChange={(e) => setFilters((p) => ({ ...p, search: e.target.value }))}
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl glass text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 border-0"
@@ -248,17 +250,17 @@ export default function ViewAllRoomsPage() {
                             onChange={(e) => setSortBy(e.target.value as SortOption)}
                             className="px-4 py-2.5 rounded-xl glass text-sm text-text cursor-pointer border-0 focus:outline-none"
                         >
-                            <option value="match">Best Match</option>
-                            <option value="nearest">Nearest</option>
-                            <option value="lowest">Lowest Price</option>
-                            <option value="highest">Highest Price</option>
-                            <option value="rating">Top Rated</option>
+                            <option value="match">{t('roomsPage.sortMatch')}</option>
+                            <option value="nearest">{t('roomsPage.sortNearest')}</option>
+                            <option value="lowest">{t('roomsPage.sortLowest')}</option>
+                            <option value="highest">{t('roomsPage.sortHighest')}</option>
+                            <option value="rating">{t('roomsPage.sortRating')}</option>
                         </select>
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl glass text-sm text-text cursor-pointer border-0"
                         >
-                            <SlidersHorizontal size={16} /> Filters
+                            <SlidersHorizontal size={16} /> {t('common.filters')}
                         </button>
                     </div>
                 </div>
@@ -298,12 +300,12 @@ export default function ViewAllRoomsPage() {
 
                     {/* Grid */}
                     <div className="flex-1">
-                        <p className="text-sm text-text-muted mb-4">{filtered.length} rooms found</p>
+                        <p className="text-sm text-text-muted mb-4">{filtered.length} {t('roomsPage.roomsFound')}</p>
                         {filtered.length === 0 ? (
                             <div className="text-center py-20">
                                 <div className="text-6xl mb-4">🏠</div>
-                                <h3 className="text-lg font-semibold text-text mb-2">No rooms found</h3>
-                                <p className="text-sm text-text-muted">Try adjusting your filters</p>
+                                <h3 className="text-lg font-semibold text-text mb-2">{t('roomsPage.noRooms')}</h3>
+                                <p className="text-sm text-text-muted">{t('roomsPage.tryAdjusting')}</p>
                             </div>
                         ) : (
                             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">

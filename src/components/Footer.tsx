@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { Heart, Mail, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+    const { t } = useTranslation();
+
     return (
         <footer className="bg-text text-white/80 mt-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -17,35 +20,35 @@ export default function Footer() {
                             </span>
                         </div>
                         <p className="text-sm text-white/60 leading-relaxed">
-                            Find your perfect roommate based on lifestyle compatibility, not just budget.
+                            {t('footer.tagline')}
                         </p>
                     </div>
 
                     {/* Quick Links */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">Quick Links</h4>
+                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">{t('footer.quickLinks')}</h4>
                         <ul className="space-y-2 list-none p-0 m-0">
-                            <li><Link to="/" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Home</Link></li>
-                            <li><Link to="/find" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Find Roommate</Link></li>
-                            <li><Link to="/post" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Post Room Slot</Link></li>
-                            <li><Link to="/profile" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">My Profile</Link></li>
+                            <li><Link to="/" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.home')}</Link></li>
+                            <li><Link to="/find" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.findRoommate')}</Link></li>
+                            <li><Link to="/post" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.postRoomSlot')}</Link></li>
+                            <li><Link to="/profile" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.myProfile')}</Link></li>
                         </ul>
                     </div>
 
                     {/* Support */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">Support</h4>
+                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">{t('footer.support')}</h4>
                         <ul className="space-y-2 list-none p-0 m-0">
-                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">FAQ</a></li>
-                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Safety Tips</a></li>
-                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Community Guidelines</a></li>
-                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">Contact Us</a></li>
+                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.faq')}</a></li>
+                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.safetyTips')}</a></li>
+                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.communityGuidelines')}</a></li>
+                            <li><a href="#" className="text-sm text-white/60 hover:text-secondary transition-colors no-underline">{t('footer.contactUs')}</a></li>
                         </ul>
                     </div>
 
                     {/* Contact */}
                     <div>
-                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">Get In Touch</h4>
+                        <h4 className="text-white font-semibold mb-4 font-[family-name:var(--font-family-heading)]">{t('footer.getInTouch')}</h4>
                         <div className="space-y-3">
                             <div className="flex items-center gap-2 text-sm text-white/60">
                                 <Mail size={16} className="text-secondary" />
@@ -61,10 +64,10 @@ export default function Footer() {
 
                 <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-sm text-white/40">
-                        © 2026 My Roomie. All rights reserved.
+                        {t('footer.copyright')}
                     </p>
                     <p className="text-sm text-white/40 flex items-center gap-1">
-                        Made with <Heart size={14} className="text-accent fill-accent" /> in Da Nang
+                        {t('footer.madeWith')} <Heart size={14} className="text-accent fill-accent" /> {t('footer.inDaNang')}
                     </p>
                 </div>
             </div>

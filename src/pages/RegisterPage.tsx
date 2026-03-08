@@ -6,9 +6,11 @@ import {
     User, Phone, MapPin, DollarSign, Home, FileText, CheckCircle2
 } from "lucide-react";
 import { useAuth, type Role, type UserData } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 /* ─── Success Popup ─── */
 function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+    const { t } = useTranslation();
     return (
         <AnimatePresence>
             {isOpen && (
@@ -41,12 +43,11 @@ function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                         </div>
 
                         <h2 className="text-xl font-bold mb-3 font-[family-name:var(--font-family-heading)]" style={{ color: "#8A6D00" }}>
-                            🎉 Đăng ký thành công!
+                            {t('registerPage.successTitle')}
                         </h2>
 
                         <p className="text-sm leading-relaxed mb-6" style={{ color: "#8A6D00" }}>
-                            Hồ sơ của bạn đã được gửi và đang chờ xét duyệt.<br />
-                            Vui lòng chờ quản trị viên phê duyệt trước khi sử dụng đầy đủ tính năng.
+                            {t('registerPage.successDesc')}
                         </p>
 
                         <motion.button
@@ -56,7 +57,7 @@ function SuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                             className="px-8 py-2.5 rounded-xl font-semibold text-white cursor-pointer border-0 shadow-md text-sm"
                             style={{ background: "linear-gradient(135deg, #F59E0B, #D97706)" }}
                         >
-                            OK
+                            {t('common.ok')}
                         </motion.button>
                     </motion.div>
                 </motion.div>
@@ -91,20 +92,21 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 /* ─── Role Selection ─── */
 function RoleSelection({ onSelect }: { onSelect: (role: Role) => void }) {
     const [hovered, setHovered] = useState<Role>(null);
+    const { t } = useTranslation();
 
     const roles = [
         {
             id: "landlord" as Role,
             icon: Building,
-            title: "Chủ trọ",
-            desc: "Tôi có phòng cho thuê và muốn tìm người thuê phù hợp.",
+            title: t('registerPage.landlordTitle'),
+            desc: t('registerPage.landlordDesc'),
             color: "from-primary to-primary-light",
         },
         {
             id: "tenant" as Role,
             icon: Users,
-            title: "Người thuê",
-            desc: "Tôi đang tìm phòng và bạn cùng phòng phù hợp.",
+            title: t('registerPage.tenantTitle'),
+            desc: t('registerPage.tenantDesc'),
             color: "from-secondary to-secondary-light",
         },
     ];
@@ -113,10 +115,10 @@ function RoleSelection({ onSelect }: { onSelect: (role: Role) => void }) {
         <div className="space-y-6">
             <div className="text-center">
                 <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                    Bạn là ai?
+                    {t('registerPage.whoAreYou')}
                 </h2>
                 <p className="text-text-light text-sm mt-2">
-                    Chọn vai trò để chúng tôi tùy chỉnh trải nghiệm cho bạn.
+                    {t('registerPage.chooseRole')}
                 </p>
             </div>
 
@@ -147,7 +149,7 @@ function RoleSelection({ onSelect }: { onSelect: (role: Role) => void }) {
                                 {role.desc}
                             </p>
                             <div className="mt-4 flex items-center gap-1 text-primary font-medium text-sm">
-                                Chọn <ArrowRight size={14} />
+                                {t('registerPage.choose')} <ArrowRight size={14} />
                             </div>
                         </motion.button>
                     );
@@ -201,6 +203,8 @@ export default function RegisterPage() {
     const navigate = useNavigate();
     const { register } = useAuth();
 
+    const { t } = useTranslation();
+
     const [step, setStep] = useState(0); // 0=role, 1=form
     const [role, setRole] = useState<Role>(null);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -234,7 +238,7 @@ export default function RegisterPage() {
         setError("");
 
         if (!email || !password || !name || !phone) {
-            setError("Vui lòng nhập đầy đủ thông tin bắt buộc.");
+            setError(t('registerPage.errorRequired'));
             return;
         }
 
@@ -254,7 +258,7 @@ export default function RegisterPage() {
             await register(userData);
             setShowSuccess(true);
         } catch {
-            setError("Đã có lỗi xảy ra. Vui lòng thử lại.");
+            setError(t('registerPage.errorGeneral'));
         } finally {
             setLoading(false);
         }
@@ -317,13 +321,13 @@ export default function RegisterPage() {
                                         onClick={() => setStep(0)}
                                         className="flex items-center gap-1.5 text-sm text-text-light hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0 mb-4"
                                     >
-                                        <ArrowLeft size={16} /> Quay lại chọn vai trò
+                                        <ArrowLeft size={16} /> {t('registerPage.backToRole')}
                                     </button>
                                     <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                        {role === "landlord" ? "Thông tin Chủ trọ" : "Thông tin Người thuê"}
+                                        {role === "landlord" ? t('registerPage.landlordInfo') : t('registerPage.tenantInfo')}
                                     </h2>
                                     <p className="text-text-light text-sm mt-1">
-                                        Hoàn tất đăng ký để bắt đầu sử dụng MyRoomie.
+                                        {t('registerPage.completeRegister')}
                                     </p>
                                 </div>
 
@@ -339,10 +343,10 @@ export default function RegisterPage() {
 
                                 <form onSubmit={handleSubmit} className="space-y-4">
                                     {/* Common fields */}
-                                    <FormField label="Email *" icon={Mail} value={email} onChange={setEmail} placeholder="you@example.com" type="email" />
+                                    <FormField label={t('registerPage.emailLabel')} icon={Mail} value={email} onChange={setEmail} placeholder="you@example.com" type="email" />
 
                                     <div>
-                                        <label className="block text-sm font-medium text-text mb-1.5">Mật khẩu *</label>
+                                        <label className="block text-sm font-medium text-text mb-1.5">{t('registerPage.passwordLabel')}</label>
                                         <div className="relative">
                                             <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
                                             <input
@@ -362,21 +366,21 @@ export default function RegisterPage() {
                                         </div>
                                     </div>
 
-                                    <FormField label="Họ tên *" icon={User} value={name} onChange={setName} placeholder="Nguyễn Văn A" />
-                                    <FormField label="Số điện thoại *" icon={Phone} value={phone} onChange={setPhone} placeholder="0901 234 567" type="tel" />
+                                    <FormField label={t('registerPage.fullName')} icon={User} value={name} onChange={setName} placeholder={t('registerPage.fullNamePlaceholder')} />
+                                    <FormField label={t('registerPage.phone')} icon={Phone} value={phone} onChange={setPhone} placeholder={t('registerPage.phonePlaceholder')} type="tel" />
 
                                     {/* Role-specific fields */}
                                     {role === "landlord" ? (
                                         <>
-                                            <FormField label="Khu vực cho thuê" icon={MapPin} value={area} onChange={setArea} placeholder="Hải Châu, Đà Nẵng" />
-                                            <FormField label="Số phòng" icon={Home} value={rooms} onChange={setRooms} placeholder="3 phòng" />
-                                            <FormField label="Mô tả" icon={FileText} value={description} onChange={setDescription} placeholder="Mô tả ngắn về phòng cho thuê..." textarea />
+                                            <FormField label={t('registerPage.rentalArea')} icon={MapPin} value={area} onChange={setArea} placeholder={t('registerPage.rentalAreaPlaceholder')} />
+                                            <FormField label={t('registerPage.numberOfRooms')} icon={Home} value={rooms} onChange={setRooms} placeholder={t('registerPage.numberOfRoomsPlaceholder')} />
+                                            <FormField label={t('registerPage.descriptionLabel')} icon={FileText} value={description} onChange={setDescription} placeholder={t('registerPage.descriptionPlaceholder')} textarea />
                                         </>
                                     ) : (
                                         <>
-                                            <FormField label="Ngân sách" icon={DollarSign} value={budget} onChange={setBudget} placeholder="2.000.000 - 4.000.000 đ/tháng" />
-                                            <FormField label="Khu vực mong muốn" icon={MapPin} value={desiredArea} onChange={setDesiredArea} placeholder="Sơn Trà, Đà Nẵng" />
-                                            <FormField label="Giới thiệu bản thân" icon={FileText} value={intro} onChange={setIntro} placeholder="Tôi là sinh viên, thích sạch sẽ, yên tĩnh..." textarea />
+                                            <FormField label={t('registerPage.budgetLabel')} icon={DollarSign} value={budget} onChange={setBudget} placeholder={t('registerPage.budgetPlaceholder')} />
+                                            <FormField label={t('registerPage.desiredArea')} icon={MapPin} value={desiredArea} onChange={setDesiredArea} placeholder={t('registerPage.desiredAreaPlaceholder')} />
+                                            <FormField label={t('registerPage.introLabel')} icon={FileText} value={intro} onChange={setIntro} placeholder={t('registerPage.introPlaceholder')} textarea />
                                         </>
                                     )}
 
@@ -391,7 +395,7 @@ export default function RegisterPage() {
                                         {loading ? (
                                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                         ) : (
-                                            <>Đăng ký</>
+                                            <>{t('registerPage.registerButton')}</>
                                         )}
                                     </motion.button>
                                 </form>
@@ -402,9 +406,9 @@ export default function RegisterPage() {
                     {/* Login link */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-text-light">
-                            Đã có tài khoản?{" "}
+                            {t('registerPage.haveAccount')}{" "}
                             <Link to="/login" className="text-primary font-semibold hover:text-primary-dark transition-colors no-underline">
-                                Đăng nhập
+                                {t('registerPage.loginNow')}
                             </Link>
                         </p>
                     </div>

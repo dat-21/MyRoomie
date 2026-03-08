@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Crown,
@@ -44,12 +45,13 @@ function FadeSection({ children, className = "", delay = 0 }: { children: React.
 
 /* ─── Role Tabs ─── */
 function RoleTabs({ role, setRole }: { role: Role; setRole: (r: Role) => void }) {
+    const { t } = useTranslation();
     return (
         <div className="flex justify-center mb-12">
             <div className="inline-flex rounded-2xl p-1.5 glass-strong">
                 {[
-                    { id: "student" as Role, label: "Student", icon: GraduationCap, desc: "Find roommates" },
-                    { id: "landlord" as Role, label: "Landlord", icon: Building2, desc: "Manage rentals" },
+                    { id: "student" as Role, label: t('premiumPage.student'), icon: GraduationCap, desc: t('premiumPage.findRoommates') },
+                    { id: "landlord" as Role, label: t('premiumPage.landlord'), icon: Building2, desc: t('premiumPage.manageRentals') },
                 ].map((tab) => (
                     <motion.button
                         key={tab.id}
@@ -81,6 +83,7 @@ function RoleTabs({ role, setRole }: { role: Role; setRole: (r: Role) => void })
 
 /* ─── Hero ─── */
 function PremiumHero({ role }: { role: Role }) {
+    const { t } = useTranslation();
     const isStudent = role === "student";
 
     return (
@@ -105,33 +108,30 @@ function PremiumHero({ role }: { role: Role }) {
                         className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-primary/10 to-secondary/10 text-primary text-sm font-medium mb-6 border border-primary/20"
                     >
                         <Crown size={16} className="text-accent" />
-                        {isStudent ? "Student Plan" : "Landlord Plan"}
+                        {isStudent ? t('premiumPage.studentPlan') : t('premiumPage.landlordPlan')}
                     </motion.div>
 
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight font-[family-name:var(--font-family-heading)]">
                         {isStudent ? (
                             <>
-                                Find your{" "}
+                                {t('premiumPage.heroTitleStudent1')}{" "}
                                 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                    perfect roommate.
+                                    {t('premiumPage.heroTitleStudent2')}
                                 </span>
                             </>
                         ) : (
                             <>
-                                Reach students{" "}
+                                {t('premiumPage.heroTitleLandlord1')}{" "}
                                 <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                    faster.
+                                    {t('premiumPage.heroTitleLandlord2')}
                                 </span>
                             </>
                         )}
                     </h1>
 
-                    <p className="mt-6 text-lg text-text-light leading-relaxed max-w-2xl mx-auto">
-                        {isStudent
-                            ? <>Unlock roommate-finding features — direct messaging, smart AI suggestions, connect <strong className="text-text">3x faster</strong>.</>
-                            : <>Boost your listing to the top, unlock student contacts — <strong className="text-text">increase occupancy rate</strong> effectively.</>
-                        }
-                    </p>
+                    <p className="mt-6 text-lg text-text-light leading-relaxed max-w-2xl mx-auto"
+                        dangerouslySetInnerHTML={{ __html: isStudent ? t('premiumPage.heroDescStudent') : t('premiumPage.heroDescLandlord') }}
+                    />
 
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
@@ -141,9 +141,9 @@ function PremiumHero({ role }: { role: Role }) {
                     >
                         {isStudent
                             ? [
-                                { icon: Bot, label: "Smart AI Suggestions", color: "text-accent" },
-                                { icon: MessageCircle, label: "Unlimited Messaging", color: "text-secondary" },
-                                { icon: Shield, label: "Verified Profile", color: "text-primary" },
+                                { icon: Bot, label: t('premiumPage.smartAI'), color: "text-accent" },
+                                { icon: MessageCircle, label: t('premiumPage.unlimitedMsg'), color: "text-secondary" },
+                                { icon: Shield, label: t('premiumPage.verifiedProfile'), color: "text-primary" },
                             ].map((item) => (
                                 <div key={item.label} className="flex items-center gap-2">
                                     <item.icon size={18} className={item.color} />
@@ -151,9 +151,9 @@ function PremiumHero({ role }: { role: Role }) {
                                 </div>
                             ))
                             : [
-                                { icon: Megaphone, label: "Boost to Front Page", color: "text-gold" },
-                                { icon: Unlock, label: "Unlock Contacts", color: "text-accent" },
-                                { icon: TrendingUp, label: "Increase Reach", color: "text-primary" },
+                                { icon: Megaphone, label: t('premiumPage.boostFrontPage'), color: "text-gold" },
+                                { icon: Unlock, label: t('premiumPage.unlockContacts'), color: "text-accent" },
+                                { icon: TrendingUp, label: t('premiumPage.increaseReach'), color: "text-primary" },
                             ].map((item) => (
                                 <div key={item.label} className="flex items-center gap-2">
                                     <item.icon size={18} className={item.color} />
@@ -173,15 +173,16 @@ function PremiumHero({ role }: { role: Role }) {
    ═══════════════════════════════════════════════════════════ */
 
 function StudentComparison() {
+    const { t } = useTranslation();
     const features = [
-        { name: "Find Roommates", free: "View profiles only", premium: "Full access", icon: Users },
-        { name: "Messaging", free: false, premium: true, icon: MessageCircle },
-        { name: "Smart AI Suggestions", free: false, premium: "AI plans only", icon: Bot },
-        { name: "Lifestyle Details", free: "Basic", premium: "Full", icon: Heart },
-        { name: "Who Viewed Your Profile", free: false, premium: true, icon: Eye },
-        { name: "Boost Profile to Top", free: false, premium: true, icon: TrendingUp },
-        { name: "Advanced Filters", free: false, premium: true, icon: Sparkles },
-        { name: "Verified Badge", free: false, premium: true, icon: Shield },
+        { name: t('premiumPage.featureFindRoommates'), free: t('premiumPage.viewProfilesOnly'), premium: t('premiumPage.fullAccess'), icon: Users },
+        { name: t('premiumPage.messaging'), free: false, premium: true, icon: MessageCircle },
+        { name: t('premiumPage.aiSuggestions'), free: false, premium: t('premiumPage.aiPlansOnly'), icon: Bot },
+        { name: t('premiumPage.lifestyleDetails'), free: t('premiumPage.basic'), premium: t('premiumPage.full'), icon: Heart },
+        { name: t('premiumPage.whoViewed'), free: false, premium: true, icon: Eye },
+        { name: t('premiumPage.boostProfile'), free: false, premium: true, icon: TrendingUp },
+        { name: t('premiumPage.advancedFilters'), free: false, premium: true, icon: Sparkles },
+        { name: t('premiumPage.verifiedBadge'), free: false, premium: true, icon: Shield },
     ];
 
     return (
@@ -189,16 +190,16 @@ function StudentComparison() {
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Free vs <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Premium</span>
+                        {t('premiumPage.freeVsPremium').split('Premium')[0]}<span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Premium</span>
                     </h2>
-                    <p className="mt-3 text-text-light">See what you're missing</p>
+                    <p className="mt-3 text-text-light">{t('premiumPage.seeWhatMissing')}</p>
                 </FadeSection>
 
                 <FadeSection delay={0.1}>
                     <div className="premium-glass rounded-2xl overflow-hidden">
                         <div className="grid grid-cols-3 text-center py-4 border-b border-white/20">
-                            <div className="text-sm font-semibold text-text">Feature</div>
-                            <div className="text-sm font-semibold text-text-muted">Free</div>
+                            <div className="text-sm font-semibold text-text">{t('premiumPage.feature')}</div>
+                            <div className="text-sm font-semibold text-text-muted">{t('premiumPage.free')}</div>
                             <div className="text-sm font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Premium</div>
                         </div>
                         {features.map((f, i) => {
@@ -243,13 +244,14 @@ function StudentComparison() {
 }
 
 function StudentPricing() {
+    const { t } = useTranslation();
     const plans = [
         {
             id: "1w-noai",
-            name: "1 Week",
-            subtitle: "No AI",
+            name: t('premiumPage.oneWeek'),
+            subtitle: t('premiumPage.noAI'),
             price: 49000,
-            duration: "7 days",
+            duration: t('premiumPage.days7'),
             contacts: 15,
             hasAI: false,
             badge: null,
@@ -257,10 +259,10 @@ function StudentPricing() {
         },
         {
             id: "1w-ai",
-            name: "1 Week + AI",
-            subtitle: "With AI suggestions",
+            name: t('premiumPage.oneWeekAI'),
+            subtitle: t('premiumPage.withAI'),
             price: 69000,
-            duration: "7 days",
+            duration: t('premiumPage.days7'),
             contacts: 15,
             hasAI: true,
             badge: null,
@@ -268,24 +270,24 @@ function StudentPricing() {
         },
         {
             id: "1m-noai",
-            name: "1 Month",
-            subtitle: "No AI",
+            name: t('premiumPage.oneMonth'),
+            subtitle: t('premiumPage.noAI'),
             price: 149000,
-            duration: "30 days",
+            duration: t('premiumPage.days30'),
             contacts: 60,
             hasAI: false,
-            badge: "Most Popular",
+            badge: t('premiumPage.mostPopular'),
             popular: true,
         },
         {
             id: "1m-ai",
-            name: "1 Month + AI",
-            subtitle: "With AI suggestions",
+            name: t('premiumPage.oneMonthAI'),
+            subtitle: t('premiumPage.withAI'),
             price: 169000,
-            duration: "30 days",
+            duration: t('premiumPage.days30'),
             contacts: 60,
             hasAI: true,
-            badge: "Best Value",
+            badge: t('premiumPage.bestValue'),
             popular: false,
         },
     ];
@@ -300,13 +302,13 @@ function StudentPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-dark text-xs font-medium mb-4 border border-primary-100">
                         <GraduationCap size={14} />
-                        For Students
+                        {t('premiumPage.forStudents')}
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Unlock{" "}
-                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Roommate Finder</span>
+                        {t('premiumPage.unlockRoommateFinder').split(t('premiumPage.unlockRoommateFinder').split(' ').slice(2).join(' '))[0]}
+                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">{t('premiumPage.unlockRoommateFinder').split(' ').slice(2).join(' ')}</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Message, connect, and find your best match</p>
+                    <p className="mt-3 text-text-light">{t('premiumPage.msgConnectFind')}</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
@@ -342,30 +344,30 @@ function StudentPricing() {
                                 <div className="space-y-2.5 mt-5 mb-5 flex-1">
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Send size={14} className="text-secondary flex-shrink-0" />
-                                        Message up to <strong className="text-text">{plan.contacts} people</strong>
+                                        <span dangerouslySetInnerHTML={{ __html: t('premiumPage.messagePeople', { count: plan.contacts }) }} />
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Users size={14} className="text-secondary flex-shrink-0" />
-                                        View full profiles
+                                        {t('premiumPage.viewFullProfiles')}
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Sparkles size={14} className="text-secondary flex-shrink-0" />
-                                        Advanced filters
+                                        {t('premiumPage.advancedFilters')}
                                     </div>
                                     {plan.hasAI ? (
                                         <div className="flex items-center gap-2 text-sm text-text">
                                             <Bot size={14} className="text-accent flex-shrink-0" />
-                                            <span className="font-medium">AI roommate suggestions</span>
+                                            <span className="font-medium">{t('premiumPage.aiRoommateSuggestions')}</span>
                                         </div>
                                     ) : (
                                         <div className="flex items-center gap-2 text-sm text-text-muted/50">
                                             <Bot size={14} className="flex-shrink-0" />
-                                            <span className="line-through">AI suggestions</span>
+                                            <span className="line-through">{t('premiumPage.aiSuggestions')}</span>
                                         </div>
                                     )}
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Eye size={14} className="text-secondary flex-shrink-0" />
-                                        See who viewed your profile
+                                        {t('premiumPage.seeWhoViewed')}
                                     </div>
                                 </div>
 
@@ -377,7 +379,7 @@ function StudentPricing() {
                                         : "bg-primary/10 text-primary hover:bg-primary/20"
                                         }`}
                                 >
-                                    Buy Now
+                                    {t('common.buyNow')}
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -393,35 +395,36 @@ function StudentPricing() {
    ═══════════════════════════════════════════════════════════ */
 
 function LandlordBoostPricing() {
+    const { t } = useTranslation();
     const plans = [
         {
             id: "single",
-            name: "Boost 1 Listing",
+            name: t('premiumPage.boost1Listing'),
             price: 19000,
-            unit: "/listing",
-            duration: "24-hour front page visibility",
+            unit: t('premiumPage.perListing'),
+            duration: t('premiumPage.duration24h'),
             badge: null,
             popular: false,
             features: [
-                "Featured on front page for 24h",
-                "\"Boosted\" badge highlight",
-                "5x more views",
+                t('premiumPage.featuredFrontPage'),
+                t('premiumPage.boostedBadge'),
+                t('premiumPage.moreViews5x'),
             ],
         },
         {
             id: "bundle",
-            name: "10-Listing Bundle",
+            name: t('premiumPage.bundle10'),
             price: 149000,
-            unit: "/bundle",
-            duration: "10 listings × 24h each",
-            badge: "Save 21%",
+            unit: t('premiumPage.perBundle'),
+            duration: t('premiumPage.duration10x24h'),
+            badge: t('premiumPage.save21'),
             popular: true,
             features: [
-                "10 boost credits (use anytime)",
-                "Each listing featured for 24h",
-                "\"Boosted\" badge highlight",
-                "5x more views",
-                "Only ~14,900 VND/listing",
+                t('premiumPage.boostCredits10'),
+                t('premiumPage.eachListing24h'),
+                t('premiumPage.boostedBadge'),
+                t('premiumPage.moreViews5x'),
+                t('premiumPage.onlyPerListing'),
             ],
         },
     ];
@@ -436,13 +439,13 @@ function LandlordBoostPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/10 text-gold-dark text-xs font-medium mb-4 border border-gold-light/30">
                         <Megaphone size={14} />
-                        Boost & Stay on Top
+                        {t('premiumPage.boostStayTop')}
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Boost your listing to the{" "}
-                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">front page</span>
+                        {t('premiumPage.boostListingTitle')}{" "}
+                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">{t('premiumPage.boostListingTitleHighlight')}</span>
                     </h2>
-                    <p className="mt-3 text-text-light">Your listing will be prioritized and highlighted for 24 hours</p>
+                    <p className="mt-3 text-text-light">{t('premiumPage.boostListingDesc')}</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
@@ -494,7 +497,7 @@ function LandlordBoostPricing() {
                                         : "bg-gold/10 text-gold-dark hover:bg-gold/20"
                                         }`}
                                 >
-                                    Buy Now
+                                    {t('common.buyNow')}
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -506,33 +509,34 @@ function LandlordBoostPricing() {
 }
 
 function LandlordContactPricing() {
+    const { t } = useTranslation();
     const plans = [
         {
             id: "free",
-            name: "Free",
+            name: t('premiumPage.freeContacts'),
             price: 0,
             contacts: 3,
             badge: null,
             popular: false,
-            perContact: "Free",
+            perContact: t('premiumPage.freeLabel'),
         },
         {
             id: "30",
-            name: "30 Contacts",
+            name: t('premiumPage.contacts30'),
             price: 99000,
             contacts: 30,
-            badge: "Most Popular",
+            badge: t('premiumPage.mostPopular'),
             popular: true,
-            perContact: "~3,300 VND/contact",
+            perContact: "~3,300 VND" + t('premiumPage.perContact'),
         },
         {
             id: "100",
-            name: "100 Contacts",
+            name: t('premiumPage.contacts100'),
             price: 249000,
             contacts: 100,
-            badge: "Best Value",
+            badge: t('premiumPage.bestValue'),
             popular: false,
-            perContact: "~2,490 VND/contact",
+            perContact: "~2,490 VND" + t('premiumPage.perContact'),
         },
     ];
 
@@ -546,13 +550,13 @@ function LandlordContactPricing() {
                 <FadeSection className="text-center mb-14">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-50 text-primary-dark text-xs font-medium mb-4 border border-secondary-100">
                         <Unlock size={14} />
-                        Unlock Student Contacts
+                        {t('premiumPage.unlockStudentContacts')}
                     </div>
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Unlock{" "}
-                        <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">student contacts</span>
+                        {t('premiumPage.unlockStudentContactsTitle').split(' ').slice(0, 2).join(' ')}{" "}
+                        <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">{t('premiumPage.unlockStudentContactsTitle').split(' ').slice(2).join(' ')}</span>
                     </h2>
-                    <p className="mt-3 text-text-light">View phone numbers and emails to contact students directly</p>
+                    <p className="mt-3 text-text-light">{t('premiumPage.unlockStudentContactsDesc')}</p>
                 </FadeSection>
 
                 <div className="grid sm:grid-cols-3 gap-6 items-stretch">
@@ -596,21 +600,21 @@ function LandlordContactPricing() {
                                 <div className="space-y-2.5 mt-5 mb-5 flex-1">
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Check size={16} className="text-secondary flex-shrink-0" />
-                                        Unlock <strong className="text-text">{plan.contacts} student</strong> contacts
+                                        <span dangerouslySetInnerHTML={{ __html: t('premiumPage.unlockStudents', { count: plan.contacts }) }} />
                                     </div>
                                     <div className="flex items-center gap-2 text-sm text-text-light">
                                         <Check size={16} className="text-secondary flex-shrink-0" />
-                                        View full phone & email
+                                        {t('premiumPage.viewPhoneEmail')}
                                     </div>
                                     {plan.price > 0 && (
                                         <>
                                             <div className="flex items-center gap-2 text-sm text-text-light">
                                                 <Check size={16} className="text-secondary flex-shrink-0" />
-                                                Contacts never expire
+                                                {t('premiumPage.contactsNeverExpire')}
                                             </div>
                                             <div className="flex items-center gap-2 text-sm text-text-light">
                                                 <Check size={16} className="text-secondary flex-shrink-0" />
-                                                Priority listing display
+                                                {t('premiumPage.priorityListing')}
                                             </div>
                                         </>
                                     )}
@@ -626,7 +630,7 @@ function LandlordContactPricing() {
                                             : "bg-secondary/10 text-secondary hover:bg-secondary/20"
                                         }`}
                                 >
-                                    {plan.id === "free" ? "Current Plan" : "Upgrade"}
+                                    {plan.id === "free" ? t('premiumPage.currentPlan') : t('premiumPage.upgrade')}
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
@@ -639,6 +643,7 @@ function LandlordContactPricing() {
 
 /* ─── Testimonials ─── */
 function Testimonials({ role }: { role: Role }) {
+    const { t } = useTranslation();
     const studentReviews = [
         {
             name: "Minh T.",
@@ -667,21 +672,21 @@ function Testimonials({ role }: { role: Role }) {
         {
             name: "Tuan A.",
             role: "Landlord, Ngu Hanh Son",
-            text: "Boosted for 24h and got 5 student inquiries right away. The 10-listing bundle saves so much more.",
+            text: t('premiumPage.reviewLandlord1'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhTuan",
             rating: 5,
         },
         {
             name: "Hoa N.",
             role: "Landlord, Hai Chau",
-            text: "The 30-contact pack is amazing value — only 99k and I could reach so many students. Rooms filled fast.",
+            text: t('premiumPage.reviewLandlord2'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=ChiHoa",
             rating: 5,
         },
         {
             name: "Duc T.",
             role: "Landlord, Thanh Khe",
-            text: "My rooms are always full thanks to front-page boosting. Totally worth the investment.",
+            text: t('premiumPage.reviewLandlord3'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhDuc",
             rating: 5,
         },
@@ -694,7 +699,7 @@ function Testimonials({ role }: { role: Role }) {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        What {role === "student" ? "students" : "landlords"} <span className="text-secondary">say</span>
+                        {role === "student" ? t('premiumPage.whatStudentsSay') : t('premiumPage.whatLandlordsSay')} <span className="text-secondary">{t('premiumPage.whatSay')}</span>
                     </h2>
                 </FadeSection>
 
@@ -729,20 +734,21 @@ function Testimonials({ role }: { role: Role }) {
 
 /* ─── FAQ ─── */
 function FAQ({ role }: { role: Role }) {
+    const { t } = useTranslation();
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     const studentFaqs = [
-        { q: "Can I cancel my plan at any time?", a: "Your plan remains active until it expires (7 days or 30 days). There is no auto-renewal." },
-        { q: "What's the difference between AI and non-AI plans?", a: "AI plans use an AI algorithm to analyze lifestyle and preferences, then suggest the most compatible roommates. Non-AI plans let you search and message on your own." },
-        { q: "What does 15 people / 60 people mean?", a: "That's the number of people you can message during your plan. For example, the 1-week plan allows messaging up to 15 different people." },
-        { q: "What payment methods are accepted?", a: "We accept MoMo, ZaloPay, domestic bank cards, and bank transfers." },
+        { q: t('premiumPage.studentFaq1Q'), a: t('premiumPage.studentFaq1A') },
+        { q: t('premiumPage.studentFaq2Q'), a: t('premiumPage.studentFaq2A') },
+        { q: t('premiumPage.studentFaq3Q'), a: t('premiumPage.studentFaq3A') },
+        { q: t('premiumPage.studentFaq4Q'), a: t('premiumPage.studentFaq4A') },
     ];
 
     const landlordFaqs = [
-        { q: "How does the 24-hour boost work?", a: "When you boost a listing, it will be displayed as a priority on the front page for 24 hours, with a \"Boosted\" badge, increasing views by up to 5x." },
-        { q: "Can I use the 10-listing bundle gradually?", a: "Yes! You purchase the 10-listing bundle and use credits over time. Each boost deducts 1 credit. Credits never expire." },
-        { q: "What does unlocking student contacts mean?", a: "Student contact info (phone, email) is hidden by default. You need to unlock it to view. The free plan includes 3 contacts — upgrade for more." },
-        { q: "Do unlocked contacts expire?", a: "No. Once you unlock a student's contact info, you can view it permanently." },
+        { q: t('premiumPage.landlordFaq1Q'), a: t('premiumPage.landlordFaq1A') },
+        { q: t('premiumPage.landlordFaq2Q'), a: t('premiumPage.landlordFaq2A') },
+        { q: t('premiumPage.landlordFaq3Q'), a: t('premiumPage.landlordFaq3A') },
+        { q: t('premiumPage.landlordFaq4Q'), a: t('premiumPage.landlordFaq4A') },
     ];
 
     const faqs = role === "student" ? studentFaqs : landlordFaqs;
@@ -752,7 +758,7 @@ function FAQ({ role }: { role: Role }) {
             <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Frequently Asked <span className="text-primary">Questions</span>
+                        {t('premiumPage.faqTitle1')} <span className="text-primary">{t('premiumPage.faqTitle2')}</span>
                     </h2>
                 </FadeSection>
 
@@ -791,6 +797,7 @@ function FAQ({ role }: { role: Role }) {
 
 /* ─── Bottom CTA ─── */
 function BottomCTA({ role }: { role: Role }) {
+    const { t } = useTranslation();
     return (
         <section className="py-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -811,13 +818,10 @@ function BottomCTA({ role }: { role: Role }) {
                                 : <Building2 size={40} className="text-secondary-light mx-auto mb-4" />
                             }
                             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-[family-name:var(--font-family-heading)]">
-                                {role === "student" ? "Ready to find your roommate?" : "Ready to fill your vacancies?"}
+                                {role === "student" ? t('premiumPage.readyStudent') : t('premiumPage.readyLandlord')}
                             </h2>
                             <p className="text-white/80 max-w-lg mx-auto mb-8 text-lg">
-                                {role === "student"
-                                    ? "Thousands of students have found their ideal roommate. It's your turn!"
-                                    : "Boost listings, unlock contacts — fill your rooms quickly."
-                                }
+                                {role === "student" ? t('premiumPage.ctaDescStudent') : t('premiumPage.ctaDescLandlord')}
                             </p>
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
@@ -825,10 +829,10 @@ function BottomCTA({ role }: { role: Role }) {
                                 className="btn-glow premium-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                             >
                                 <Sparkles size={18} />
-                                {role === "student" ? "Get Started Now" : "Upgrade Now"}
+                                {role === "student" ? t('premiumPage.getStarted') : t('premiumPage.upgradeNow')}
                             </motion.button>
                             <p className="text-white/50 text-xs mt-4">
-                                {role === "student" ? "No auto-renewal · One-time payment" : "Boost credits never expire · Contacts unlocked forever"}
+                                {role === "student" ? t('premiumPage.noAutoRenewal') : t('premiumPage.creditsNeverExpire')}
                             </p>
                         </div>
                     </div>

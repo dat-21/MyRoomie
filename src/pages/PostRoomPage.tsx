@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     MapPin,
@@ -38,20 +39,21 @@ const initialFormData: FormData = {
 };
 
 const steps = [
-    { label: "Room Details", icon: Home },
-    { label: "Preferences", icon: Heart },
-    { label: "Description", icon: FileText },
-    { label: "Review", icon: Check },
+    { labelKey: "postRoom.stepRoomDetails", icon: Home },
+    { labelKey: "postRoom.stepPreferences", icon: Heart },
+    { labelKey: "postRoom.stepDescription", icon: FileText },
+    { labelKey: "postRoom.stepReview", icon: Check },
 ];
 
 const roomTypes = [
-    "Private Room",
-    "Shared Room",
-    "Studio Apartment",
-    "Master Bedroom",
+    { value: "Private Room", labelKey: "postRoom.privateRoom" },
+    { value: "Shared Room", labelKey: "postRoom.sharedRoom" },
+    { value: "Studio Apartment", labelKey: "postRoom.studioApartment" },
+    { value: "Master Bedroom", labelKey: "postRoom.masterBedroom" },
 ];
 
 export default function PostRoomPage() {
+    const { t } = useTranslation();
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState<FormData>(initialFormData);
     const [submitted, setSubmitted] = useState(false);
@@ -102,10 +104,10 @@ export default function PostRoomPage() {
                         <Check size={36} className="text-secondary" />
                     </div>
                     <h2 className="text-2xl font-bold text-text mb-3 font-[family-name:var(--font-family-heading)]">
-                        Room Slot Posted!
+                        {t('postRoom.successTitle')}
                     </h2>
                     <p className="text-text-light mb-6">
-                        Your room slot has been published. Compatible roommates will be able to find you soon!
+                        {t('postRoom.successDesc')}
                     </p>
                     <motion.button
                         whileHover={{ scale: 1.04 }}
@@ -113,7 +115,7 @@ export default function PostRoomPage() {
                         onClick={() => { setSubmitted(false); setCurrentStep(0); setFormData(initialFormData); }}
                         className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-medium cursor-pointer border-0 shadow-md"
                     >
-                        Post Another
+                        {t('postRoom.postAnother')}
                     </motion.button>
                 </motion.div>
             </div>
@@ -126,10 +128,10 @@ export default function PostRoomPage() {
                 {/* Page header */}
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <h1 className="text-3xl sm:text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Post a <span className="text-secondary">Room Slot</span>
+                        {t('postRoom.pageTitle1')} <span className="text-secondary">{t('postRoom.pageTitle2')}</span>
                     </h1>
                     <p className="mt-2 text-text-light">
-                        Share your available room and find a compatible roommate.
+                        {t('postRoom.pageSubtitle')}
                     </p>
                 </motion.div>
 
@@ -148,7 +150,7 @@ export default function PostRoomPage() {
                             const done = i < currentStep;
                             const active = i === currentStep;
                             return (
-                                <div key={step.label} className="relative z-10 flex flex-col items-center">
+                                <div key={step.labelKey} className="relative z-10 flex flex-col items-center">
                                     <motion.div
                                         animate={{
                                             scale: active ? 1.1 : 1,
@@ -167,7 +169,7 @@ export default function PostRoomPage() {
                                         )}
                                     </motion.div>
                                     <span className={`mt-2 text-xs font-medium ${active ? "text-primary" : done ? "text-secondary" : "text-text-muted"}`}>
-                                        {step.label}
+                                        {t(step.labelKey)}
                                     </span>
                                 </div>
                             );
@@ -191,14 +193,14 @@ export default function PostRoomPage() {
                                 <div className="space-y-5">
                                     <h2 className="text-xl font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                         <Home size={20} className="text-primary" />
-                                        Room Details
+                                        {t('postRoom.roomDetails')}
                                     </h2>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-text mb-1.5">Title</label>
+                                        <label className="block text-sm font-medium text-text mb-1.5">{t('postRoom.title')}</label>
                                         <input
                                             type="text"
-                                            placeholder="e.g., Cozy room near UD campus"
+                                            placeholder={t('postRoom.titlePlaceholder')}
                                             value={formData.title}
                                             onChange={(e) => update("title", e.target.value)}
                                             className="w-full px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -208,11 +210,11 @@ export default function PostRoomPage() {
                                     <div className="grid sm:grid-cols-2 gap-4">
                                         <div>
                                             <label className="block text-sm font-medium text-text mb-1.5">
-                                                <MapPin size={14} className="inline mr-1" />Location
+                                                <MapPin size={14} className="inline mr-1" />{t('postRoom.locationLabel')}
                                             </label>
                                             <input
                                                 type="text"
-                                                placeholder="e.g., Hai Chau, Da Nang"
+                                                placeholder={t('postRoom.locationPlaceholder')}
                                                 value={formData.location}
                                                 onChange={(e) => update("location", e.target.value)}
                                                 className="w-full px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -220,11 +222,11 @@ export default function PostRoomPage() {
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-text mb-1.5">
-                                                <DollarSign size={14} className="inline mr-1" />Rent (VND/month)
+                                                <DollarSign size={14} className="inline mr-1" />{t('postRoom.rent')}
                                             </label>
                                             <input
                                                 type="number"
-                                                placeholder="e.g., 3500000"
+                                                placeholder={t('postRoom.rentPlaceholder')}
                                                 value={formData.rent}
                                                 onChange={(e) => update("rent", e.target.value)}
                                                 className="w-full px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -234,25 +236,25 @@ export default function PostRoomPage() {
 
                                     <div className="grid sm:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-sm font-medium text-text mb-1.5">Room Type</label>
+                                            <label className="block text-sm font-medium text-text mb-1.5">{t('postRoom.roomType')}</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 {roomTypes.map((type) => (
                                                     <button
-                                                        key={type}
-                                                        onClick={() => update("roomType", type)}
-                                                        className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${formData.roomType === type
+                                                        key={type.value}
+                                                        onClick={() => update("roomType", type.value)}
+                                                        className={`py-2.5 px-3 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${formData.roomType === type.value
                                                             ? "bg-primary text-white shadow-md"
                                                             : "bg-white/60 text-text-light hover:bg-primary/10"
                                                             }`}
                                                     >
-                                                        {type}
+                                                        {t(type.labelKey)}
                                                     </button>
                                                 ))}
                                             </div>
                                         </div>
                                         <div>
                                             <label className="block text-sm font-medium text-text mb-1.5">
-                                                <Users size={14} className="inline mr-1" />Available Slots
+                                                <Users size={14} className="inline mr-1" />{t('postRoom.availableSlots')}
                                             </label>
                                             <select
                                                 value={formData.availableSlots}
@@ -260,7 +262,7 @@ export default function PostRoomPage() {
                                                 className="w-full px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer"
                                             >
                                                 {[1, 2, 3, 4].map((n) => (
-                                                    <option key={n} value={n}>{n} slot{n > 1 ? "s" : ""}</option>
+                                                    <option key={n} value={n}>{n} {n > 1 ? t('postRoom.slots') : t('postRoom.slot')}</option>
                                                 ))}
                                             </select>
                                         </div>
@@ -268,7 +270,7 @@ export default function PostRoomPage() {
 
                                     <div>
                                         <label className="block text-sm font-medium text-text mb-1.5">
-                                            <Calendar size={14} className="inline mr-1" />Available From
+                                            <Calendar size={14} className="inline mr-1" />{t('postRoom.availableFrom')}
                                         </label>
                                         <input
                                             type="date"
@@ -284,10 +286,10 @@ export default function PostRoomPage() {
                                 <div className="space-y-5">
                                     <h2 className="text-xl font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                         <Heart size={20} className="text-secondary" />
-                                        Lifestyle Expectations
+                                        {t('postRoom.lifestyleExpectations')}
                                     </h2>
                                     <p className="text-sm text-text-light">
-                                        Select the lifestyle traits you'd prefer in a roommate.
+                                        {t('postRoom.lifestyleDesc')}
                                     </p>
                                     <div className="flex flex-wrap gap-2">
                                         {lifestyleOptions.map((tag) => (
@@ -307,7 +309,7 @@ export default function PostRoomPage() {
                                     </div>
                                     {formData.lifestyleExpectations.length > 0 && (
                                         <p className="text-xs text-text-muted">
-                                            {formData.lifestyleExpectations.length} selected
+                                            {formData.lifestyleExpectations.length} {t('postRoom.selectedTags')}
                                         </p>
                                     )}
                                 </div>
@@ -317,19 +319,19 @@ export default function PostRoomPage() {
                                 <div className="space-y-5">
                                     <h2 className="text-xl font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                         <FileText size={20} className="text-accent" />
-                                        Description
+                                        {t('postRoom.description')}
                                     </h2>
                                     <p className="text-sm text-text-light">
-                                        Tell potential roommates about the room and what it's like living there.
+                                        {t('postRoom.descIntro')}
                                     </p>
                                     <textarea
                                         value={formData.description}
                                         onChange={(e) => update("description", e.target.value)}
-                                        placeholder="Describe the room, neighborhood, amenities, house rules, and anything a potential roommate should know..."
+                                        placeholder={t('postRoom.descPlaceholder')}
                                         rows={8}
                                         className="w-full px-4 py-3 rounded-xl border border-white/40 bg-white/60 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                                     />
-                                    <p className="text-xs text-text-muted">{formData.description.length}/500 characters</p>
+                                    <p className="text-xs text-text-muted">{formData.description.length}/500 {t('postRoom.characters')}</p>
                                 </div>
                             )}
 
@@ -337,17 +339,17 @@ export default function PostRoomPage() {
                                 <div className="space-y-5">
                                     <h2 className="text-xl font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                         <Check size={20} className="text-secondary" />
-                                        Review Your Post
+                                        {t('postRoom.reviewTitle')}
                                     </h2>
 
                                     <div className="space-y-4">
                                         {[
-                                            { label: "Title", value: formData.title || "—" },
-                                            { label: "Location", value: formData.location || "—" },
-                                            { label: "Rent", value: formData.rent ? `${Number(formData.rent).toLocaleString()} VND/mo` : "—" },
-                                            { label: "Room Type", value: formData.roomType || "—" },
-                                            { label: "Available Slots", value: formData.availableSlots },
-                                            { label: "Move-in Date", value: formData.moveInDate || "—" },
+                                            { label: t('postRoom.title'), value: formData.title || "—" },
+                                            { label: t('postRoom.locationLabel'), value: formData.location || "—" },
+                                            { label: t('postRoom.rent'), value: formData.rent ? `${Number(formData.rent).toLocaleString()} VND/mo` : "—" },
+                                            { label: t('postRoom.roomType'), value: formData.roomType || "—" },
+                                            { label: t('postRoom.availableSlots'), value: formData.availableSlots },
+                                            { label: t('postRoom.availableFrom'), value: formData.moveInDate || "—" },
                                         ].map((item) => (
                                             <div key={item.label} className="flex justify-between items-center py-2 border-b border-white/30">
                                                 <span className="text-sm text-text-light">{item.label}</span>
@@ -357,7 +359,7 @@ export default function PostRoomPage() {
 
                                         {formData.lifestyleExpectations.length > 0 && (
                                             <div className="py-2">
-                                                <span className="text-sm text-text-light block mb-2">Lifestyle Expectations</span>
+                                                <span className="text-sm text-text-light block mb-2">{t('postRoom.lifestyleLabel')}</span>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {formData.lifestyleExpectations.map((tag) => (
                                                         <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary/10 text-secondary">
@@ -370,7 +372,7 @@ export default function PostRoomPage() {
 
                                         {formData.description && (
                                             <div className="py-2">
-                                                <span className="text-sm text-text-light block mb-2">Description</span>
+                                                <span className="text-sm text-text-light block mb-2">{t('postRoom.descriptionLabel')}</span>
                                                 <p className="text-sm text-text leading-relaxed bg-white/40 p-4 rounded-xl">
                                                     {formData.description}
                                                 </p>
@@ -396,7 +398,7 @@ export default function PostRoomPage() {
                             }`}
                     >
                         <ChevronLeft size={16} />
-                        Previous
+                        {t('common.previous')}
                     </motion.button>
 
                     {currentStep < steps.length - 1 ? (
@@ -406,7 +408,7 @@ export default function PostRoomPage() {
                             onClick={next}
                             className="btn-glow flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-medium text-sm shadow-md shadow-primary/20 cursor-pointer border-0"
                         >
-                            Next
+                            {t('common.next')}
                             <ChevronRight size={16} />
                         </motion.button>
                     ) : (
@@ -417,7 +419,7 @@ export default function PostRoomPage() {
                             className="btn-glow flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary-light text-white font-medium text-sm shadow-md shadow-secondary/20 cursor-pointer border-0"
                         >
                             <Send size={16} />
-                            Publish Post
+                            {t('postRoom.publish')}
                         </motion.button>
                     )}
                 </div>

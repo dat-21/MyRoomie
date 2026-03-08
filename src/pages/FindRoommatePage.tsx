@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     SlidersHorizontal,
@@ -40,6 +41,7 @@ export default function FindRoommatePage() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [lifestyleExpanded, setLifestyleExpanded] = useState(false);
+    const { t } = useTranslation();
 
     // Simulate loading
     useState(() => {
@@ -98,16 +100,16 @@ export default function FindRoommatePage() {
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                     <SlidersHorizontal size={18} />
-                    Filters
+                    {t('common.filters')}
                 </h3>
                 <button onClick={resetFilters} className="text-xs text-accent hover:text-accent-dark transition-colors cursor-pointer bg-transparent border-0 font-medium">
-                    Reset All
+                    {t('common.resetAll')}
                 </button>
             </div>
 
             {/* Gender */}
             <div>
-                <label className="block text-sm font-medium text-text mb-2">Gender Preference</label>
+                <label className="block text-sm font-medium text-text mb-2">{t('findPage.genderPreference')}</label>
                 <div className="grid grid-cols-3 gap-2">
                     {["All", "Male", "Female"].map((g) => (
                         <button
@@ -126,7 +128,7 @@ export default function FindRoommatePage() {
 
             {/* Budget */}
             <div>
-                <label className="block text-sm font-medium text-text mb-2">Budget Range</label>
+                <label className="block text-sm font-medium text-text mb-2">{t('findPage.budgetRange')}</label>
                 <div className="space-y-3">
                     <div>
                         <div className="flex justify-between text-xs text-text-muted mb-1">
@@ -163,7 +165,7 @@ export default function FindRoommatePage() {
 
             {/* Move-in date */}
             <div>
-                <label className="block text-sm font-medium text-text mb-2">Move-in Before</label>
+                <label className="block text-sm font-medium text-text mb-2">{t('findPage.moveInBefore')}</label>
                 <input
                     type="date"
                     value={filters.moveInDate}
@@ -174,7 +176,7 @@ export default function FindRoommatePage() {
 
             {/* Lifestyle Tags */}
             <div>
-                <label className="block text-sm font-medium text-text mb-2">Lifestyle</label>
+                <label className="block text-sm font-medium text-text mb-2">{t('findPage.lifestyle')}</label>
                 <div className="flex flex-wrap gap-2">
                     {displayedLifestyles.map((tag) => (
                         <motion.button
@@ -197,7 +199,7 @@ export default function FindRoommatePage() {
                         className="flex items-center gap-1 mt-2 text-xs text-primary hover:text-primary-dark transition-colors cursor-pointer bg-transparent border-0"
                     >
                         {lifestyleExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                        {lifestyleExpanded ? "Show less" : `Show all (${lifestyleOptions.length})`}
+                        {lifestyleExpanded ? t('common.showLess') : `${t('common.showAll')} (${lifestyleOptions.length})`}
                     </button>
                 )}
             </div>
@@ -214,10 +216,10 @@ export default function FindRoommatePage() {
                     className="mb-8"
                 >
                     <h1 className="text-3xl sm:text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Find Your <span className="text-primary">Match</span>
+                        {t('findPage.title1')} <span className="text-primary">{t('findPage.title2')}</span>
                     </h1>
                     <p className="mt-2 text-text-light">
-                        Discover roommates who match your lifestyle and preferences.
+                        {t('findPage.subtitle')}
                     </p>
                 </motion.div>
 
@@ -232,7 +234,7 @@ export default function FindRoommatePage() {
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         <input
                             type="text"
-                            placeholder="Search by name, bio, or location..."
+                            placeholder={t('findPage.searchPlaceholder')}
                             value={filters.search}
                             onChange={(e) => setFilters((p) => ({ ...p, search: e.target.value }))}
                             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-white/40 bg-white/60 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -247,10 +249,10 @@ export default function FindRoommatePage() {
                                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                                 className="px-3 py-2.5 rounded-xl border border-white/40 bg-white/60 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer"
                             >
-                                <option value="compatibility">Compatibility</option>
-                                <option value="budget-low">Budget: Low → High</option>
-                                <option value="budget-high">Budget: High → Low</option>
-                                <option value="date">Move-in Date</option>
+                                <option value="compatibility">{t('findPage.sortCompatibility')}</option>
+                                <option value="budget-low">{t('findPage.sortBudgetLow')}</option>
+                                <option value="budget-high">{t('findPage.sortBudgetHigh')}</option>
+                                <option value="date">{t('findPage.sortDate')}</option>
                             </select>
                         </div>
 
@@ -259,7 +261,7 @@ export default function FindRoommatePage() {
                             className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary/10 text-primary text-sm font-medium cursor-pointer border-0"
                         >
                             <SlidersHorizontal size={16} />
-                            Filters
+                            {t('common.filters')}
                         </button>
                     </div>
                 </motion.div>
@@ -273,22 +275,22 @@ export default function FindRoommatePage() {
                             exit={{ opacity: 0, height: 0 }}
                             className="flex flex-wrap items-center gap-2 mb-4"
                         >
-                            <span className="text-xs text-text-muted">Active:</span>
+                            <span className="text-xs text-text-muted">{t('findPage.active')}</span>
                             {filters.gender !== "All" && (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs">
                                     {filters.gender}
                                     <X size={12} className="cursor-pointer" onClick={() => setFilters((p) => ({ ...p, gender: "All" }))} />
                                 </span>
                             )}
-                            {filters.lifestyleTags.map((t) => (
-                                <span key={t} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs">
-                                    {t}
-                                    <X size={12} className="cursor-pointer" onClick={() => toggleTag(t)} />
+                            {filters.lifestyleTags.map((tag) => (
+                                <span key={tag} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs">
+                                    {tag}
+                                    <X size={12} className="cursor-pointer" onClick={() => toggleTag(tag)} />
                                 </span>
                             ))}
                             {filters.moveInDate && (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent/10 text-accent text-xs">
-                                    Before {filters.moveInDate}
+                                    {t('findPage.before')} {filters.moveInDate}
                                     <X size={12} className="cursor-pointer" onClick={() => setFilters((p) => ({ ...p, moveInDate: "" }))} />
                                 </span>
                             )}

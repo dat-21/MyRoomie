@@ -17,6 +17,7 @@ import {
     ChevronRight,
     BadgeCheck,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useInView } from "../hooks/useInView";
 import { roommates, rooms, formatCurrency } from "../data/mockData";
 import type { RoomListing } from "../data/mockData";
@@ -125,6 +126,7 @@ function Hero() {
     const [selectedRoom, setSelectedRoom] = useState<RoomListing | null>(null);
     const topRooms = rooms.slice(0, 3);
     const topMatches = [...roommates].sort((a, b) => b.compatibility - a.compatibility).slice(0, 3);
+    const { t } = useTranslation();
 
     return (
         <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-20">
@@ -151,18 +153,18 @@ function Hero() {
                             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6"
                         >
                             <Sparkles size={16} />
-                            Lifestyle-based matching
+                            {t('landing.badge')}
                         </motion.div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-text leading-tight font-[family-name:var(--font-family-heading)]">
-                            Find Your{" "}
+                            {t('landing.heroTitle1')}{" "}
                             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                                Perfect Roommate
+                                {t('landing.heroTitle2')}
                             </span>
                         </h1>
 
                         <p className="mt-6 text-lg text-text-light leading-relaxed max-w-lg">
-                            My Roomie matches you with compatible roommates based on your lifestyle, habits, and preferences — not just budget. Feel safe, matched, and understood.
+                            {t('landing.heroDesc')}
                         </p>
 
                         <div className="flex flex-wrap gap-4 mt-8">
@@ -173,7 +175,7 @@ function Hero() {
                                     className="btn-glow flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-shadow cursor-pointer border-0 text-base"
                                 >
                                     <Search size={18} />
-                                    Find a Roommate
+                                    {t('landing.findRoommate')}
                                 </motion.button>
                             </Link>
 
@@ -184,7 +186,7 @@ function Hero() {
                                     className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white/70 text-text font-semibold shadow-md hover:shadow-lg border border-white/40 backdrop-blur-sm transition-all cursor-pointer text-base"
                                 >
                                     <PlusCircle size={18} className="text-secondary" />
-                                    Post a Room Slot
+                                    {t('landing.postRoomSlot')}
                                 </motion.button>
                             </Link>
                         </div>
@@ -192,9 +194,9 @@ function Hero() {
                         {/* Stats */}
                         <div className="flex gap-8 mt-10">
                             {[
-                                { value: "2.5K+", label: "Active Users" },
-                                { value: "89%", label: "Match Rate" },
-                                { value: "1.2K+", label: "Matches Made" },
+                                { value: "2.5K+", label: t('landing.activeUsers') },
+                                { value: "89%", label: t('landing.matchRate') },
+                                { value: "1.2K+", label: t('landing.matchesMade') },
                             ].map((stat) => (
                                 <div key={stat.label}>
                                     <div className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{stat.value}</div>
@@ -221,10 +223,10 @@ function Hero() {
                             <div className="flex items-center justify-between px-5 pt-4 pb-2">
                                 <h3 className="text-base font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                     <Home size={16} className="text-primary" />
-                                    Nearby Rooms
+                                    {t('landing.nearbyRooms')}
                                 </h3>
                                 <Link to="/rooms" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
-                                    View All <ChevronRight size={14} />
+                                    {t('common.viewAll')} <ChevronRight size={14} />
                                 </Link>
                             </div>
                             <div className="px-3 pb-4 space-y-1">
@@ -244,10 +246,10 @@ function Hero() {
                             <div className="flex items-center justify-between px-5 pt-4 pb-2">
                                 <h3 className="text-base font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2">
                                     <Users size={16} className="text-secondary" />
-                                    Best Matches
+                                    {t('landing.bestMatches')}
                                 </h3>
                                 <Link to="/matches" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
-                                    View All <ChevronRight size={14} />
+                                    {t('common.viewAll')} <ChevronRight size={14} />
                                 </Link>
                             </div>
                             <div className="px-3 pb-4 space-y-0.5">
@@ -270,23 +272,24 @@ function Hero() {
 
 /* ─── How It Works ─── */
 function HowItWorks() {
+    const { t } = useTranslation();
     const steps = [
         {
             icon: UserCheck,
-            title: "Create Your Profile",
-            description: "Tell us about your lifestyle, habits, and what matters to you in a roommate.",
+            title: t('landing.step1Title'),
+            description: t('landing.step1Desc'),
             color: "from-primary to-primary-light",
         },
         {
             icon: Heart,
-            title: "Get Matched",
-            description: "Our smart algorithm finds people whose lifestyle is most compatible with yours.",
+            title: t('landing.step2Title'),
+            description: t('landing.step2Desc'),
             color: "from-secondary to-secondary-light",
         },
         {
             icon: MessageCircle,
-            title: "Connect & Move In",
-            description: "Chat with your matches, meet up, and find your new home together.",
+            title: t('landing.step3Title'),
+            description: t('landing.step3Desc'),
             color: "from-accent to-accent-light",
         },
     ];
@@ -296,10 +299,10 @@ function HowItWorks() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-14">
                     <h2 className="text-3xl sm:text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        How It <span className="text-primary">Works</span>
+                        {t('landing.howItWorks').split(' ').slice(0, -1).join(' ')} <span className="text-primary">{t('landing.howItWorks').split(' ').pop()}</span>
                     </h2>
                     <p className="mt-4 text-text-light max-w-xl mx-auto">
-                        Three simple steps to finding a roommate who truly fits your lifestyle.
+                        {t('landing.howItWorksDesc')}
                     </p>
                 </FadeSection>
 
@@ -332,36 +335,37 @@ function HowItWorks() {
 
 /* ─── Features ─── */
 function Features() {
+    const { t } = useTranslation();
     const features = [
         {
             icon: Heart,
-            title: "Lifestyle-Based Matching",
-            description: "We analyze sleep schedules, cleanliness habits, noise tolerance, and more to find your ideal match.",
+            title: t('landing.feature1Title'),
+            description: t('landing.feature1Desc'),
         },
         {
             icon: ShieldCheck,
-            title: "Verified Profiles",
-            description: "Feel safe with our verification system. Know who you're connecting with before meeting.",
+            title: t('landing.feature2Title'),
+            description: t('landing.feature2Desc'),
         },
         {
             icon: Sparkles,
-            title: "Smart Suggestions",
-            description: "Our algorithm learns your preferences and improves match quality over time.",
+            title: t('landing.feature3Title'),
+            description: t('landing.feature3Desc'),
         },
         {
             icon: Users,
-            title: "Community Driven",
-            description: "Join a community of students and young professionals looking for compatible living situations.",
+            title: t('landing.feature4Title'),
+            description: t('landing.feature4Desc'),
         },
         {
             icon: Home,
-            title: "Room Slot Posting",
-            description: "Have an empty room? Post it and let compatible roommates find you.",
+            title: t('landing.feature5Title'),
+            description: t('landing.feature5Desc'),
         },
         {
             icon: MessageCircle,
-            title: "Safe Communication",
-            description: "Chat within the platform before sharing personal contact information.",
+            title: t('landing.feature6Title'),
+            description: t('landing.feature6Desc'),
         },
     ];
 
@@ -375,10 +379,10 @@ function Features() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <FadeSection className="text-center mb-14">
                     <h2 className="text-3xl sm:text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        Why Choose <span className="text-secondary">My Roomie</span>?
+                        {t('landing.whyChoose')} <span className="text-secondary">My Roomie</span>?
                     </h2>
                     <p className="mt-4 text-text-light max-w-xl mx-auto">
-                        We're not a rental marketplace. We're a compatibility-driven roommate finder.
+                        {t('landing.whyChooseDesc')}
                     </p>
                 </FadeSection>
 
@@ -408,6 +412,7 @@ function Features() {
 
 /* ─── CTA ─── */
 function CTA() {
+    const { t } = useTranslation();
     return (
         <section className="py-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -416,10 +421,10 @@ function CTA() {
                         <div className="absolute inset-0 bg-black/10" />
                         <div className="relative z-10">
                             <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-[family-name:var(--font-family-heading)]">
-                                Ready to Find Your Perfect Roommate?
+                                {t('landing.ctaTitle')}
                             </h2>
                             <p className="text-white/80 max-w-lg mx-auto mb-8 text-lg">
-                                Join thousands of students and young professionals who found their ideal living situation through My Roomie.
+                                {t('landing.ctaDesc')}
                             </p>
                             <Link to="/find">
                                 <motion.button
@@ -427,7 +432,7 @@ function CTA() {
                                     whileTap={{ scale: 0.97 }}
                                     className="btn-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                                 >
-                                    Get Started Now
+                                    {t('landing.getStarted')}
                                     <ArrowRight size={18} />
                                 </motion.button>
                             </Link>

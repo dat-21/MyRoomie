@@ -3,21 +3,23 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Home, Search, PlusCircle, User, Palette, MessageCircle, Crown, Users, Building, LogIn, LogOut, Clock, LayoutDashboard } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const tenantNavLinks = [
-    { to: "/", label: "Home", icon: Home },
-    { to: "/find", label: "Find Roommate", icon: Search },
-    { to: "/rooms", label: "Rooms", icon: Building },
-    { to: "/matches", label: "Matches", icon: Users },
-    { to: "/post", label: "Post Room", icon: PlusCircle },
-    { to: "/premium", label: "Premium", icon: Crown },
+    { to: "/", labelKey: "common.home", icon: Home },
+    { to: "/find", labelKey: "common.findRoommate", icon: Search },
+    { to: "/rooms", labelKey: "common.rooms", icon: Building },
+    { to: "/matches", labelKey: "common.matches", icon: Users },
+    { to: "/post", labelKey: "common.postRoom", icon: PlusCircle },
+    { to: "/premium", labelKey: "common.premium", icon: Crown },
 ];
 
 const landlordNavLinks = [
-    { to: "/", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/rooms", label: "My Rooms", icon: Building },
-    { to: "/post", label: "Post Room", icon: PlusCircle },
-    { to: "/premium", label: "Premium", icon: Crown },
+    { to: "/", labelKey: "common.dashboard", icon: LayoutDashboard },
+    { to: "/rooms", labelKey: "common.myRooms", icon: Building },
+    { to: "/post", labelKey: "common.postRoom", icon: PlusCircle },
+    { to: "/premium", labelKey: "common.premium", icon: Crown },
 ];
 
 interface NavbarProps {
@@ -30,6 +32,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
     const navigate = useNavigate();
     const { user, isAuthenticated, isPending, logout } = useAuth();
 
+    const { t } = useTranslation();
     const navLinks = user?.role === "landlord" ? landlordNavLinks : tenantNavLinks;
 
     const handleLogout = () => {
@@ -66,16 +69,18 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                             transition={{ type: "spring", stiffness: 380, damping: 30 }}
                                         />
                                     )}
-                                    <span className="relative z-10">{link.label}</span>
+                                    <span className="relative z-10">{t(link.labelKey)}</span>
                                 </Link>
                             );
                         })}
 
                         {/* Chat button */}
+                        <LanguageSwitcher />
+
                         <button
                             onClick={onChatOpen}
                             className="relative ml-3 p-2.5 rounded-xl hover:bg-primary/10 transition-colors text-text-light hover:text-primary cursor-pointer border-0 bg-transparent"
-                            title="Messages"
+                            title={t('common.messages')}
                         >
                             <MessageCircle size={24} />
                             <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent rounded-full flex items-center justify-center">
@@ -90,19 +95,19 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                 {user?.role === "landlord" && (
                                     <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
                                         <Building size={12} />
-                                        Landlord
+                                        {t('common.landlord')}
                                     </span>
                                 )}
                                 {user?.role === "tenant" && (
                                     <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-secondary/10 text-secondary border border-secondary/20">
                                         <Users size={12} />
-                                        Tenant
+                                        {t('common.tenant')}
                                     </span>
                                 )}
                                 {isPending && (
                                     <span className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "#FFF8E1", color: "#8A6D00", border: "1px solid #FFC107" }}>
                                         <Clock size={12} />
-                                        Chờ duyệt
+                                        {t('navbar.waitingApproval')}
                                     </span>
                                 )}
                                 <Link
@@ -126,7 +131,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                 className="ml-3 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold text-sm no-underline shadow-md shadow-primary/20 hover:shadow-lg transition-all"
                             >
                                 <LogIn size={16} />
-                                Đăng nhập
+                                {t('common.login')}
                             </Link>
                         )}
                     </div>
@@ -176,7 +181,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                             }`}
                                     >
                                         <Icon size={18} />
-                                        {link.label}
+                                        {t(link.labelKey)}
                                     </Link>
                                 );
                             })}
@@ -189,11 +194,11 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                         {user?.role && (
                                             <div className="flex items-center gap-2 px-4 py-2 mb-1">
                                                 <span className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${user.role === "landlord"
-                                                        ? "bg-primary/10 text-primary border border-primary/20"
-                                                        : "bg-secondary/10 text-secondary border border-secondary/20"
+                                                    ? "bg-primary/10 text-primary border border-primary/20"
+                                                    : "bg-secondary/10 text-secondary border border-secondary/20"
                                                     }`}>
                                                     {user.role === "landlord" ? <Building size={12} /> : <Users size={12} />}
-                                                    {user.role === "landlord" ? "Landlord" : "Tenant"}
+                                                    {user.role === "landlord" ? t('common.landlord') : t('common.tenant')}
                                                 </span>
                                             </div>
                                         )}
@@ -201,7 +206,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                             <div className="flex items-center gap-2 px-4 py-2 mb-1">
                                                 <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: "#FFF8E1", color: "#8A6D00", border: "1px solid #FFC107" }}>
                                                     <Clock size={12} />
-                                                    Chờ duyệt
+                                                    {t('navbar.waitingApproval')}
                                                 </span>
                                             </div>
                                         )}
@@ -218,7 +223,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-50 hover:text-red-500 transition-all w-full bg-transparent border-0 cursor-pointer"
                                         >
                                             <LogOut size={18} />
-                                            Đăng xuất
+                                            {t('common.logout')}
                                         </button>
                                     </>
                                 ) : (
@@ -228,7 +233,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-primary hover:bg-primary/5 transition-all no-underline"
                                     >
                                         <LogIn size={18} />
-                                        Đăng nhập
+                                        {t('common.login')}
                                     </Link>
                                 )}
                             </div>

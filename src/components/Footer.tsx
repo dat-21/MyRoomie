@@ -56,7 +56,7 @@ export default function Footer() {
                             </div>
                             <div className="flex items-center gap-2 text-sm text-white/60">
                                 <MapPin size={16} className="text-secondary" />
-                                Da Nang, Vietnam
+                                {t('footer.address')}
                             </div>
                         </div>
                     </div>

@@ -35,8 +35,31 @@ type SortOption = "match" | "nearest" | "lowest" | "highest" | "rating";
 const amenityOptions = ["WiFi", "Air conditioning", "Kitchen", "Washing Machine", "Parking", "Gym", "Pool", "Balcony", "Security", "Elevator", "Pets allowed"];
 const roomTypes = ["All", "Studio", "Private Room", "Shared Room", "Master Bedroom"];
 
+const amenityLabelKeys: Record<string, string> = {
+    "WiFi": "roomsPage.wifiShort",
+    "Air conditioning": "roomsPage.airConditioning",
+    "Kitchen": "roomsPage.kitchen",
+    "Washing Machine": "roomsPage.washingMachine",
+    "Parking": "roomsPage.parking",
+    "Gym": "roomsPage.gym",
+    "Pool": "roomsPage.pool",
+    "Balcony": "roomsPage.balcony",
+    "Security": "roomsPage.security",
+    "Elevator": "roomsPage.elevator",
+    "Pets allowed": "roomsPage.petsAllowed",
+};
+
+const roomTypeLabelKeys: Record<string, string> = {
+    "All": "common.all",
+    "Studio": "roomsPage.studio",
+    "Private Room": "roomsPage.privateRoom",
+    "Shared Room": "roomsPage.sharedRoom",
+    "Master Bedroom": "roomsPage.masterBedroom",
+};
+
 function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => void; index: number }) {
     const [ref, inView] = useInView(0.1);
+    const { t } = useTranslation();
 
     return (
         <motion.div
@@ -54,10 +77,10 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
                 <div className="absolute top-3 left-3 flex gap-2">
                     {room.verified && (
                         <span className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/90 text-white text-[10px] font-medium backdrop-blur-sm">
-                            <BadgeCheck size={10} /> Verified
+                            <BadgeCheck size={10} /> {t('common.verified')}
                         </span>
                     )}
-                    <span className="px-2.5 py-1 rounded-full bg-white/90 text-text text-[10px] font-medium backdrop-blur-sm">{room.roomType}</span>
+                    <span className="px-2.5 py-1 rounded-full bg-white/90 text-text text-[10px] font-medium backdrop-blur-sm">{t(roomTypeLabelKeys[room.roomType] || room.roomType)}</span>
                 </div>
                 <div className="absolute top-3 right-3">
                     <MatchCircle value={room.matchScore} size="sm" />
@@ -70,7 +93,7 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
                 <div className="flex items-center gap-1 text-text-muted">
                     <MapPin size={12} />
                     <span className="text-xs truncate">{room.district}</span>
-                    <span className="text-xs ml-auto">{room.distance}km</span>
+                    <span className="text-xs ml-auto">{t('common.kmAway', { distance: room.distance })}</span>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-text-light">
                     <span className="flex items-center gap-1"><Bed size={12} /> {room.bedrooms}</span>
@@ -78,7 +101,7 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
                     <span className="flex items-center gap-1"><Maximize size={12} /> {room.area}m²</span>
                 </div>
                 <div className="flex items-center justify-between pt-2 border-t border-white/40">
-                    <span className="text-sm font-bold text-text">{formatCurrency(room.rent)}<span className="text-xs font-normal text-text-muted">/mo</span></span>
+                    <span className="text-sm font-bold text-text">{formatCurrency(room.rent)}<span className="text-xs font-normal text-text-muted">{t('common.perMonth')}</span></span>
                     <div className="flex items-center gap-1">
                         <Star size={12} className="text-gold fill-gold" />
                         <span className="text-xs font-medium text-text">{room.rating}</span>
@@ -147,7 +170,7 @@ export default function ViewAllRoomsPage() {
                         value={filters.budgetMin}
                         onChange={(e) => setFilters((p) => ({ ...p, budgetMin: Number(e.target.value) }))}
                         className="w-full px-3 py-2 rounded-xl border border-text/10 text-sm focus:outline-none focus:border-primary/40 bg-bg/50"
-                        placeholder="Min"
+                        placeholder={t('common.min')}
                     />
                     <span className="text-text-muted">—</span>
                     <input
@@ -155,7 +178,7 @@ export default function ViewAllRoomsPage() {
                         value={filters.budgetMax}
                         onChange={(e) => setFilters((p) => ({ ...p, budgetMax: Number(e.target.value) }))}
                         className="w-full px-3 py-2 rounded-xl border border-text/10 text-sm focus:outline-none focus:border-primary/40 bg-bg/50"
-                        placeholder="Max"
+                        placeholder={t('common.max')}
                     />
                 </div>
             </div>
@@ -185,7 +208,7 @@ export default function ViewAllRoomsPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.roomType === rt ? "bg-primary text-white border-primary" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {rt}
+                            {t(roomTypeLabelKeys[rt])}
                         </button>
                     ))}
                 </div>
@@ -213,7 +236,7 @@ export default function ViewAllRoomsPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.amenities.includes(a) ? "bg-primary/10 text-primary border-primary/30" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {a}
+                            {t(amenityLabelKeys[a])}
                         </button>
                     ))}
                 </div>

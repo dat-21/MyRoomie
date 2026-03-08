@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Search, Smile, Phone, MoreVertical } from "lucide-react";
 import { conversations as initialConversations } from "../data/mockData";
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function ChatPanel({ isOpen, onClose, initialConversationId }: Props) {
+    const { t, i18n } = useTranslation();
     const [convos, setConvos] = useState<Conversation[]>(initialConversations);
     const [activeId, setActiveId] = useState<string>(initialConversationId || convos[0]?.id || "");
     const [newMessage, setNewMessage] = useState("");
@@ -42,7 +44,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
             id: `m_${Date.now()}`,
             senderId: "current",
             text: newMessage.trim(),
-            timestamp: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
+            timestamp: new Date().toLocaleTimeString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { hour: "numeric", minute: "2-digit" }),
             read: false,
         };
         setConvos((prev) =>
@@ -92,7 +94,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                             {/* Header */}
                             <div className="p-4 border-b border-gray-100">
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="text-lg font-bold text-text font-[family-name:var(--font-family-heading)]">Messages</h3>
+                                    <h3 className="text-lg font-bold text-text font-[family-name:var(--font-family-heading)]">{t('chatPanel.messages')}</h3>
                                     <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center cursor-pointer border-0 bg-transparent">
                                         <X size={18} className="text-text-muted" />
                                     </button>
@@ -101,7 +103,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                     <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                                     <input
                                         type="text"
-                                        placeholder="Search conversations..."
+                                        placeholder={t('chatPanel.searchConversations')}
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         className="w-full pl-9 pr-3 py-2 rounded-xl bg-white border border-gray-100 text-sm focus:outline-none focus:border-primary/40"
@@ -112,7 +114,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                             {/* Conversation Items */}
                             <div className="flex-1 overflow-y-auto">
                                 <div className="p-2 space-y-0.5">
-                                    <div className="px-3 py-2 text-[10px] font-semibold text-text-muted uppercase tracking-wider">Active Chats</div>
+                                    <div className="px-3 py-2 text-[10px] font-semibold text-text-muted uppercase tracking-wider">{t('chatPanel.activeChats')}</div>
                                     {filteredConvos.map((c) => (
                                         <button
                                             key={c.id}
@@ -152,7 +154,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                 <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=CurrentUser" alt="You" className="w-9 h-9 rounded-full bg-primary/10" />
                                 <div className="flex-1 min-w-0">
                                     <div className="text-sm font-semibold text-text">Alex Chen</div>
-                                    <div className="text-[10px] text-text-muted">My Account</div>
+                                    <div className="text-[10px] text-text-muted">{t('chatPanel.myAccount')}</div>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +175,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                             <div>
                                                 <h4 className="text-sm font-semibold text-text">{activeConvo.participantName}</h4>
                                                 <p className="text-xs text-text-muted">
-                                                    {activeConvo.participantOccupation} · {activeConvo.online ? <span className="text-secondary">Online now</span> : "Offline"}
+                                                    {activeConvo.participantOccupation} · {activeConvo.online ? <span className="text-secondary">{t('chatPanel.onlineNow')}</span> : t('chatPanel.offline')}
                                                 </p>
                                             </div>
                                         </div>
@@ -185,14 +187,14 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                 <Phone size={16} className="text-text-muted" />
                                             </button>
                                             <button className="px-4 py-2 rounded-xl bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors cursor-pointer border-0">
-                                                View Profile
+                                                {t('chatPanel.viewProfile')}
                                             </button>
                                         </div>
                                     </div>
 
                                     {/* Safety Tip */}
                                     <div className="px-6 py-2 bg-yellow-50 text-xs text-yellow-700 text-center border-b border-yellow-100">
-                                        ⚠️ Safety Tip: Do not share financial information or agree to meet in private places immediately.
+                                        {t('chatPanel.safetyTip')}
                                     </div>
 
                                     {/* Messages */}
@@ -202,14 +204,14 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                             <span className="text-xs text-text-muted bg-bg px-3 py-1 rounded-full">
                                                 {activeConvo.messages[0]?.timestamp.includes("Oct") || activeConvo.messages[0]?.timestamp.includes("Yesterday")
                                                     ? activeConvo.lastMessageTime
-                                                    : "Today"}
+                                                    : t('chatPanel.today')}
                                             </span>
                                         </div>
 
                                         {/* Match notification */}
                                         <div className="text-center py-2">
                                             <span className="text-xs text-text-muted">
-                                                ✨ You matched with {activeConvo.participantName}! Start a conversation.
+                                                {t('chatPanel.matchNotification', { name: activeConvo.participantName })}
                                             </span>
                                         </div>
 
@@ -230,7 +232,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                             </div>
                                                             <div className={`text-[10px] text-text-muted mt-1 ${isMe ? "text-right" : "text-left"}`}>
                                                                 {msg.timestamp}
-                                                                {isMe && msg.read && " · Read"}
+                                                                {isMe && msg.read && " · " + t('chatPanel.read')}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,7 +253,7 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                     value={newMessage}
                                                     onChange={(e) => setNewMessage(e.target.value)}
                                                     onKeyDown={handleKeyDown}
-                                                    placeholder="Type a message..."
+                                                    placeholder={t('chatPanel.typeMessage')}
                                                     rows={1}
                                                     className="w-full px-4 py-2.5 rounded-2xl border border-gray-200 text-sm text-text resize-none focus:outline-none focus:border-primary/40 bg-bg/50"
                                                     style={{ maxHeight: "120px" }}
@@ -267,15 +269,15 @@ export default function ChatPanel({ isOpen, onClose, initialConversationId }: Pr
                                                     : "bg-gray-100 text-text-muted cursor-not-allowed"
                                                     }`}
                                             >
-                                                Send <Send size={14} />
+                                                {t('chatPanel.sendBtn')} <Send size={14} />
                                             </motion.button>
                                         </div>
-                                        <p className="text-[10px] text-text-muted text-center mt-2">Press Enter to send, Shift + Enter for new line</p>
+                                        <p className="text-[10px] text-text-muted text-center mt-2">{t('chatPanel.enterToSend')}</p>
                                     </div>
                                 </>
                             ) : (
                                 <div className="flex-1 flex items-center justify-center">
-                                    <p className="text-text-muted">Select a conversation to start chatting</p>
+                                    <p className="text-text-muted">{t('chatPanel.selectConversation')}</p>
                                 </div>
                             )}
                         </div>

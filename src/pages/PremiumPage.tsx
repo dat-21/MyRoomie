@@ -647,22 +647,22 @@ function Testimonials({ role }: { role: Role }) {
     const studentReviews = [
         {
             name: "Minh T.",
-            role: "IT Student",
-            text: "The 1-month + AI plan helped me find a roommate in just 2 days. The AI suggestions were spot on!",
+            role: t('premiumPage.roleITStudent'),
+            text: t('premiumPage.reviewStudent1'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=MinhT",
             rating: 5,
         },
         {
             name: "Linh N.",
-            role: "Business Student",
-            text: "Only 49k and I could message 15 people. Found a roommate with a perfectly matching personality.",
+            role: t('premiumPage.roleBusinessStudent'),
+            text: t('premiumPage.reviewStudent2'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=LinhN",
             rating: 5,
         },
         {
             name: "Hana K.",
-            role: "Language Student",
-            text: "I used the AI plan — it suggested 3 best matches, and I found the perfect roommate!",
+            role: t('premiumPage.roleLanguageStudent'),
+            text: t('premiumPage.reviewStudent3'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=HanaK",
             rating: 5,
         },
@@ -671,21 +671,21 @@ function Testimonials({ role }: { role: Role }) {
     const landlordReviews = [
         {
             name: "Tuan A.",
-            role: "Landlord, Ngu Hanh Son",
+            role: t('premiumPage.roleLandlordNHS'),
             text: t('premiumPage.reviewLandlord1'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhTuan",
             rating: 5,
         },
         {
             name: "Hoa N.",
-            role: "Landlord, Hai Chau",
+            role: t('premiumPage.roleLandlordHC'),
             text: t('premiumPage.reviewLandlord2'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=ChiHoa",
             rating: 5,
         },
         {
             name: "Duc T.",
-            role: "Landlord, Thanh Khe",
+            role: t('premiumPage.roleLandlordTK'),
             text: t('premiumPage.reviewLandlord3'),
             avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=AnhDuc",
             rating: 5,

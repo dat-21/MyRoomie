@@ -303,7 +303,7 @@ export default function PostRoomPage() {
                                                     : "bg-white/60 text-text-light hover:bg-secondary/10"
                                                     }`}
                                             >
-                                                {tag}
+                                                {t(`lifestyle.${tag}`, tag)}
                                             </motion.button>
                                         ))}
                                     </div>
@@ -346,7 +346,7 @@ export default function PostRoomPage() {
                                         {[
                                             { label: t('postRoom.title'), value: formData.title || "—" },
                                             { label: t('postRoom.locationLabel'), value: formData.location || "—" },
-                                            { label: t('postRoom.rent'), value: formData.rent ? `${Number(formData.rent).toLocaleString()} VND/mo` : "—" },
+                                            { label: t('postRoom.rent'), value: formData.rent ? `${Number(formData.rent).toLocaleString()} VND${t('common.perMonth')}` : "—" },
                                             { label: t('postRoom.roomType'), value: formData.roomType || "—" },
                                             { label: t('postRoom.availableSlots'), value: formData.availableSlots },
                                             { label: t('postRoom.availableFrom'), value: formData.moveInDate || "—" },
@@ -363,7 +363,7 @@ export default function PostRoomPage() {
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {formData.lifestyleExpectations.map((tag) => (
                                                         <span key={tag} className="px-3 py-1 rounded-full text-xs font-medium bg-secondary/10 text-secondary">
-                                                            {tag}
+                                                            {t(`lifestyle.${tag}`, tag)}
                                                         </span>
                                                     ))}
                                                 </div>

@@ -111,18 +111,21 @@ export default function FindRoommatePage() {
             <div>
                 <label className="block text-sm font-medium text-text mb-2">{t('findPage.genderPreference')}</label>
                 <div className="grid grid-cols-3 gap-2">
-                    {["All", "Male", "Female"].map((g) => (
-                        <button
-                            key={g}
-                            onClick={() => setFilters((p) => ({ ...p, gender: g }))}
-                            className={`py-2 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${filters.gender === g
-                                ? "bg-primary text-white shadow-md shadow-primary/20"
-                                : "bg-white/60 text-text-light hover:bg-primary/10"
-                                }`}
-                        >
-                            {g}
-                        </button>
-                    ))}
+                    {["All", "Male", "Female"].map((g) => {
+                        const genderLabels: Record<string, string> = { "All": t('common.all'), "Male": t('common.male'), "Female": t('common.female') };
+                        return (
+                            <button
+                                key={g}
+                                onClick={() => setFilters((p) => ({ ...p, gender: g }))}
+                                className={`py-2 rounded-xl text-xs font-medium transition-all cursor-pointer border-0 ${filters.gender === g
+                                    ? "bg-primary text-white shadow-md shadow-primary/20"
+                                    : "bg-white/60 text-text-light hover:bg-primary/10"
+                                    }`}
+                            >
+                                {genderLabels[g]}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -132,7 +135,7 @@ export default function FindRoommatePage() {
                 <div className="space-y-3">
                     <div>
                         <div className="flex justify-between text-xs text-text-muted mb-1">
-                            <span>Min</span>
+                            <span>{t('common.min')}</span>
                             <span>{formatCurrency(filters.budgetMin)}</span>
                         </div>
                         <input
@@ -147,7 +150,7 @@ export default function FindRoommatePage() {
                     </div>
                     <div>
                         <div className="flex justify-between text-xs text-text-muted mb-1">
-                            <span>Max</span>
+                            <span>{t('common.max')}</span>
                             <span>{formatCurrency(filters.budgetMax)}</span>
                         </div>
                         <input
@@ -189,7 +192,7 @@ export default function FindRoommatePage() {
                                 : "bg-white/60 text-text-light hover:bg-secondary/10"
                                 }`}
                         >
-                            {tag}
+                            {t(`lifestyle.${tag}`, tag)}
                         </motion.button>
                     ))}
                 </div>
@@ -278,13 +281,13 @@ export default function FindRoommatePage() {
                             <span className="text-xs text-text-muted">{t('findPage.active')}</span>
                             {filters.gender !== "All" && (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs">
-                                    {filters.gender}
+                                    {t(`common.${filters.gender.toLowerCase()}`)}
                                     <X size={12} className="cursor-pointer" onClick={() => setFilters((p) => ({ ...p, gender: "All" }))} />
                                 </span>
                             )}
                             {filters.lifestyleTags.map((tag) => (
                                 <span key={tag} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary/10 text-secondary text-xs">
-                                    {tag}
+                                    {t(`lifestyle.${tag}`, tag)}
                                     <X size={12} className="cursor-pointer" onClick={() => toggleTag(tag)} />
                                 </span>
                             ))}
@@ -315,7 +318,7 @@ export default function FindRoommatePage() {
                     {/* Cards grid */}
                     <div className="flex-1">
                         <div className="text-sm text-text-muted mb-4">
-                            {loading ? "Loading..." : `${filtered.length} roommate${filtered.length !== 1 ? "s" : ""} found`}
+                            {loading ? t('common.loading') : t('common.roommatesFound', { count: filtered.length })}
                         </div>
 
                         <div className="grid sm:grid-cols-2 gap-5">

@@ -43,6 +43,7 @@ function FadeSection({ children, className = "", delay = 0 }: { children: React.
 
 /* ─── Nearby Room Item ─── */
 function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => void }) {
+    const { t } = useTranslation();
     return (
         <motion.button
             whileHover={{ y: -2, scale: 1.01 }}
@@ -61,8 +62,8 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
                     <span className="text-xs truncate">{room.district}</span>
                 </div>
                 <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs font-semibold text-text">{formatCurrency(room.rent)}<span className="text-text-muted font-normal">/mo</span></span>
-                    <span className="text-[10px] text-text-muted">{room.distance}km away</span>
+                    <span className="text-xs font-semibold text-text">{formatCurrency(room.rent)}<span className="text-text-muted font-normal">{t('common.perMonth')}</span></span>
+                    <span className="text-[10px] text-text-muted">{t('common.kmAway', { distance: room.distance })}</span>
                 </div>
             </div>
             <div className="flex-shrink-0">
@@ -74,6 +75,7 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
 
 /* ─── Match Profile Item ─── */
 function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; index: number }) {
+    const { t } = useTranslation();
     return (
         <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -98,7 +100,7 @@ function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; 
                 <p className="text-xs text-text-muted truncate">{roommate.occupation}</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                     {roommate.lifestyleTags.slice(0, 3).map((tag) => (
-                        <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{tag}</span>
+                        <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{t(`lifestyle.${tag}`, tag)}</span>
                     ))}
                     {roommate.lifestyleTags.length > 3 && (
                         <span className="px-2 py-0.5 rounded-full bg-text-muted/10 text-text-muted text-[10px]">+{roommate.lifestyleTags.length - 3}</span>
@@ -113,7 +115,7 @@ function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; 
                         whileTap={{ scale: 0.95 }}
                         className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gradient-to-r from-primary to-primary-light text-white text-[10px] font-medium cursor-pointer btn-glow"
                     >
-                        <Eye size={10} /> View
+                        <Eye size={10} /> {t('common.view')}
                     </motion.span>
                 </Link>
             </div>

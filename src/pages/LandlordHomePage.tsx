@@ -70,9 +70,9 @@ const myRooms = rooms.slice(0, 3).map((r, i) => ({
 }));
 
 const tenantRequests = [
-    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hai Chau", budget: "3.5M - 4.5M VND", time: "2 hours ago", status: "new" as const },
-    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Son Tra", budget: "3M - 4M VND", time: "5 hours ago", status: "new" as const },
-    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngu Hanh Son", budget: "2.5M - 3.5M VND", time: "1 day ago", status: "viewed" as const },
+    { id: "1", name: "Minh Tran", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Minh", area: "Hai Chau", budget: "3.5M - 4.5M VND", timeKey: "landlordHome.hoursAgo", timeCount: 2, status: "new" as const },
+    { id: "2", name: "Khanh Vo", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Khanh", area: "Son Tra", budget: "3M - 4M VND", timeKey: "landlordHome.hoursAgo", timeCount: 5, status: "new" as const },
+    { id: "3", name: "Linh Nguyen", avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Linh", area: "Ngu Hanh Son", budget: "2.5M - 3.5M VND", timeKey: "landlordHome.dayAgo", timeCount: 1, status: "viewed" as const },
 ];
 
 /* ─── Hero Section (Landlord) ─── */
@@ -259,7 +259,7 @@ function TenantRequestsSection() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 flex-shrink-0">
-                                    <span className="text-xs text-text-muted hidden sm:block">{req.time}</span>
+                                    <span className="text-xs text-text-muted hidden sm:block">{t(req.timeKey, { count: req.timeCount })}</span>
                                     <Link to={`/profile/${req.id}`}>
                                         <motion.button
                                             whileHover={{ scale: 1.05 }}
@@ -404,7 +404,7 @@ function BrowseOtherRooms() {
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 text-xs text-text-muted">
-                                            <span className="px-2 py-0.5 rounded-full bg-primary/8">{room.roomType}</span>
+                                            <span className="px-2 py-0.5 rounded-full bg-primary/8">{t(`roomsPage.${room.roomType === 'Private Room' ? 'privateRoom' : room.roomType === 'Shared Room' ? 'sharedRoom' : room.roomType === 'Master Bedroom' ? 'masterBedroom' : 'studio'}`)}</span>
                                             <span>{room.area} m²</span>
                                             <span>{t('landlordHome.bedBath', { bed: room.bedrooms, bath: room.bathrooms })}</span>
                                         </div>

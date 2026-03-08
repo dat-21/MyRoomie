@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Star, BadgeCheck, Bed, Bath, Maximize, Wifi, Wind, Car, PawPrint, ChevronLeft, ChevronRight, Share2, Bookmark, Phone, Send, Users } from "lucide-react";
 import type { RoomListing } from "../data/mockData";
@@ -10,8 +11,9 @@ interface Props {
 }
 
 export default function RoomDetailContent({ room }: Props) {
+    const { t, i18n } = useTranslation();
     const [currentImage, setCurrentImage] = useState(0);
-    const [contactMessage, setContactMessage] = useState("Hi, I'm interested in this room...");
+    const [contactMessage, setContactMessage] = useState(t('roomDetail.defaultMessage'));
 
     const nextImage = () => setCurrentImage((i) => (i + 1) % room.images.length);
     const prevImage = () => setCurrentImage((i) => (i - 1 + room.images.length) % room.images.length);
@@ -53,7 +55,7 @@ export default function RoomDetailContent({ room }: Props) {
                 <div className="absolute top-4 left-4 flex gap-2">
                     {room.verified && (
                         <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-secondary/90 text-white text-xs font-medium backdrop-blur-sm">
-                            <BadgeCheck size={12} /> Verified
+                            <BadgeCheck size={12} /> {t('roomDetail.verified')}
                         </span>
                     )}
                     <span className="px-3 py-1 rounded-full bg-white/90 text-text text-xs font-medium backdrop-blur-sm uppercase">{room.roomType}</span>
@@ -70,7 +72,7 @@ export default function RoomDetailContent({ room }: Props) {
                             <div className="flex items-center gap-2 mb-1">
                                 <Star size={16} className="text-gold fill-gold" />
                                 <span className="text-sm font-semibold text-text">{room.rating}</span>
-                                <span className="text-sm text-text-muted">({room.reviewCount} reviews)</span>
+                                <span className="text-sm text-text-muted">({room.reviewCount} {t('roomDetail.reviews')})</span>
                             </div>
                             <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{room.title}</h2>
                             <div className="flex items-center gap-1.5 mt-1 text-text-muted">
@@ -83,11 +85,11 @@ export default function RoomDetailContent({ room }: Props) {
                         <div className="flex flex-wrap gap-4">
                             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-bg text-sm">
                                 <Bed size={16} className="text-primary" />
-                                <span>{room.bedrooms} Bedroom{room.bedrooms > 1 ? "s" : ""}</span>
+                                <span>{room.bedrooms} {room.bedrooms > 1 ? t('roomDetail.bedrooms') : t('roomDetail.bedroom')}</span>
                             </div>
                             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-bg text-sm">
                                 <Bath size={16} className="text-primary" />
-                                <span>{room.bathrooms} Bathroom{room.bathrooms > 1 ? "s" : ""}</span>
+                                <span>{room.bathrooms} {room.bathrooms > 1 ? t('roomDetail.bathrooms') : t('roomDetail.bathroom')}</span>
                             </div>
                             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-bg text-sm">
                                 <Maximize size={16} className="text-primary" />
@@ -98,7 +100,7 @@ export default function RoomDetailContent({ room }: Props) {
                         {/* Current Roommates */}
                         {room.currentRoommates.length > 0 && (
                             <div>
-                                <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">Current Roommates</h3>
+                                <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">{t('roomDetail.currentRoommates')}</h3>
                                 <div className="grid sm:grid-cols-2 gap-3">
                                     {room.currentRoommates.map((rm) => (
                                         <div key={rm.name} className="flex items-start gap-3 p-3 rounded-xl bg-bg">
@@ -107,8 +109,8 @@ export default function RoomDetailContent({ room }: Props) {
                                                 <div className="text-sm font-semibold text-text">{rm.name}</div>
                                                 <div className="text-xs text-text-muted">{rm.occupation} · {rm.age}y</div>
                                                 <div className="flex flex-wrap gap-1 mt-1">
-                                                    {rm.tags.map((t) => (
-                                                        <span key={t} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{t}</span>
+                                                    {rm.tags.map((tag) => (
+                                                        <span key={tag} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">{t(`lifestyle.${tag}`, tag)}</span>
                                                     ))}
                                                 </div>
                                                 <p className="text-xs text-text-light mt-1 italic">"{rm.quote}"</p>
@@ -121,13 +123,13 @@ export default function RoomDetailContent({ room }: Props) {
 
                         {/* About */}
                         <div>
-                            <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">About this place</h3>
+                            <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">{t('roomDetail.aboutThisPlace')}</h3>
                             <p className="text-sm text-text-light leading-relaxed whitespace-pre-line">{room.description}</p>
                         </div>
 
                         {/* Amenities */}
                         <div>
-                            <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">What this place offers</h3>
+                            <h3 className="text-lg font-semibold text-text mb-3 font-[family-name:var(--font-family-heading)]">{t('roomDetail.whatOffers')}</h3>
                             <div className="grid grid-cols-2 gap-2">
                                 {room.amenities.slice(0, 6).map((a) => (
                                     <div key={a} className="flex items-center gap-2 text-sm text-text-light py-1">
@@ -136,13 +138,13 @@ export default function RoomDetailContent({ room }: Props) {
                                                 a.toLowerCase().includes("parking") ? <Car size={16} className="text-primary" /> :
                                                     a.toLowerCase().includes("pet") ? <PawPrint size={16} className="text-primary" /> :
                                                         <BadgeCheck size={16} className="text-primary" />}
-                                        {a}
+                                        {t(`amenity.${a}`, a)}
                                     </div>
                                 ))}
                             </div>
                             {room.amenities.length > 6 && (
                                 <button className="mt-3 px-4 py-2 rounded-xl border border-text/20 text-sm font-medium text-text hover:bg-bg transition-colors cursor-pointer bg-transparent">
-                                    Show all {room.amenities.length} amenities
+                                    {t('roomDetail.showAllAmenities', { count: room.amenities.length })}
                                 </button>
                             )}
                         </div>
@@ -152,7 +154,7 @@ export default function RoomDetailContent({ room }: Props) {
                             <div className="flex items-center gap-2 mb-3">
                                 <Star size={18} className="text-gold fill-gold" />
                                 <span className="text-lg font-bold text-text">{room.rating}</span>
-                                <span className="text-text-muted">{room.reviewCount} reviews</span>
+                                <span className="text-text-muted">{room.reviewCount} {t('roomDetail.reviews')}</span>
                             </div>
                             <div className="grid sm:grid-cols-2 gap-4">
                                 {room.reviews.map((review) => (
@@ -170,7 +172,7 @@ export default function RoomDetailContent({ room }: Props) {
                             </div>
                             {room.reviewCount > 2 && (
                                 <button className="mt-3 px-4 py-2 rounded-xl border border-text/20 text-sm font-medium text-text hover:bg-bg transition-colors cursor-pointer bg-transparent">
-                                    Show all {room.reviewCount} reviews
+                                    {t('roomDetail.showAllReviews', { count: room.reviewCount })}
                                 </button>
                             )}
                         </div>
@@ -182,24 +184,24 @@ export default function RoomDetailContent({ room }: Props) {
                             <div className="flex items-baseline justify-between">
                                 <div>
                                     <span className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{formatCurrency(room.rent)}</span>
-                                    <span className="text-text-muted text-sm"> / month</span>
+                                    <span className="text-text-muted text-sm"> / {t('common.month')}</span>
                                 </div>
-                                <span className="text-xs text-secondary font-medium">Available now</span>
+                                <span className="text-xs text-secondary font-medium">{t('roomDetail.availableNow')}</span>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                    <div className="text-xs text-text-muted mb-1">MOVE-IN</div>
-                                    <div className="text-text font-medium">{new Date(room.availableFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</div>
+                                    <div className="text-xs text-text-muted mb-1">{t('roomDetail.moveIn')}</div>
+                                    <div className="text-text font-medium">{new Date(room.availableFrom).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: "short", day: "numeric", year: "numeric" })}</div>
                                 </div>
                                 <div>
-                                    <div className="text-xs text-text-muted mb-1">DURATION</div>
+                                    <div className="text-xs text-text-muted mb-1">{t('roomDetail.duration')}</div>
                                     <div className="text-text font-medium">{room.duration}</div>
                                 </div>
                             </div>
 
                             <div>
-                                <div className="text-xs text-text-muted mb-1">ROOM TYPE</div>
+                                <div className="text-xs text-text-muted mb-1">{t('roomDetail.roomType')}</div>
                                 <div className="text-text font-medium text-sm">{room.roomType}</div>
                             </div>
 
@@ -208,10 +210,10 @@ export default function RoomDetailContent({ room }: Props) {
                                 whileTap={{ scale: 0.98 }}
                                 className="w-full py-3 rounded-2xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-shadow cursor-pointer border-0 text-base btn-glow"
                             >
-                                Book a Viewing
+                                {t('roomDetail.bookViewing')}
                             </motion.button>
 
-                            <div className="text-center text-xs text-text-muted">or contact host</div>
+                            <div className="text-center text-xs text-text-muted">{t('roomDetail.orContactHost')}</div>
 
                             <textarea
                                 value={contactMessage}
@@ -225,17 +227,17 @@ export default function RoomDetailContent({ room }: Props) {
                                 whileTap={{ scale: 0.98 }}
                                 className="w-full py-2.5 rounded-xl border border-text/20 text-text font-medium text-sm hover:bg-bg transition-colors cursor-pointer bg-transparent flex items-center justify-center gap-2"
                             >
-                                <Send size={14} /> Send Message
+                                <Send size={14} /> {t('roomDetail.sendMessage')}
                             </motion.button>
 
-                            <p className="text-[10px] text-text-muted text-center">You won't be charged yet</p>
+                            <p className="text-[10px] text-text-muted text-center">{t('roomDetail.notChargedYet')}</p>
 
                             <div className="flex justify-center gap-6 pt-2 border-t border-white/30">
                                 <button className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text transition-colors cursor-pointer bg-transparent border-0">
-                                    <Share2 size={14} /> Share
+                                    <Share2 size={14} /> {t('common.share')}
                                 </button>
                                 <button className="flex items-center gap-1.5 text-xs text-text-muted hover:text-text transition-colors cursor-pointer bg-transparent border-0">
-                                    <Bookmark size={14} /> Save
+                                    <Bookmark size={14} /> {t('common.save')}
                                 </button>
                             </div>
 

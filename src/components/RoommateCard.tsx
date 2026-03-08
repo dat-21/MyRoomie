@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useInView } from "../hooks/useInView";
 import { useCountUp } from "../hooks/useCountUp";
 import { MapPin, Calendar, BadgeCheck, Eye } from "lucide-react";
@@ -55,6 +56,7 @@ function Tag({ label }: { label: string }) {
 }
 
 export default function RoommateCard({ roommate, index = 0 }: Props) {
+    const { t, i18n } = useTranslation();
     const [ref, inView] = useInView(0.15);
 
     return (
@@ -106,7 +108,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
             {/* Tags */}
             <div className="flex flex-wrap gap-1.5 flex-1 content-start">
                 {roommate.lifestyleTags.slice(0, 4).map((tag) => (
-                    <Tag key={tag} label={tag} />
+                    <Tag key={tag} label={t(`lifestyle.${tag}`, tag)} />
                 ))}
                 {roommate.lifestyleTags.length > 4 && (
                     <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-text-muted/10 text-text-muted">
@@ -126,7 +128,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
                     <div className="flex items-center gap-1.5 text-text-muted">
                         <Calendar size={12} />
                         <span className="text-xs">
-                            {new Date(roommate.moveInDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                            {new Date(roommate.moveInDate).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: "short", day: "numeric" })}
                         </span>
                     </div>
                 </div>
@@ -138,7 +140,7 @@ export default function RoommateCard({ roommate, index = 0 }: Props) {
                         className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-xs font-medium shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-shadow cursor-pointer border-0"
                     >
                         <Eye size={14} />
-                        View Details
+                        {t('roommateCard.viewDetails')}
                     </motion.button>
                 </Link>
             </div>

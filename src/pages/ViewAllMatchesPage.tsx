@@ -32,6 +32,20 @@ const cleanlinessOptions = ["All", "Very Clean", "Clean", "Moderate"];
 const smokingOptions = ["All", "No", "Yes"];
 const genderOptions = ["All", "Male", "Female", "Non-binary"];
 
+const filterLabelKeys: Record<string, string> = {
+    "All": "common.all",
+    "Male": "common.male",
+    "Female": "common.female",
+    "Non-binary": "common.nonBinary",
+    "Early Bird": "matchesPage.earlyBird",
+    "Moderate": "matchesPage.moderate",
+    "Night Owl": "matchesPage.nightOwl",
+    "Very Clean": "matchesPage.veryClean",
+    "Clean": "matchesPage.clean",
+    "No": "matchesPage.no",
+    "Yes": "matchesPage.yes",
+};
+
 export default function ViewAllMatchesPage() {
     const { t } = useTranslation();
     const [filters, setFilters] = useState<Filters>(defaultFilters);
@@ -102,7 +116,7 @@ export default function ViewAllMatchesPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.gender === g ? "bg-primary text-white border-primary" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {g}
+                            {t(filterLabelKeys[g])}
                         </button>
                     ))}
                 </div>
@@ -119,7 +133,7 @@ export default function ViewAllMatchesPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.sleepSchedule === s ? "bg-primary text-white border-primary" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {s}
+                            {t(filterLabelKeys[s])}
                         </button>
                     ))}
                 </div>
@@ -136,7 +150,7 @@ export default function ViewAllMatchesPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.cleanliness === c ? "bg-primary text-white border-primary" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {c}
+                            {t(filterLabelKeys[c])}
                         </button>
                     ))}
                 </div>
@@ -153,7 +167,7 @@ export default function ViewAllMatchesPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.smoking === s ? "bg-primary text-white border-primary" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {s}
+                            {t(filterLabelKeys[s])}
                         </button>
                     ))}
                 </div>
@@ -170,7 +184,7 @@ export default function ViewAllMatchesPage() {
                             className={`px-3 py-1.5 rounded-xl text-xs font-medium cursor-pointer border transition-all ${filters.lifestyle.includes(tag) ? "bg-primary/10 text-primary border-primary/30" : "bg-transparent text-text-light border-text/10 hover:border-primary/30"
                                 }`}
                         >
-                            {tag}
+                            {t(`lifestyle.${tag}`, tag)}
                         </button>
                     ))}
                 </div>

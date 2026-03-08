@@ -1,4 +1,5 @@
 import { useCountUp } from "../hooks/useCountUp";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     value: number;
@@ -14,6 +15,7 @@ const sizes = {
 
 export default function MatchCircle({ value, size = "md", started = true }: Props) {
     const count = useCountUp(value, size === "lg" ? 1500 : 1200, started);
+    const { t } = useTranslation();
     const s = sizes[size];
     const viewBox = size === "sm" ? "0 0 32 32" : size === "md" ? "0 0 80 80" : "0 0 120 120";
     const cx = size === "sm" ? 16 : size === "md" ? 40 : 60;
@@ -38,7 +40,7 @@ export default function MatchCircle({ value, size = "md", started = true }: Prop
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className={`${s.fontSize} font-bold`} style={{ color }}>{count}%</span>
-                {size === "lg" && <span className="text-[10px] text-text-muted">Match</span>}
+                {size === "lg" && <span className="text-[10px] text-text-muted">{t('common.match')}</span>}
             </div>
         </div>
     );

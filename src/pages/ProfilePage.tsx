@@ -45,6 +45,7 @@ function PrefItem({ icon: Icon, label, value }: { icon: React.ElementType; label
 /* ─── Compatibility Ring (Large) ─── */
 function LargeCompatRing({ value }: { value: number }) {
     const count = useCountUp(value, 1500, true);
+    const { t } = useTranslation();
     const circumference = 2 * Math.PI * 54;
     const offset = circumference - (count / 100) * circumference;
     const color = value >= 85 ? "var(--color-secondary)" : value >= 70 ? "var(--color-primary)" : "var(--color-accent)";
@@ -68,7 +69,7 @@ function LargeCompatRing({ value }: { value: number }) {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-2xl font-bold" style={{ color }}>{count}%</span>
-                <span className="text-[10px] text-text-muted">Match</span>
+                <span className="text-[10px] text-text-muted">{t('common.match')}</span>
             </div>
         </div>
     );
@@ -76,7 +77,7 @@ function LargeCompatRing({ value }: { value: number }) {
 
 /* ─── Profile page for a roommate (view) ─── */
 function RoommateProfile({ person }: { person: Roommate }) {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [connected, setConnected] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
 
@@ -125,7 +126,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                                     <Calendar size={14} className="text-text-muted" />
                                     <span className="text-text-muted">{t('profile.moveIn')}: </span>
                                     <span className="font-medium text-text">
-                                        {new Date(person.moveInDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                                        {new Date(person.moveInDate).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: "long", day: "numeric", year: "numeric" })}
                                     </span>
                                 </div>
                             </div>
@@ -153,7 +154,7 @@ function RoommateProfile({ person }: { person: Roommate }) {
                                 whileHover={{ scale: 1.05 }}
                                 className="px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary"
                             >
-                                {tag}
+                                {t(`lifestyle.${tag}`, tag)}
                             </motion.span>
                         ))}
                     </div>
@@ -167,16 +168,16 @@ function RoommateProfile({ person }: { person: Roommate }) {
                     className="glass rounded-3xl p-6 sm:p-8 mt-6"
                 >
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)]">
-                        Living Preferences
+                        {t('profile.livingPreferences')}
                     </h2>
                     <div className="grid sm:grid-cols-2 gap-x-8">
-                        <PrefItem icon={Moon} label="Sleep Schedule" value={person.preferences.sleepSchedule} />
-                        <PrefItem icon={Sparkles} label="Cleanliness" value={person.preferences.cleanliness} />
-                        <PrefItem icon={Volume2} label="Noise Level" value={person.preferences.noise} />
-                        <PrefItem icon={Users} label="Guests" value={person.preferences.guests} />
-                        <PrefItem icon={Cigarette} label="Smoking" value={person.preferences.smoking} />
-                        <PrefItem icon={Dog} label="Pets" value={person.preferences.pets} />
-                        <PrefItem icon={CookingPot} label="Cooking" value={person.preferences.cooking} />
+                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={person.preferences.sleepSchedule} />
+                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={person.preferences.cleanliness} />
+                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={person.preferences.noise} />
+                        <PrefItem icon={Users} label={t('profile.guests')} value={person.preferences.guests} />
+                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={person.preferences.smoking} />
+                        <PrefItem icon={Dog} label={t('profile.pets')} value={person.preferences.pets} />
+                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={person.preferences.cooking} />
                     </div>
                 </motion.div>
 
@@ -279,7 +280,7 @@ function OwnProfile() {
                         <div className="flex-1 w-full">
                             <div className="flex items-center gap-2 mb-1">
                                 <h2 className="text-xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                    {currentUser.name === "You" ? "Your Name" : currentUser.name}
+                                    {currentUser.name === "You" ? t('profile.myProfile') : currentUser.name}
                                 </h2>
                                 <span className="text-sm text-text-muted">{currentUser.age}y, {currentUser.gender}</span>
                             </div>
@@ -334,7 +335,7 @@ function OwnProfile() {
                                         : "bg-white/60 text-text-light hover:bg-secondary/10"
                                         }`}
                                 >
-                                    {tag}
+                                    {t(`lifestyle.${tag}`, tag)}
                                 </motion.button>
                             ))}
                         </div>
@@ -346,7 +347,7 @@ function OwnProfile() {
                                     whileHover={{ scale: 1.05 }}
                                     className="px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary"
                                 >
-                                    {tag}
+                                    {t(`lifestyle.${tag}`, tag)}
                                 </motion.span>
                             ))}
                         </div>

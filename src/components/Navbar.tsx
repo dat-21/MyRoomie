@@ -120,7 +120,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                 <button
                                     onClick={handleLogout}
                                     className="p-2 rounded-xl hover:bg-red-50 text-text-light hover:text-red-500 transition-colors cursor-pointer border-0 bg-transparent"
-                                    title="Đăng xuất"
+                                    title={t('common.logout')}
                                 >
                                     <LogOut size={18} />
                                 </button>
@@ -216,7 +216,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                                             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-text-light hover:bg-primary/5 hover:text-primary transition-all no-underline"
                                         >
                                             <User size={18} />
-                                            {user?.name || "Hồ sơ"}
+                                            {user?.name || t('common.profile')}
                                         </Link>
                                         <button
                                             onClick={() => { handleLogout(); setMobileOpen(false); }}

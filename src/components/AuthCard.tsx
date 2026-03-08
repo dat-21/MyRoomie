@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Mail, Lock, EyeOff, ArrowRight, Github, Facebook } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AuthCard() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -18,14 +20,14 @@ export default function AuthCard() {
           className={`flex-1 py-2 px-4 rounded-full text-sm font-bold transition-all duration-300 z-10 ${activeTab === 'login' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
             }`}
         >
-          Login
+          {t('authCard.loginTab')}
         </button>
         <button
           onClick={() => setActiveTab('register')}
           className={`flex-1 py-2 px-4 rounded-full text-sm font-bold transition-all duration-300 z-10 ${activeTab === 'register' ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700'
             }`}
         >
-          Register
+          {t('authCard.registerTab')}
         </button>
         <motion.div
           layoutId="tab-bg"
@@ -43,12 +45,12 @@ export default function AuthCard() {
       {/* Header Text */}
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold mb-2 tracking-tight">
-          {activeTab === 'login' ? 'Welcome back!' : 'Create an account'}
+          {activeTab === 'login' ? t('authCard.welcomeBack') : t('authCard.createAccount')}
         </h1>
         <p className="text-slate-500 text-sm">
           {activeTab === 'login'
-            ? 'Sign in to find your perfect roommate in Da Nang.'
-            : 'Join our community and start your search today.'}
+            ? t('authCard.loginDesc')
+            : t('authCard.registerDesc')}
         </p>
       </div>
 
@@ -57,7 +59,7 @@ export default function AuthCard() {
         {/* Email Input */}
         <div className="space-y-1.5">
           <label className="text-sm font-semibold ml-2 text-slate-700" htmlFor="email">
-            Email Address
+            {t('authCard.emailLabel')}
           </label>
           <div className="relative group/input">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within/input:text-primary transition-colors">
@@ -76,11 +78,11 @@ export default function AuthCard() {
         <div className="space-y-1.5">
           <div className="flex justify-between items-center px-2">
             <label className="text-sm font-semibold text-slate-700" htmlFor="password">
-              Password
+              {t('authCard.passwordLabel')}
             </label>
             {activeTab === 'login' && (
               <a className="text-xs font-semibold text-primary hover:text-primary/80 transition-colors" href="#">
-                Forgot Password?
+                {t('authCard.forgotPassword')}
               </a>
             )}
           </div>
@@ -109,7 +111,7 @@ export default function AuthCard() {
           className="mt-2 w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3.5 rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 group/btn"
           type="submit"
         >
-          <span>{activeTab === 'login' ? 'Sign In' : 'Sign Up'}</span>
+          <span>{activeTab === 'login' ? t('authCard.signIn') : t('authCard.signUp')}</span>
           <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
         </button>
       </form>
@@ -118,7 +120,7 @@ export default function AuthCard() {
       <div className="relative flex py-8 items-center">
         <div className="flex-grow border-t border-slate-200"></div>
         <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-medium uppercase tracking-wider">
-          Or continue with
+          {t('authCard.orContinueWith')}
         </span>
         <div className="flex-grow border-t border-slate-200"></div>
       </div>
@@ -143,12 +145,12 @@ export default function AuthCard() {
       {/* Toggle Auth Mode */}
       <div className="mt-8 text-center">
         <p className="text-sm text-slate-500">
-          {activeTab === 'login' ? "Don't have an account? " : "Already have an account? "}
+          {activeTab === 'login' ? t('authCard.noAccount') : t('authCard.hasAccount')}
           <button
             onClick={() => setActiveTab(activeTab === 'login' ? 'register' : 'login')}
             className="text-primary font-bold hover:underline decoration-2 underline-offset-2"
           >
-            {activeTab === 'login' ? 'Sign Up Now' : 'Log In'}
+            {activeTab === 'login' ? t('authCard.signUpNow') : t('authCard.logIn')}
           </button>
         </p>
       </div>

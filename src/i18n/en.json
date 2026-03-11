@@ -65,7 +65,11 @@
     "perMonthShort": "/mo",
     "kmAway": "{{distance}}km away",
     "roommatesFound": "{{count}} roommate(s) found",
-    "roommateFound": "{{count}} roommate(s) found"
+    "roommateFound": "{{count}} roommate(s) found",
+    "review": "review",
+    "reviews": "reviews",
+    "optional": "optional",
+    "submitting": "Submitting..."
   },
   "amenity": {
     "WiFi": "WiFi",
@@ -297,7 +301,24 @@
     "budget": "Budget",
     "moveIn": "Move-in",
     "my": "My",
-    "profileHighlight": "Profile"
+    "profileHighlight": "Profile",
+    "ratingsReviews": "Ratings & Reviews"
+  },
+  "rating": {
+    "writeReview": "Write Review",
+    "submitReview": "Submit Review",
+    "reviewingLabel": "You are reviewing",
+    "tapToRate": "Tap to rate",
+    "yourReview": "Your review",
+    "reviewPlaceholder": "Share your experience with others...",
+    "noReviewsYet": "No reviews yet",
+    "beFirstToReview": "Be the first to leave a review!",
+    "showAllReviews": "Show all {{count}} reviews",
+    "terrible": "Terrible",
+    "poor": "Poor",
+    "okay": "Okay",
+    "good": "Good",
+    "excellent": "Excellent"
   },
   "roomsPage": {
     "title1": "Nearby",

@@ -65,7 +65,11 @@
     "perMonthShort": "/tháng",
     "kmAway": "cách đây {{distance}}km",
     "roommatesFound": "{{count}} bạn cùng phòng",
-    "roommateFound": "{{count}} bạn cùng phòng"
+    "roommateFound": "{{count}} bạn cùng phòng",
+    "review": "đánh giá",
+    "reviews": "đánh giá",
+    "optional": "tùy chọn",
+    "submitting": "Đang gửi..."
   },
   "amenity": {
     "WiFi": "WiFi",
@@ -297,7 +301,24 @@
     "budget": "Ngân sách",
     "moveIn": "Ngày chuyển vào",
     "my": "Hồ sơ",
-    "profileHighlight": "của tôi"
+    "profileHighlight": "của tôi",
+    "ratingsReviews": "Đánh giá & Nhận xét"
+  },
+  "rating": {
+    "writeReview": "Viết đánh giá",
+    "submitReview": "Gửi đánh giá",
+    "reviewingLabel": "Bạn đang đánh giá",
+    "tapToRate": "Chạm để đánh giá",
+    "yourReview": "Nhận xét của bạn",
+    "reviewPlaceholder": "Chia sẻ trải nghiệm của bạn với mọi người...",
+    "noReviewsYet": "Chưa có đánh giá nào",
+    "beFirstToReview": "Hãy là người đầu tiên đánh giá!",
+    "showAllReviews": "Xem tất cả {{count}} đánh giá",
+    "terrible": "Rất tệ",
+    "poor": "Tệ",
+    "okay": "Bình thường",
+    "good": "Tốt",
+    "excellent": "Xuất sắc"
   },
   "roomsPage": {
     "title1": "Khám Phá",

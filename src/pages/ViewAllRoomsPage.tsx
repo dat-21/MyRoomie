@@ -1,12 +1,11 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, SlidersHorizontal, X, ArrowUpDown, Search, Bed, Bath, Maximize, Star, BadgeCheck } from "lucide-react";
 import { rooms, formatCurrency } from "../data/mockData";
 import type { RoomListing } from "../data/mockData";
 import MatchCircle from "../components/MatchCircle";
-import Modal from "../components/Modal";
-import RoomDetailContent from "../components/RoomDetailContent";
 import { useInView } from "../hooks/useInView";
 
 /* ─── Filters ─── */
@@ -57,9 +56,10 @@ const roomTypeLabelKeys: Record<string, string> = {
     "Master Bedroom": "roomsPage.masterBedroom",
 };
 
-function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => void; index: number }) {
+function RoomCard({ room, index }: { room: RoomListing; index: number }) {
     const [ref, inView] = useInView(0.1);
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     return (
         <motion.div
@@ -68,7 +68,7 @@ function RoomCard({ room, onClick, index }: { room: RoomListing; onClick: () => 
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: index * 0.05 }}
             whileHover={{ y: -6, transition: { duration: 0.2 } }}
-            onClick={onClick}
+            onClick={() => navigate(`/rooms/${room.id}`)}
             className="glass rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 group"
         >
             {/* Image */}
@@ -117,7 +117,6 @@ export default function ViewAllRoomsPage() {
     const [filters, setFilters] = useState<Filters>(defaultFilters);
     const [sortBy, setSortBy] = useState<SortOption>("match");
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [selectedRoom, setSelectedRoom] = useState<RoomListing | null>(null);
 
     const filtered = useMemo(() => {
         let list = rooms.filter((r) => {
@@ -333,7 +332,7 @@ export default function ViewAllRoomsPage() {
                         ) : (
                             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                 {filtered.map((room, i) => (
-                                    <RoomCard key={room.id} room={room} index={i} onClick={() => setSelectedRoom(room)} />
+                                    <RoomCard key={room.id} room={room} index={i} />
                                 ))}
                             </div>
                         )}
@@ -341,10 +340,6 @@ export default function ViewAllRoomsPage() {
                 </div>
             </div>
 
-            {/* Room Detail Modal */}
-            <Modal isOpen={!!selectedRoom} onClose={() => setSelectedRoom(null)} size="xl">
-                {selectedRoom && <RoomDetailContent room={selectedRoom} />}
-            </Modal>
         </div>
     );
 }

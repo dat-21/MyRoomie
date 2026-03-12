@@ -14,11 +14,16 @@ import {
   Eye,
   Trash2,
   Flag,
+  MapPin,
+  Calendar,
 } from "lucide-react";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminStatsCard from "../components/admin/AdminStatsCard";
 import AdminUserTable from "../components/admin/AdminUserTable";
 import AdminUserModal from "../components/admin/AdminUserModal";
+import AdminPieChart from "../components/admin/AdminPieChart";
+import AdminBarChart from "../components/admin/AdminBarChart";
+import AdminLineChart from "../components/admin/AdminLineChart";
 import {
   adminStats,
   adminLandlords,
@@ -227,6 +232,57 @@ function DashboardContent({
   pendingLandlords: number;
   pendingTenants: number;
 }) {
+  // Data for charts
+  const userDistributionData = [
+    { label: "Tenants", value: stats.totalTenants, color: "#6366f1" },
+    { label: "Landlords", value: stats.totalLandlords, color: "#22c55e" },
+    { label: "Pending", value: stats.pendingApprovals, color: "#f59e0b" },
+  ];
+
+  const roomStatusData = [
+    { label: "Active", value: stats.activeRooms, color: "#22c55e" },
+    { label: "Inactive", value: stats.totalRooms - stats.activeRooms, color: "#94a3b8" },
+  ];
+
+  const districtData = [
+    { label: "Son Tra", value: 145 },
+    { label: "Hai Chau", value: 128 },
+    { label: "Ngu Hanh Son", value: 89 },
+    { label: "Cam Le", value: 67 },
+    { label: "Lien Chieu", value: 42 },
+    { label: "Thanh Khe", value: 35 },
+  ];
+
+  const monthlyUsersData = [
+    { label: "Jan", value: 820 },
+    { label: "Feb", value: 890 },
+    { label: "Mar", value: 945 },
+    { label: "Apr", value: 1020 },
+    { label: "May", value: 1089 },
+    { label: "Jun", value: 1150 },
+    { label: "Jul", value: stats.totalUsers },
+  ];
+
+  const weeklyMatchesData = [
+    { label: "Mon", value: 124 },
+    { label: "Tue", value: 156 },
+    { label: "Wed", value: 189 },
+    { label: "Thu", value: 145 },
+    { label: "Fri", value: 178 },
+    { label: "Sat", value: 234 },
+    { label: "Sun", value: 198 },
+  ];
+
+  const monthlyRevenueData = [
+    { label: "Jan", value: 45000000 },
+    { label: "Feb", value: 52000000 },
+    { label: "Mar", value: 48000000 },
+    { label: "Apr", value: 61000000 },
+    { label: "May", value: 58000000 },
+    { label: "Jun", value: 72000000 },
+    { label: "Jul", value: 85000000 },
+  ];
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -304,13 +360,93 @@ function DashboardContent({
         />
       </div>
 
+      {/* Charts Row - Pie Charts */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <AdminPieChart
+            data={userDistributionData}
+            title="User Distribution"
+            size={180}
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+        >
+          <AdminPieChart
+            data={roomStatusData}
+            title="Room Status"
+            size={180}
+          />
+        </motion.div>
+      </div>
+
+      {/* Charts Row - Bar Charts */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0 }}
+        >
+          <AdminBarChart
+            data={districtData}
+            title="Rooms by District"
+            horizontal
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1 }}
+        >
+          <AdminBarChart
+            data={weeklyMatchesData}
+            title="Weekly Matches"
+          />
+        </motion.div>
+      </div>
+
+      {/* Charts Row - Line Charts */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+        >
+          <AdminLineChart
+            data={monthlyUsersData}
+            title="User Growth (Monthly)"
+            color="#6366f1"
+          />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3 }}
+        >
+          <AdminLineChart
+            data={monthlyRevenueData.map((d) => ({
+              label: d.label,
+              value: d.value / 1000000,
+            }))}
+            title="Monthly Revenue (Million VND)"
+            color="#22c55e"
+          />
+        </motion.div>
+      </div>
+
       {/* Quick Actions */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Pending Approvals */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 1.4 }}
           className="glass rounded-2xl p-6"
         >
           <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2 mb-4">
@@ -343,7 +479,7 @@ function DashboardContent({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 1.5 }}
           className="glass rounded-2xl p-6"
         >
           <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2 mb-4">
@@ -376,6 +512,142 @@ function DashboardContent({
               <div>
                 <p className="text-sm text-text">New review submitted</p>
                 <p className="text-xs text-text-muted">5-star review for Minh Tran - 1 day ago</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Top Performing Section */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* Top Landlords */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.6 }}
+          className="glass rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2 mb-4">
+            <Star size={20} className="text-gold" />
+            Top Landlords
+          </h3>
+          <div className="space-y-3">
+            {adminLandlords
+              .filter((l) => l.status === "active")
+              .sort((a, b) => b.rating - a.rating)
+              .slice(0, 3)
+              .map((landlord, index) => (
+                <div key={landlord.id} className="flex items-center gap-3 p-2 rounded-xl bg-white/40">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                    {index + 1}
+                  </span>
+                  <img src={landlord.avatar} alt={landlord.name} className="w-8 h-8 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-text truncate">{landlord.name}</div>
+                    <div className="text-xs text-text-muted">{landlord.totalRooms} rooms</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Star size={12} className="text-gold fill-gold" />
+                    <span className="text-sm font-semibold text-text">{landlord.rating}</span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </motion.div>
+
+        {/* Most Active Tenants */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.7 }}
+          className="glass rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2 mb-4">
+            <TrendingUp size={20} className="text-secondary" />
+            Most Active Tenants
+          </h3>
+          <div className="space-y-3">
+            {adminTenants
+              .filter((t) => t.status === "active")
+              .sort((a, b) => b.messagesCount - a.messagesCount)
+              .slice(0, 3)
+              .map((tenant, index) => (
+                <div key={tenant.id} className="flex items-center gap-3 p-2 rounded-xl bg-white/40">
+                  <span className="w-6 h-6 rounded-full bg-secondary/10 flex items-center justify-center text-xs font-bold text-secondary">
+                    {index + 1}
+                  </span>
+                  <img src={tenant.avatar} alt={tenant.name} className="w-8 h-8 rounded-full" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-text truncate">{tenant.name}</div>
+                    <div className="text-xs text-text-muted">{tenant.occupation}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-semibold text-text">{tenant.messagesCount}</div>
+                    <div className="text-[10px] text-text-muted">messages</div>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </motion.div>
+
+        {/* Quick Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8 }}
+          className="glass rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)] flex items-center gap-2 mb-4">
+            <Calendar size={20} className="text-accent" />
+            This Month
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Users size={14} className="text-primary" />
+                </div>
+                <span className="text-sm text-text-light">New Users</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-text">+97</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-green-100 text-green-700">+12%</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                  <Home size={14} className="text-secondary" />
+                </div>
+                <span className="text-sm text-text-light">New Rooms</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-text">+34</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-green-100 text-green-700">+8%</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <TrendingUp size={14} className="text-accent" />
+                </div>
+                <span className="text-sm text-text-light">Matches Made</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-text">+156</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-green-100 text-green-700">+15%</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center">
+                  <Star size={14} className="text-gold" />
+                </div>
+                <span className="text-sm text-text-light">Reviews</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-text">+42</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-green-100 text-green-700">+21%</span>
               </div>
             </div>
           </div>

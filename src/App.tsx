@@ -10,6 +10,7 @@ import PostRoomPage from "./pages/PostRoomPage";
 import ProfilePage from "./pages/ProfilePage";
 import DesignSystemPage from "./pages/DesignSystemPage";
 import ViewAllRoomsPage from "./pages/ViewAllRoomsPage";
+import RoomDetailPage from "./pages/RoomDetailPage";
 import ViewAllMatchesPage from "./pages/ViewAllMatchesPage";
 import PremiumPage from "./pages/PremiumPage";
 import LoginPage from "./pages/LoginPage";
@@ -55,6 +56,7 @@ export default function App() {
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/design" element={<DesignSystemPage />} />
               <Route path="/rooms" element={<ViewAllRoomsPage />} />
+              <Route path="/rooms/:id" element={<RoomDetailPage />} />
               <Route path="/matches" element={<ViewAllMatchesPage />} />
               <Route path="/premium" element={<PremiumPage />} />
               <Route path="/login" element={<LoginPage />} />

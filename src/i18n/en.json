@@ -65,7 +65,11 @@
     "perMonthShort": "/mo",
     "kmAway": "{{distance}}km away",
     "roommatesFound": "{{count}} roommate(s) found",
-    "roommateFound": "{{count}} roommate(s) found"
+    "roommateFound": "{{count}} roommate(s) found",
+    "review": "review",
+    "reviews": "reviews",
+    "optional": "optional",
+    "submitting": "Submitting..."
   },
   "amenity": {
     "WiFi": "WiFi",
@@ -154,12 +158,27 @@
     "availableNow": "Available now",
     "moveIn": "MOVE-IN",
     "duration": "DURATION",
-    "roomType": "ROOM TYPE",
+    "roomType": "Room Type",
     "bookViewing": "Book a Viewing",
     "orContactHost": "or contact host",
     "sendMessage": "Send Message",
     "notChargedYet": "You won't be charged yet",
-    "defaultMessage": "Hi, I'm interested in this room..."
+    "defaultMessage": "Hi, I'm interested in this room...",
+    "notFound": "Room Not Found",
+    "notFoundDescription": "The room you're looking for doesn't exist or has been removed.",
+    "backToRooms": "Back to Rooms",
+    "highlights": "Highlights",
+    "availableFrom": "Available From",
+    "minDuration": "Minimum Duration",
+    "people": "people",
+    "noRoommates": "No roommates yet",
+    "pets": "Pets",
+    "petsAllowed": "Allowed",
+    "noPets": "Not allowed",
+    "meetYourRoommates": "Meet Your Future Roommates",
+    "messagePlaceholder": "Write a message to the host...",
+    "viewOnMap": "View on Map",
+    "similarRooms": "Similar Rooms You May Like"
   },
   "roommateCard": {
     "viewDetails": "View Details"
@@ -297,7 +316,24 @@
     "budget": "Budget",
     "moveIn": "Move-in",
     "my": "My",
-    "profileHighlight": "Profile"
+    "profileHighlight": "Profile",
+    "ratingsReviews": "Ratings & Reviews"
+  },
+  "rating": {
+    "writeReview": "Write Review",
+    "submitReview": "Submit Review",
+    "reviewingLabel": "You are reviewing",
+    "tapToRate": "Tap to rate",
+    "yourReview": "Your review",
+    "reviewPlaceholder": "Share your experience with others...",
+    "noReviewsYet": "No reviews yet",
+    "beFirstToReview": "Be the first to leave a review!",
+    "showAllReviews": "Show all {{count}} reviews",
+    "terrible": "Terrible",
+    "poor": "Poor",
+    "okay": "Okay",
+    "good": "Good",
+    "excellent": "Excellent"
   },
   "roomsPage": {
     "title1": "Nearby",

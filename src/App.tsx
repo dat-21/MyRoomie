@@ -10,11 +10,13 @@ import PostRoomPage from "./pages/PostRoomPage";
 import ProfilePage from "./pages/ProfilePage";
 import DesignSystemPage from "./pages/DesignSystemPage";
 import ViewAllRoomsPage from "./pages/ViewAllRoomsPage";
+import RoomDetailPage from "./pages/RoomDetailPage";
 import ViewAllMatchesPage from "./pages/ViewAllMatchesPage";
 import PremiumPage from "./pages/PremiumPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import LandlordHomePage from "./pages/LandlordHomePage";
+import AdminPage from "./pages/AdminPage";
 import { useAuth } from "./contexts/AuthContext";
 
 const pageVariants = {
@@ -29,11 +31,12 @@ export default function App() {
   const { user } = useAuth();
 
   const isAuthPage = ["login", "register"].includes(location.pathname.replace("/", ""));
+  const isAdminPage = location.pathname === "/admin";
   const isLandlord = user?.role === "landlord";
 
   return (
     <div className="min-h-screen flex flex-col bg-bg">
-      {!isAuthPage && <Navbar onChatOpen={() => setChatOpen(true)} />}
+      {!isAuthPage && !isAdminPage && <Navbar onChatOpen={() => setChatOpen(true)} />}
 
       <main className="flex-1">
         <AnimatePresence mode="wait">
@@ -53,19 +56,21 @@ export default function App() {
               <Route path="/profile/:id" element={<ProfilePage />} />
               <Route path="/design" element={<DesignSystemPage />} />
               <Route path="/rooms" element={<ViewAllRoomsPage />} />
+              <Route path="/rooms/:id" element={<RoomDetailPage />} />
               <Route path="/matches" element={<ViewAllMatchesPage />} />
               <Route path="/premium" element={<PremiumPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/admin" element={<AdminPage />} />
             </Routes>
           </motion.div>
         </AnimatePresence>
       </main>
 
-      {!isAuthPage && <Footer />}
+      {!isAuthPage && !isAdminPage && <Footer />}
 
       {/* Global Chat Panel */}
-      {!isAuthPage && <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />}
+      {!isAuthPage && !isAdminPage && <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />}
     </div>
   );
 }

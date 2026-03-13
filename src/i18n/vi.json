@@ -65,7 +65,11 @@
     "perMonthShort": "/tháng",
     "kmAway": "cách đây {{distance}}km",
     "roommatesFound": "{{count}} bạn cùng phòng",
-    "roommateFound": "{{count}} bạn cùng phòng"
+    "roommateFound": "{{count}} bạn cùng phòng",
+    "review": "đánh giá",
+    "reviews": "đánh giá",
+    "optional": "tùy chọn",
+    "submitting": "Đang gửi..."
   },
   "amenity": {
     "WiFi": "WiFi",
@@ -154,12 +158,27 @@
     "availableNow": "Còn trống",
     "moveIn": "CHUYỂN VÀO",
     "duration": "THỜI HẠN",
-    "roomType": "LOẠI PHÒNG",
+    "roomType": "Loại phòng",
     "bookViewing": "Đặt lịch xem phòng",
     "orContactHost": "hoặc liên hệ chủ nhà",
     "sendMessage": "Gửi tin nhắn",
     "notChargedYet": "Bạn chưa bị tính phí",
-    "defaultMessage": "Xin chào, tôi quan tâm đến phòng này..."
+    "defaultMessage": "Xin chào, tôi quan tâm đến phòng này...",
+    "notFound": "Không tìm thấy phòng",
+    "notFoundDescription": "Phòng bạn đang tìm không tồn tại hoặc đã bị xóa.",
+    "backToRooms": "Quay lại danh sách phòng",
+    "highlights": "Điểm nổi bật",
+    "availableFrom": "Có sẵn từ",
+    "minDuration": "Thời hạn tối thiểu",
+    "people": "người",
+    "noRoommates": "Chưa có bạn cùng phòng",
+    "pets": "Thú cưng",
+    "petsAllowed": "Cho phép",
+    "noPets": "Không cho phép",
+    "meetYourRoommates": "Gặp gỡ bạn cùng phòng tương lai",
+    "messagePlaceholder": "Viết tin nhắn cho chủ nhà...",
+    "viewOnMap": "Xem trên bản đồ",
+    "similarRooms": "Phòng tương tự có thể bạn thích"
   },
   "roommateCard": {
     "viewDetails": "Xem chi tiết"
@@ -297,7 +316,24 @@
     "budget": "Ngân sách",
     "moveIn": "Ngày chuyển vào",
     "my": "Hồ sơ",
-    "profileHighlight": "của tôi"
+    "profileHighlight": "của tôi",
+    "ratingsReviews": "Đánh giá & Nhận xét"
+  },
+  "rating": {
+    "writeReview": "Viết đánh giá",
+    "submitReview": "Gửi đánh giá",
+    "reviewingLabel": "Bạn đang đánh giá",
+    "tapToRate": "Chạm để đánh giá",
+    "yourReview": "Nhận xét của bạn",
+    "reviewPlaceholder": "Chia sẻ trải nghiệm của bạn với mọi người...",
+    "noReviewsYet": "Chưa có đánh giá nào",
+    "beFirstToReview": "Hãy là người đầu tiên đánh giá!",
+    "showAllReviews": "Xem tất cả {{count}} đánh giá",
+    "terrible": "Rất tệ",
+    "poor": "Tệ",
+    "okay": "Bình thường",
+    "good": "Tốt",
+    "excellent": "Xuất sắc"
   },
   "roomsPage": {
     "title1": "Khám Phá",

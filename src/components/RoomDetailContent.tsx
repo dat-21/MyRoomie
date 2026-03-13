@@ -1,22 +1,60 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { MapPin, Star, BadgeCheck, Bed, Bath, Maximize, Wifi, Wind, Car, PawPrint, ChevronLeft, ChevronRight, Share2, Bookmark, Phone, Send, Users } from "lucide-react";
+import { MapPin, Star, BadgeCheck, Bed, Bath, Maximize, Wifi, Wind, Car, PawPrint, ChevronLeft, ChevronRight, Share2, Bookmark, Phone, Send, Users, MessageSquarePlus, ChevronDown } from "lucide-react";
 import type { RoomListing } from "../data/mockData";
-import { formatCurrency } from "../data/mockData";
+import { formatCurrency, currentUser } from "../data/mockData";
 import MatchCircle from "./MatchCircle";
+import StarRating from "./StarRating";
+import ReviewForm from "./ReviewForm";
 
 interface Props {
     room: RoomListing;
+}
+
+interface RoomReview {
+    author: string;
+    avatar: string;
+    date: string;
+    rating: number;
+    text: string;
 }
 
 export default function RoomDetailContent({ room }: Props) {
     const { t, i18n } = useTranslation();
     const [currentImage, setCurrentImage] = useState(0);
     const [contactMessage, setContactMessage] = useState(t('roomDetail.defaultMessage'));
+    const [showReviewForm, setShowReviewForm] = useState(false);
+    const [showAllReviews, setShowAllReviews] = useState(false);
+    const [reviews, setReviews] = useState<RoomReview[]>(room.reviews);
+
+    // Calculate current rating
+    const currentRating = reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : room.rating;
 
     const nextImage = () => setCurrentImage((i) => (i + 1) % room.images.length);
     const prevImage = () => setCurrentImage((i) => (i - 1 + room.images.length) % room.images.length);
+
+    const handleAddReview = (newRating: number, text: string) => {
+        const newReview: RoomReview = {
+            author: currentUser.name,
+            avatar: currentUser.avatar,
+            date: new Date().toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: 'long', year: 'numeric' }),
+            rating: newRating,
+            text: text || t('rating.excellent'),
+        };
+        setReviews([newReview, ...reviews]);
+    };
+
+    // Calculate rating distribution
+    const ratingDistribution = [5, 4, 3, 2, 1].map((star) => {
+        const count = reviews.filter((r) => Math.round(r.rating) === star).length;
+        const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+        return { star, count, percentage };
+    });
+
+    const displayedReviews = showAllReviews ? reviews : reviews.slice(0, 4);
 
     return (
         <div className="overflow-hidden rounded-3xl">
@@ -70,9 +108,7 @@ export default function RoomDetailContent({ room }: Props) {
                         {/* Title & Rating */}
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <Star size={16} className="text-gold fill-gold" />
-                                <span className="text-sm font-semibold text-text">{room.rating}</span>
-                                <span className="text-sm text-text-muted">({room.reviewCount} {t('roomDetail.reviews')})</span>
+                                <StarRating rating={currentRating} size={16} showValue reviewCount={reviews.length} />
                             </div>
                             <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">{t(`room.${room.id}.title`, room.title)}</h2>
                             <div className="flex items-center gap-1.5 mt-1 text-text-muted">
@@ -150,32 +186,118 @@ export default function RoomDetailContent({ room }: Props) {
                         </div>
 
                         {/* Reviews */}
-                        <div>
-                            <div className="flex items-center gap-2 mb-3">
-                                <Star size={18} className="text-gold fill-gold" />
-                                <span className="text-lg font-bold text-text">{room.rating}</span>
-                                <span className="text-text-muted">{room.reviewCount} {t('roomDetail.reviews')}</span>
+                        <div className="glass rounded-2xl p-6">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-2">
+                                    <Star size={20} className="text-gold fill-gold" />
+                                    <span className="text-xl font-bold text-text font-[family-name:var(--font-family-heading)]">
+                                        {currentRating.toFixed(1)}
+                                    </span>
+                                    <span className="text-text-muted">
+                                        ({reviews.length} {t('roomDetail.reviews')})
+                                    </span>
+                                </div>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setShowReviewForm(true)}
+                                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors cursor-pointer border-0"
+                                >
+                                    <MessageSquarePlus size={14} />
+                                    {t('rating.writeReview')}
+                                </motion.button>
                             </div>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                                {room.reviews.map((review) => (
-                                    <div key={review.author} className="space-y-2">
-                                        <div className="flex items-center gap-2">
-                                            <img src={review.avatar} alt={review.author} className="w-8 h-8 rounded-full bg-primary/10" />
-                                            <div>
-                                                <div className="text-sm font-semibold text-text">{review.author}</div>
-                                                <div className="text-xs text-text-muted">{review.date}</div>
+
+                            {/* Rating Distribution */}
+                            <div className="flex flex-col sm:flex-row gap-6 mb-6 pb-6 border-b border-white/20">
+                                {/* Overall Rating */}
+                                <div className="text-center sm:text-left sm:pr-6 sm:border-r sm:border-white/20 flex-shrink-0">
+                                    <div className="text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
+                                        {currentRating.toFixed(1)}
+                                    </div>
+                                    <StarRating rating={currentRating} size={18} />
+                                    <div className="text-sm text-text-muted mt-1">
+                                        {reviews.length} {reviews.length === 1 ? t('common.review') : t('common.reviews')}
+                                    </div>
+                                </div>
+
+                                {/* Distribution Bars */}
+                                <div className="flex-1 space-y-2">
+                                    {ratingDistribution.map(({ star, count, percentage }) => (
+                                        <div key={star} className="flex items-center gap-2 text-sm">
+                                            <span className="w-3 text-text-muted">{star}</span>
+                                            <Star size={12} className="text-gold fill-gold" />
+                                            <div className="flex-1 h-2 bg-white/40 rounded-full overflow-hidden">
+                                                <motion.div
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: `${percentage}%` }}
+                                                    transition={{ duration: 0.8, delay: 0.1 * (5 - star) }}
+                                                    className="h-full bg-gradient-to-r from-gold to-gold-light rounded-full"
+                                                />
                                             </div>
+                                            <span className="w-6 text-right text-text-muted">{count}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Reviews List */}
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                {displayedReviews.map((review, index) => (
+                                    <motion.div
+                                        key={`${review.author}-${index}`}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className="p-4 rounded-xl bg-white/40 space-y-2"
+                                    >
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <img src={review.avatar} alt={review.author} className="w-9 h-9 rounded-xl bg-primary/10" />
+                                                <div>
+                                                    <div className="text-sm font-semibold text-text">{review.author}</div>
+                                                    <div className="text-xs text-text-muted">{review.date}</div>
+                                                </div>
+                                            </div>
+                                            <StarRating rating={review.rating} size={12} />
                                         </div>
                                         <p className="text-sm text-text-light leading-relaxed">"{review.text}"</p>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
-                            {room.reviewCount > 2 && (
-                                <button className="mt-3 px-4 py-2 rounded-xl border border-text/20 text-sm font-medium text-text hover:bg-bg transition-colors cursor-pointer bg-transparent">
-                                    {t('roomDetail.showAllReviews', { count: room.reviewCount })}
-                                </button>
+
+                            {/* Show More Button */}
+                            {reviews.length > 4 && (
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => setShowAllReviews(!showAllReviews)}
+                                    className="w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-xl border border-white/40 bg-white/40 text-text text-sm font-medium hover:bg-white/60 transition-colors cursor-pointer"
+                                >
+                                    {showAllReviews ? (
+                                        <>
+                                            {t('common.showLess')}
+                                            <ChevronDown size={16} className="rotate-180" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {t('roomDetail.showAllReviews', { count: reviews.length })}
+                                            <ChevronDown size={16} />
+                                        </>
+                                    )}
+                                </motion.button>
                             )}
                         </div>
+
+                        {/* Review Form Modal */}
+                        <ReviewForm
+                            isOpen={showReviewForm}
+                            onClose={() => setShowReviewForm(false)}
+                            onSubmit={handleAddReview}
+                            targetName={room.title}
+                            targetAvatar={room.thumbnail}
+                        />
                     </div>
 
                     {/* Right - Booking Card */}

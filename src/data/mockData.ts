@@ -576,6 +576,167 @@ export const conversations: Conversation[] = [
   },
 ];
 
+/* ─── User Reviews (for roommates/tenants) ─── */
+export interface UserReview {
+  id: string;
+  author: string;
+  authorId: string;
+  avatar: string;
+  date: string;
+  rating: number;
+  text: string;
+}
+
+export interface RoommateWithReviews extends Roommate {
+  reviews: UserReview[];
+  rating: number;
+  reviewCount: number;
+}
+
+export const roommateReviews: Record<string, UserReview[]> = {
+  "1": [
+    {
+      id: "ur1",
+      author: "Mrs. Lan",
+      authorId: "l4",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Lan",
+      date: "2026-02-20",
+      rating: 5,
+      text: "Minh was an excellent tenant. Always paid rent on time, kept the apartment spotless, and was very respectful of neighbors. Highly recommended!",
+    },
+    {
+      id: "ur2",
+      author: "Hung Le",
+      authorId: "l2",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=HungL",
+      date: "2025-11-15",
+      rating: 5,
+      text: "Great roommate! Very clean, quiet, and considerate. A pleasure to have around.",
+    },
+  ],
+  "2": [
+    {
+      id: "ur3",
+      author: "Minh Tran",
+      authorId: "l1",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=MinhR",
+      date: "2026-01-10",
+      rating: 4,
+      text: "Linh is a wonderful person to live with. Very studious and respectful. Sometimes stays up late but always considerate about noise.",
+    },
+  ],
+  "3": [
+    {
+      id: "ur4",
+      author: "Kevin Dao",
+      authorId: "l5",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kevin",
+      date: "2026-02-05",
+      rating: 5,
+      text: "Duc is super friendly and keeps common areas clean. Great communication and very professional.",
+    },
+    {
+      id: "ur5",
+      author: "Duc Vo",
+      authorId: "l6",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=DucV",
+      date: "2025-12-20",
+      rating: 4,
+      text: "Good roommate overall. Sociable and fun to be around. Sometimes has guests over but always gives notice.",
+    },
+  ],
+  "4": [
+    {
+      id: "ur6",
+      author: "Tuan Nguyen",
+      authorId: "l3",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=TuanN",
+      date: "2026-01-25",
+      rating: 4,
+      text: "Hana is quiet and creative. Very respectful of shared spaces. Would recommend as a roommate.",
+    },
+  ],
+  "5": [
+    {
+      id: "ur7",
+      author: "Minh Tran",
+      authorId: "l1",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=MinhR",
+      date: "2026-02-28",
+      rating: 5,
+      text: "Khanh is the ideal roommate! Super organized, clean, and always up for board game nights. 10/10 would live with again.",
+    },
+    {
+      id: "ur8",
+      author: "Mrs. Lan",
+      authorId: "l4",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Lan",
+      date: "2026-01-05",
+      rating: 5,
+      text: "Excellent tenant. Reliable, honest, and takes great care of the property.",
+    },
+    {
+      id: "ur9",
+      author: "Hung Le",
+      authorId: "l2",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=HungL",
+      date: "2025-10-30",
+      rating: 4,
+      text: "Khanh is detail-oriented and keeps everything tidy. Great communicator too.",
+    },
+  ],
+  "6": [],
+  "7": [
+    {
+      id: "ur10",
+      author: "Tuan Nguyen",
+      authorId: "l3",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=TuanN",
+      date: "2025-09-15",
+      rating: 3,
+      text: "Bao is friendly and easy-going. Sometimes a bit messy in shared areas but overall a decent roommate.",
+    },
+  ],
+  "8": [
+    {
+      id: "ur11",
+      author: "Kevin Dao",
+      authorId: "l5",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kevin",
+      date: "2026-03-01",
+      rating: 5,
+      text: "Vy is amazing! The apartment always looks beautiful thanks to her design sense. Clean, quiet, and a great cook!",
+    },
+    {
+      id: "ur12",
+      author: "Duc Vo",
+      authorId: "l6",
+      avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=DucV",
+      date: "2026-02-10",
+      rating: 5,
+      text: "Wonderful roommate. Very considerate and always keeps the place looking nice.",
+    },
+  ],
+};
+
+// Helper function to get roommate with reviews
+export function getRoommateWithReviews(id: string): RoommateWithReviews | undefined {
+  const roommate = roommates.find((r) => r.id === id);
+  if (!roommate) return undefined;
+
+  const reviews = roommateReviews[id] || [];
+  const rating = reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    : 0;
+
+  return {
+    ...roommate,
+    reviews,
+    rating,
+    reviewCount: reviews.length,
+  };
+}
+
 export const lifestyleOptions = [
   "Early Bird",
   "Night Owl",

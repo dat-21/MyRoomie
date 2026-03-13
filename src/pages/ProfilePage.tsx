@@ -22,10 +22,12 @@ import {
     MessageCircle,
     Check,
 } from "lucide-react";
-import { roommates, currentUser, formatCurrency, lifestyleOptions } from "../data/mockData";
+import { roommates, currentUser, formatCurrency, lifestyleOptions, getRoommateWithReviews, roommateReviews } from "../data/mockData";
+import type { Roommate, UserReview } from "../data/mockData";
 import { useCountUp } from "../hooks/useCountUp";
 import ChatPanel from "../components/ChatPanel";
-import type { Roommate } from "../data/mockData";
+import ProfileRatings from "../components/ProfileRatings";
+import StarRating from "../components/StarRating";
 
 /* ─── Preference item ─── */
 function PrefItem({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
@@ -81,6 +83,26 @@ function RoommateProfile({ person }: { person: Roommate }) {
     const [connected, setConnected] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
 
+    // Get roommate with reviews
+    const roommateWithReviews = getRoommateWithReviews(person.id);
+    const [reviews, setReviews] = useState<UserReview[]>(roommateWithReviews?.reviews || []);
+    const rating = reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0;
+
+    const handleAddReview = (newRating: number, text: string) => {
+        const newReview: UserReview = {
+            id: `ur${Date.now()}`,
+            author: currentUser.name,
+            authorId: "current",
+            avatar: currentUser.avatar,
+            date: new Date().toISOString().split('T')[0],
+            rating: newRating,
+            text: text || "Great experience!",
+        };
+        setReviews([newReview, ...reviews]);
+    };
+
     return (
         <div className="min-h-screen pt-28">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
@@ -111,6 +133,11 @@ function RoommateProfile({ person }: { person: Roommate }) {
                                 </h1>
                                 <span className="text-sm text-text-muted">{person.age}y, {person.gender}</span>
                             </div>
+                            {reviews.length > 0 && (
+                                <div className="flex items-center gap-1 mb-1">
+                                    <StarRating rating={rating} size={14} showValue reviewCount={reviews.length} />
+                                </div>
+                            )}
                             <div className="flex flex-wrap items-center gap-3 text-sm text-text-light mt-1">
                                 <span className="flex items-center gap-1"><Briefcase size={14} />{t(`occupation.${person.occupation}`, person.occupation)}</span>
                                 <span className="flex items-center gap-1"><MapPin size={14} />{t(`district.${person.location}`, person.location)}</span>
@@ -180,6 +207,19 @@ function RoommateProfile({ person }: { person: Roommate }) {
                         <PrefItem icon={CookingPot} label={t('profile.cooking')} value={t(`preference.${person.preferences.cooking}`, person.preferences.cooking)} />
                     </div>
                 </motion.div>
+
+                {/* Ratings & Reviews */}
+                <div className="mt-6">
+                    <ProfileRatings
+                        reviews={reviews}
+                        rating={rating}
+                        reviewCount={reviews.length}
+                        targetName={person.name}
+                        targetAvatar={person.avatar}
+                        canReview={true}
+                        onAddReview={handleAddReview}
+                    />
+                </div>
 
                 {/* Connect / Message CTA */}
                 <motion.div

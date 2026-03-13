@@ -16,10 +16,11 @@ import {
     Eye,
     ChevronRight,
     BadgeCheck,
+    Star,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "../hooks/useInView";
-import { roommates, rooms, formatCurrency } from "../data/mockData";
+import { roommates, rooms, formatCurrency, roommateReviews } from "../data/mockData";
 import type { RoomListing } from "../data/mockData";
 import MatchCircle from "../components/MatchCircle";
 import Modal from "../components/Modal";
@@ -63,7 +64,13 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
                 </div>
                 <div className="flex items-center justify-between mt-1">
                     <span className="text-xs font-semibold text-text">{formatCurrency(room.rent)}<span className="text-text-muted font-normal">{t('common.perMonth')}</span></span>
-                    <span className="text-[10px] text-text-muted">{t('common.kmAway', { distance: room.distance })}</span>
+                    <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-0.5 text-[10px] text-amber-500">
+                            <Star size={10} fill="currentColor" />
+                            {room.rating.toFixed(1)}
+                        </span>
+                        <span className="text-[10px] text-text-muted">{t('common.kmAway', { distance: room.distance })}</span>
+                    </div>
                 </div>
             </div>
             <div className="flex-shrink-0">
@@ -76,6 +83,10 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
 /* ─── Match Profile Item ─── */
 function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; index: number }) {
     const { t } = useTranslation();
+    const reviews = roommateReviews[roommate.id] || [];
+    const rating = reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : 0;
     return (
         <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -96,6 +107,12 @@ function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; 
                 <div className="flex items-center gap-1.5">
                     <span className="text-sm font-semibold text-text truncate">{roommate.name}</span>
                     <span className="text-[10px] text-text-muted">{roommate.age}y</span>
+                    {rating > 0 && (
+                        <span className="flex items-center gap-0.5 text-[10px] text-amber-500">
+                            <Star size={10} fill="currentColor" />
+                            {rating.toFixed(1)}
+                        </span>
+                    )}
                 </div>
                 <p className="text-xs text-text-muted truncate">{t(`occupation.${roommate.occupation}`, roommate.occupation)}</p>
                 <div className="flex flex-wrap gap-1 mt-1">

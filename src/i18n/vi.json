@@ -70,7 +70,8 @@
     "review": "đánh giá",
     "reviews": "đánh giá",
     "optional": "tùy chọn",
-    "submitting": "Đang gửi..."
+    "submitting": "Đang gửi...",
+    "years": "tuổi"
   },
   "amenity": {
     "WiFi": "WiFi",
@@ -246,7 +247,13 @@
     "sortBudgetHigh": "Ngân sách: Cao → Thấp",
     "sortDate": "Ngày chuyển vào",
     "active": "Đang lọc:",
-    "before": "Trước"
+    "before": "Trước",
+    "tabHasRoom": "Đã có phòng",
+    "tabNeedsRoom": "Đang tìm phòng",
+    "hasRoomTitle": "Tìm người ở ghép",
+    "needsRoomTitle": "Tìm người đã có phòng",
+    "statusHasRoom": "Đã có phòng",
+    "statusNeedsRoom": "Đang tìm phòng"
   },
   "postRoom": {
     "pageTitle1": "Đăng",
@@ -660,7 +667,14 @@
     "Software Dev": "Lập trình viên",
     "Marketing": "Marketing",
     "Tech Lead": "Trưởng nhóm kỹ thuật",
-    "Student": "Sinh viên"
+    "Student": "Sinh viên",
+    "Sinh viên": "Sinh viên",
+    "Đi làm": "Đi làm",
+    "Freelancer": "Freelancer",
+    "Giáo viên": "Giáo viên",
+    "Kỹ sư": "Kỹ sư",
+    "Thiết kế": "Thiết kế",
+    "Khác": "Khác"
   },
   "district": {
     "Hai Chau, Da Nang": "Hải Châu, Đà Nẵng",

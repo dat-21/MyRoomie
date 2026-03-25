@@ -1,149 +1,105 @@
 import { motion } from "framer-motion";
+import { MapPin, Calendar, Wallet, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useInView } from "../hooks/useInView";
-import { useCountUp } from "../hooks/useCountUp";
-import { MapPin, Calendar, BadgeCheck, Eye } from "lucide-react";
-import { Link } from "react-router-dom";
 import type { Roommate } from "../data/mockData";
 import { formatCurrency } from "../data/mockData";
 
-interface Props {
-    roommate: Roommate;
-    index?: number;
+interface RoommateCardProps {
+  roommate: Roommate;
+  index?: number;
 }
 
-function CompatibilityRing({ value, started }: { value: number; started: boolean }) {
-    const count = useCountUp(value, 1200, started);
-    const circumference = 2 * Math.PI * 36;
-    const offset = circumference - (count / 100) * circumference;
+export default function RoommateCard({ roommate, index = 0 }: RoommateCardProps) {
+  const { t } = useTranslation();
 
-    const color =
-        value >= 85 ? "var(--color-secondary)" : value >= 70 ? "var(--color-primary)" : "var(--color-accent)";
-
-    return (
-        <div className="relative w-16 h-16 flex-shrink-0">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="36" fill="none" stroke="var(--color-divider)" strokeWidth="5" />
-                <circle
-                    cx="40"
-                    cy="40"
-                    r="36"
-                    fill="none"
-                    stroke={color}
-                    strokeWidth="5"
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={offset}
-                    style={{ transition: "stroke-dashoffset 1.2s ease-out" }}
-                />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xs font-bold" style={{ color }}>{count}%</span>
-            </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      className="group relative flex flex-col bg-card-bg rounded-cards border border-border hover:shadow-xl transition-all duration-300 overflow-hidden h-full"
+    >
+      {/* Visual Section: Top Half */}
+      <div className="relative h-56 overflow-hidden bg-filter-bg">
+        <img
+          src={roommate.avatar}
+          alt={roommate.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        
+        {/* Compatibility Badge - Star + Percentage */}
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm border border-white/20">
+          <Star size={14} className="text-primary fill-primary" />
+          <span className="font-caption font-semibold text-text-primary">{roommate.compatibility}%</span>
         </div>
-    );
-}
+      </div>
 
-function Tag({ label }: { label: string }) {
-    return (
-        <motion.span
-            whileHover={{ scale: 1.08, y: -1 }}
-            className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary cursor-default transition-colors hover:bg-primary/20"
-        >
-            {label}
-        </motion.span>
-    );
-}
+      {/* Content Section */}
+      <div className="p-5 flex flex-col flex-1">
+        {/* Header: Name and Status */}
+        <div className="flex flex-col gap-1 mb-4">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-h2 text-text-primary truncate">
+              {roommate.name}
+            </h3>
+            <span className={`px-2.5 py-1 rounded-full font-tag font-bold uppercase tracking-[0.05em] whitespace-nowrap ${
+              roommate.status === "HAS_ROOM" 
+              ? "bg-badge-blue-bg text-badge-blue-text" 
+              : "bg-badge-green-bg text-badge-green-text"
+            }`}>
+              {t(`findPage.status${roommate.status === "HAS_ROOM" ? "HasRoom" : "NeedsRoom"}`)}
+            </span>
+          </div>
+          
+          {/* Age + Job: Caption Regular */}
+          <p className="font-caption text-text-secondary">
+            {roommate.age} {t('common.years')} · {t(`occupation.${roommate.occupation}`, roommate.occupation)}
+          </p>
+        </div>
 
-export default function RoommateCard({ roommate, index = 0 }: Props) {
-    const { t, i18n } = useTranslation();
-    const [ref, inView] = useInView(0.15);
-
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.08 }}
-            whileHover={{ y: -6, transition: { duration: 0.25 } }}
-            className="glass rounded-2xl p-5 flex flex-col gap-4 shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 transition-shadow duration-300 h-full"
-        >
-            {/* Header */}
-            <div className="flex items-start gap-4">
-                <div className="relative">
-                    <img
-                        src={roommate.avatar}
-                        alt={roommate.name}
-                        className="w-14 h-14 rounded-2xl object-cover bg-primary/10"
-                    />
-                    {roommate.verified && (
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-secondary rounded-full flex items-center justify-center">
-                            <BadgeCheck size={12} className="text-white" />
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                        <h3 className="text-base font-semibold text-text truncate font-[family-name:var(--font-family-heading)]">
-                            {roommate.name}
-                        </h3>
-                        <span className="text-xs text-text-muted">{roommate.age}y</span>
-                    </div>
-                    <p className="text-xs text-text-light mt-0.5">{t(`occupation.${roommate.occupation}`, roommate.occupation)}</p>
-                    <div className="flex items-center gap-1 mt-1 text-text-muted">
-                        <MapPin size={12} />
-                        <span className="text-xs">{t(`district.${roommate.location}`, roommate.location)}</span>
-                    </div>
-                </div>
-
-                <CompatibilityRing value={roommate.compatibility} started={inView} />
+        {/* Transactional Info Row: Ngân sách & Chuyển vào */}
+        <div className="grid grid-cols-2 gap-4 mb-5 p-3.5 bg-filter-bg rounded-xl border border-border/50">
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-text-secondary">
+              <Wallet size={12} />
+              <span className="font-caption uppercase tracking-[0.05em] font-medium">{t('common.budget')}</span>
             </div>
-
-            {/* Bio */}
-            <p className="text-sm text-text-light leading-relaxed line-clamp-2">
-                {t(`bio.${roommate.id}`, roommate.bio)}
+            <p className="font-body font-semibold text-text-primary">
+              {formatCurrency(roommate.budget.max)}
             </p>
-
-            {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 flex-1 content-start">
-                {roommate.lifestyleTags.slice(0, 4).map((tag) => (
-                    <Tag key={tag} label={t(`lifestyle.${tag}`, tag)} />
-                ))}
-                {roommate.lifestyleTags.length > 4 && (
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-text-muted/10 text-text-muted">
-                        +{roommate.lifestyleTags.length - 4}
-                    </span>
-                )}
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-text-secondary">
+              <Calendar size={12} />
+              <span className="font-caption uppercase tracking-[0.05em] font-medium">{t('common.moveIn')}</span>
             </div>
+            <p className="font-body font-semibold text-text-primary">
+              {roommate.moveInDate}
+            </p>
+          </div>
+        </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/40 mt-auto">
-                <div className="space-y-1">
-                    <div className="flex items-center gap-1.5 text-text-light">
-                        <span className="text-xs font-medium">
-                            {formatCurrency(roommate.budget.min)} - {formatCurrency(roommate.budget.max)}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-text-muted">
-                        <Calendar size={12} />
-                        <span className="text-xs">
-                            {new Date(roommate.moveInDate).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: "short", day: "numeric" })}
-                        </span>
-                    </div>
-                </div>
+        {/* Location & Tags */}
+        <div className="space-y-4 flex-1">
+          <div className="flex items-center gap-2 text-text-secondary">
+            <MapPin size={14} className="text-primary/60" />
+            <span className="font-caption">{t(`district.${roommate.location}`, roommate.location)}</span>
+          </div>
 
-                <Link to={`/profile/${roommate.id}`}>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.97 }}
-                        className="btn-glow flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-xs font-medium shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-shadow cursor-pointer border-0"
-                    >
-                        <Eye size={14} />
-                        {t('roommateCard.viewDetails')}
-                    </motion.button>
-                </Link>
-            </div>
-        </motion.div>
-    );
+          <div className="flex flex-wrap gap-2 pt-1">
+            {roommate.lifestyleTags.slice(0, 3).map(tag => (
+              <span key={tag} className="font-tag px-2.5 py-1 bg-filter-bg text-text-secondary rounded-full border border-border">
+                {t(`lifestyle.${tag}`, tag)}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Button: Full width teal */}
+        <button className="mt-6 w-full py-3 rounded-buttons bg-primary text-white font-h3 hover:bg-primary-dark transition-colors cursor-pointer shadow-sm">
+          {t('roommateCard.viewDetails')}
+        </button>
+      </div>
+    </motion.div>
+  );
 }

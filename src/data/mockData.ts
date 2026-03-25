@@ -21,6 +21,7 @@ export interface Roommate {
     cooking: string;
   };
   verified: boolean;
+  status: "HAS_ROOM" | "NEEDS_ROOM";
 }
 
 export interface RoomSlot {
@@ -62,6 +63,7 @@ export const roommates: Roommate[] = [
       cooking: "Often",
     },
     verified: true,
+    status: "HAS_ROOM",
   },
   {
     id: "2",
@@ -86,6 +88,7 @@ export const roommates: Roommate[] = [
       cooking: "Daily",
     },
     verified: true,
+    status: "NEEDS_ROOM",
   },
   {
     id: "3",
@@ -110,6 +113,7 @@ export const roommates: Roommate[] = [
       cooking: "Sometimes",
     },
     verified: true,
+    status: "HAS_ROOM",
   },
   {
     id: "4",
@@ -134,6 +138,7 @@ export const roommates: Roommate[] = [
       cooking: "Sometimes",
     },
     verified: false,
+    status: "NEEDS_ROOM",
   },
   {
     id: "5",
@@ -158,6 +163,7 @@ export const roommates: Roommate[] = [
       cooking: "Often",
     },
     verified: true,
+    status: "HAS_ROOM",
   },
   {
     id: "6",
@@ -182,6 +188,7 @@ export const roommates: Roommate[] = [
       cooking: "Daily",
     },
     verified: true,
+    status: "NEEDS_ROOM",
   },
   {
     id: "7",
@@ -206,6 +213,7 @@ export const roommates: Roommate[] = [
       cooking: "Rarely",
     },
     verified: false,
+    status: "HAS_ROOM",
   },
   {
     id: "8",
@@ -230,6 +238,7 @@ export const roommates: Roommate[] = [
       cooking: "Daily",
     },
     verified: true,
+    status: "NEEDS_ROOM",
   },
 ];
 
@@ -254,6 +263,7 @@ export const currentUser = {
   },
   budget: { min: 3000000, max: 5000000 },
   verified: true,
+  status: "NEEDS_ROOM" as const,
 };
 
 /* ─── Room Listings ─── */

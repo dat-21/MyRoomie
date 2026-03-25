@@ -52,15 +52,14 @@ export default function LandlordSidebar({ onChatOpen }: LandlordSidebarProps) {
                             <Link
                                 key={link.to}
                                 to={link.to}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all no-underline ${
-                                    isActive
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all no-underline ${isActive
                                         ? isPremiumLink
                                             ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-md shadow-amber-400/20"
                                             : "bg-primary text-white shadow-md shadow-primary/20"
                                         : isPremiumLink
                                             ? "text-amber-600 hover:bg-amber-50 hover:text-amber-700"
                                             : "text-text-light hover:bg-primary/10 hover:text-primary"
-                                }`}
+                                    }`}
                             >
                                 <Icon size={20} className={isActive ? "text-white" : isPremiumLink ? "text-amber-500" : ""} />
                                 {t(link.labelKey)}

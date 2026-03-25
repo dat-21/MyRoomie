@@ -7,29 +7,29 @@
 
 @theme {
   /* ── Color System ── */
-  --color-primary: #2EC4B6;
-  --color-primary-light: #5EDBD0;
-  --color-primary-dark: #1FA89D;
-  --color-secondary: #67D7CE;
-  --color-secondary-light: #8EE5DD;
-  --color-accent: #18BFAF;
-  --color-surface: #F4F9F9;
-  --color-card-bg: #FFFFFF;
-  --color-filter-bg: #F0F7F6;
-  --color-border: #E0EEEC;
-  --color-text-primary: #1A1A2E;
-  --color-text-secondary: #6B7280;
-  --color-text-light: #5F6B7A;
-  --color-text-muted: #8B97A7;
-  
-  --color-badge-green-bg: #D1FAE5;
-  --color-badge-green-text: #065F46;
-  --color-badge-blue-bg: #DBEAFE;
-  --color-badge-blue-text: #1E40AF;
+  --color-primary: #2ec4b6;
+  --color-primary-light: #5edbd0;
+  --color-primary-dark: #1fa89d;
+  --color-secondary: #67d7ce;
+  --color-secondary-light: #8ee5dd;
+  --color-accent: #18bfaf;
+  --color-surface: #f4f9f9;
+  --color-card-bg: #ffffff;
+  --color-filter-bg: #f0f7f6;
+  --color-border: #e0eeec;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-text-light: #5f6b7a;
+  --color-text-muted: #8b97a7;
+
+  --color-badge-green-bg: #d1fae5;
+  --color-badge-green-text: #065f46;
+  --color-badge-blue-bg: #dbeafe;
+  --color-badge-blue-text: #1e40af;
 
   /* ── Typography System ── */
   --font-inter: "Inter", sans-serif;
-  
+
   --font-size-display: 36px;
   --font-size-h1: 28px;
   --font-size-h2: 20px;
@@ -61,18 +61,51 @@ body {
   letter-spacing: 0.01em;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.3;
 }
 
 /* Typography Utility Classes */
-.font-display { font-size: 36px; font-weight: 800; line-height: 1.3; }
-.font-h1 { font-size: 28px; font-weight: 700; line-height: 1.3; }
-.font-h2 { font-size: 20px; font-weight: 600; line-height: 1.3; }
-.font-h3 { font-size: 16px; font-weight: 600; line-height: 1.3; }
-.font-body { font-size: 14px; font-weight: 400; line-height: 1.5; }
-.font-caption { font-size: 12px; font-weight: 400; line-height: 1.5; }
-.font-tag { font-size: 11px; font-weight: 500; line-height: 1.5; }
+.font-display {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.font-h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.font-h2 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.font-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.font-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.font-caption {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.font-tag {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+}
 
 /* Filter Section Headers Style */
 .filter-section-header {
@@ -220,7 +253,11 @@ h6 {
 
 /* Premium glassmorphism */
 .premium-glass {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.7),
+    rgba(255, 255, 255, 0.4)
+  );
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -249,7 +286,9 @@ h6 {
 
 /* Card lift effect */
 .card-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .card-lift:hover {
@@ -258,7 +297,9 @@ h6 {
 }
 
 /* Smooth focus rings */
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15);
 }

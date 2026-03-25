@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Vercel deployment trigger
 // Pages
 import RoleSelectionPage from "./pages/RoleSelectionPage";
 import LandingPage from "./pages/LandingPage";

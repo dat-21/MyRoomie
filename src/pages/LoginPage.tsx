@@ -58,7 +58,7 @@ export default function LoginPage() {
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link to="/" className="inline-block no-underline">
-                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto mx-auto object-contain" />
+                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto mx-auto brand-logo" />
                     </Link>
                 </div>
 

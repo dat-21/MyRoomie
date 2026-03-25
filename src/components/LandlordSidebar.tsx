@@ -36,7 +36,7 @@ export default function LandlordSidebar({ onChatOpen }: LandlordSidebarProps) {
             <aside className="hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 glass-strong border-r border-border/50 z-40">
                 <div className="p-6 flex items-center justify-center border-b border-border/50">
                     <Link to="/" className="inline-block no-underline">
-                        <img src="/logo(1).jpg" alt="My Roomie" className="h-12 w-auto object-contain" />
+                        <img src="/logo(1).jpg" alt="My Roomie" className="h-12 w-auto brand-logo" />
                     </Link>
                 </div>
 
@@ -113,7 +113,7 @@ export default function LandlordSidebar({ onChatOpen }: LandlordSidebarProps) {
             {/* Mobile Header & Menu */}
             <div className="md:hidden fixed top-0 left-0 right-0 h-20 glass-strong z-50 flex items-center justify-between px-4 border-b border-border/50">
                 <Link to="/" className="inline-block no-underline">
-                    <img src="/logo(1).jpg" alt="My Roomie" className="h-10 w-auto object-contain" />
+                    <img src="/logo(1).jpg" alt="My Roomie" className="h-10 w-auto brand-logo" />
                 </Link>
                 <div className="flex items-center gap-2">
                     <button

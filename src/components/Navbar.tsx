@@ -39,7 +39,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
                 <div className="flex items-center justify-between h-24">
                     {/* Logo */}
                     <Link to="/" className="flex-shrink-0 flex items-center no-underline">
-                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto object-contain" />
+                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto brand-logo" />
                     </Link>
 
                     {/* Desktop nav */}

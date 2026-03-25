@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Building, Users, ArrowRight, ArrowLeft, Mail, Lock, Eye, EyeOff,
@@ -201,6 +201,7 @@ function FormField({ label, icon: Icon, value, onChange, placeholder, type = "te
 /* ─── Main Register Page ─── */
 export default function RegisterPage() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { register } = useAuth();
 
     const { t } = useTranslation();
@@ -227,6 +228,14 @@ export default function RegisterPage() {
     const [budget, setBudget] = useState("");
     const [desiredArea, setDesiredArea] = useState("");
     const [intro, setIntro] = useState("");
+
+    useEffect(() => {
+        const roleParam = searchParams.get("role");
+        if (roleParam === "tenant" || roleParam === "landlord") {
+            setRole(roleParam);
+            setStep(1);
+        }
+    }, [searchParams]);
 
     const handleRoleSelect = (selectedRole: Role) => {
         setRole(selectedRole);
@@ -287,7 +296,7 @@ export default function RegisterPage() {
                 {/* Logo */}
                 <div className="text-center mb-6">
                     <Link to="/" className="inline-block no-underline">
-                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto mx-auto object-contain" />
+                        <img src="/logo(1).jpg" alt="My Roomie" className="h-20 w-auto mx-auto brand-logo" />
                     </Link>
                 </div>
 

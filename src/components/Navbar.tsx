@@ -15,13 +15,6 @@ const tenantNavLinks = [
     { to: "/premium", labelKey: "common.premium", icon: Crown },
 ];
 
-const landlordNavLinks = [
-    { to: "/", labelKey: "common.dashboard", icon: LayoutDashboard },
-    { to: "/rooms", labelKey: "common.myRooms", icon: Building },
-    { to: "/post", labelKey: "common.postRoom", icon: PlusCircle },
-    { to: "/premium", labelKey: "common.premium", icon: Crown },
-];
-
 interface NavbarProps {
     onChatOpen?: () => void;
 }
@@ -33,7 +26,7 @@ export default function Navbar({ onChatOpen }: NavbarProps) {
     const { user, isAuthenticated, isPending, logout } = useAuth();
 
     const { t } = useTranslation();
-    const navLinks = user?.role === "landlord" ? landlordNavLinks : tenantNavLinks;
+    const navLinks = tenantNavLinks;
 
     const handleLogout = () => {
         logout();

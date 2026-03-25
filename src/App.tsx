@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import ChatPanel from "./components/ChatPanel";
+
+// Pages
+import RoleSelectionPage from "./pages/RoleSelectionPage";
 import LandingPage from "./pages/LandingPage";
 import FindRoommatePage from "./pages/FindRoommatePage";
 import PostRoomPage from "./pages/PostRoomPage";
@@ -16,7 +15,14 @@ import PremiumPage from "./pages/PremiumPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import LandlordHomePage from "./pages/LandlordHomePage";
+import LandlordRoomsPage from "./pages/LandlordRoomsPage";
+import LandlordPremiumPage from "./pages/LandlordPremiumPage";
 import AdminPage from "./pages/AdminPage";
+
+// Layouts
+import TenantLayout from "./layouts/TenantLayout";
+import LandlordLayout from "./layouts/LandlordLayout";
+
 import { useAuth } from "./contexts/AuthContext";
 
 const pageVariants = {
@@ -25,19 +31,10 @@ const pageVariants = {
   exit: { opacity: 0, y: -12 },
 };
 
-export default function App() {
+function AnimatedStandalonePage({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const [chatOpen, setChatOpen] = useState(false);
-  const { user } = useAuth();
-
-  const isAuthPage = ["login", "register"].includes(location.pathname.replace("/", ""));
-  const isAdminPage = location.pathname === "/admin";
-  const isLandlord = user?.role === "landlord";
-
   return (
     <div className="min-h-screen flex flex-col bg-bg">
-      {!isAuthPage && !isAdminPage && <Navbar onChatOpen={() => setChatOpen(true)} />}
-
       <main className="flex-1">
         <AnimatePresence mode="wait">
           <motion.div
@@ -48,29 +45,69 @@ export default function App() {
             exit="exit"
             transition={{ duration: 0.3 }}
           >
-            <Routes location={location}>
-              <Route path="/" element={isLandlord ? <LandlordHomePage /> : <LandingPage />} />
-              <Route path="/find" element={<FindRoommatePage />} />
-              <Route path="/post" element={<PostRoomPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/:id" element={<ProfilePage />} />
-              <Route path="/design" element={<DesignSystemPage />} />
-              <Route path="/rooms" element={<ViewAllRoomsPage />} />
-              <Route path="/rooms/:id" element={<RoomDetailPage />} />
-              <Route path="/matches" element={<ViewAllMatchesPage />} />
-              <Route path="/premium" element={<PremiumPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-            </Routes>
+            {children}
           </motion.div>
         </AnimatePresence>
       </main>
-
-      {!isAuthPage && !isAdminPage && <Footer />}
-
-      {/* Global Chat Panel */}
-      {!isAuthPage && !isAdminPage && <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} />}
     </div>
+  );
+}
+
+export default function App() {
+  const { user } = useAuth();
+
+  const isLandlord = user?.role === "landlord";
+  const isTenant = user?.role === "tenant";
+  const isLoggedIn = !!user;
+
+  return (
+    <Routes>
+      {/* Auth & Admin Routes (Standalone Layout — always accessible) */}
+      <Route path="/login" element={<AnimatedStandalonePage><LoginPage /></AnimatedStandalonePage>} />
+      <Route path="/register" element={<AnimatedStandalonePage><RegisterPage /></AnimatedStandalonePage>} />
+      <Route path="/admin" element={<AnimatedStandalonePage><AdminPage /></AnimatedStandalonePage>} />
+
+      {/* ═══ Landlord Routes ═══ */}
+      {isLandlord && (
+        <Route element={<LandlordLayout />}>
+          <Route path="/" element={<LandlordHomePage />} />
+          <Route path="/post" element={<PostRoomPage />} />
+          <Route path="/rooms" element={<LandlordRoomsPage />} />
+          <Route path="/explore" element={<ViewAllRoomsPage />} />
+          <Route path="/rooms/:id" element={<RoomDetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/premium" element={<LandlordPremiumPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      )}
+
+      {/* ═══ Tenant Routes ═══ */}
+      {isTenant && (
+        <Route element={<TenantLayout />}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/find" element={<FindRoommatePage />} />
+          <Route path="/post" element={<PostRoomPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/design" element={<DesignSystemPage />} />
+          <Route path="/rooms" element={<ViewAllRoomsPage />} />
+          <Route path="/rooms/:id" element={<RoomDetailPage />} />
+          <Route path="/matches" element={<ViewAllMatchesPage />} />
+          <Route path="/premium" element={<PremiumPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      )}
+
+      {/* ═══ Unauthenticated — Role Selection Homepage ═══ */}
+      {!isLoggedIn && (
+        <Route element={<TenantLayout />}>
+          <Route path="/" element={<RoleSelectionPage />} />
+          <Route path="/rooms" element={<ViewAllRoomsPage />} />
+          <Route path="/rooms/:id" element={<RoomDetailPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      )}
+    </Routes>
   );
 }

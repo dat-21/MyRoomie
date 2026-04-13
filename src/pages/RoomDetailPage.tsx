@@ -699,7 +699,7 @@ export default function RoomDetailPage() {
                                         style={{ border: 0 }}
                                         loading="lazy"
                                         referrerPolicy="no-referrer-when-downgrade"
-                                        src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}&q=${room.lat},${room.lng}&zoom=15&maptype=roadmap`}
+                                        src={`https://maps.google.com/maps?q=${room.lat},${room.lng}&z=15&output=embed`}
                                         allowFullScreen
                                     />
                                 </div>

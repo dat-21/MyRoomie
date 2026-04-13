@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { MapPin, Calendar, Wallet, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { Roommate } from "../data/mockData";
@@ -11,6 +12,7 @@ interface RoommateCardProps {
 
 export default function RoommateCard({ roommate, index = 0 }: RoommateCardProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <motion.div
@@ -96,7 +98,10 @@ export default function RoommateCard({ roommate, index = 0 }: RoommateCardProps)
         </div>
 
         {/* Action Button: Full width teal */}
-        <button className="mt-6 w-full py-3 rounded-buttons bg-primary text-white font-h3 hover:bg-primary-dark transition-colors cursor-pointer shadow-sm">
+        <button
+          onClick={() => navigate(`/user/${roommate.id}`)}
+          className="mt-6 w-full py-3 rounded-buttons bg-primary text-white font-h3 hover:bg-primary-dark transition-colors cursor-pointer shadow-sm"
+        >
           {t('roommateCard.viewDetails')}
         </button>
       </div>

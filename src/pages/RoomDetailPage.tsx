@@ -689,12 +689,34 @@ export default function RoomDetailPage() {
                                 </div>
                             </div>
 
-                            {/* Map Placeholder */}
-                            <div className="mt-4 glass rounded-2xl p-4 h-48 flex items-center justify-center bg-gradient-to-br from-primary/5 to-secondary/5">
-                                <div className="text-center">
-                                    <MapPin size={32} className="text-primary mx-auto mb-2" />
-                                    <div className="text-sm font-medium text-text">{t(`roomDistrict.${room.district}`, room.district)}</div>
-                                    <div className="text-xs text-text-muted">{t('roomDetail.viewOnMap')}</div>
+                            {/* Google Maps */}
+                            <div className="mt-4 glass rounded-2xl overflow-hidden">
+                                <div className="relative h-56 sm:h-64">
+                                    <iframe
+                                        title={`Map - ${room.title}`}
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${room.lat},${room.lng}&zoom=15&maptype=roadmap`}
+                                        allowFullScreen
+                                    />
+                                </div>
+                                <div className="p-3 flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-sm text-text-light min-w-0">
+                                        <MapPin size={14} className="text-primary flex-shrink-0" />
+                                        <span className="truncate">{t(`roomDistrict.${room.district}`, room.district)}</span>
+                                    </div>
+                                    <a
+                                        href={`https://www.google.com/maps/search/?api=1&query=${room.lat},${room.lng}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-medium hover:bg-primary/20 transition-colors whitespace-nowrap"
+                                    >
+                                        <Navigation size={12} />
+                                        {t('roomDetail.viewOnMap')}
+                                    </a>
                                 </div>
                             </div>
                         </motion.div>

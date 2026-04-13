@@ -19,6 +19,7 @@ import LandlordHomePage from "./pages/LandlordHomePage";
 import LandlordRoomsPage from "./pages/LandlordRoomsPage";
 import LandlordPremiumPage from "./pages/LandlordPremiumPage";
 import AdminPage from "./pages/AdminPage";
+import UserDetailPage from "./pages/UserDetailPage";
 
 // Layouts
 import TenantLayout from "./layouts/TenantLayout";
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="/rooms/:id" element={<RoomDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
+          <Route path="/user/:id" element={<UserDetailPage />} />
           <Route path="/premium" element={<LandlordPremiumPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
@@ -95,6 +97,7 @@ export default function App() {
           <Route path="/rooms" element={<ViewAllRoomsPage />} />
           <Route path="/rooms/:id" element={<RoomDetailPage />} />
           <Route path="/matches" element={<ViewAllMatchesPage />} />
+          <Route path="/user/:id" element={<UserDetailPage />} />
           <Route path="/premium" element={<PremiumPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

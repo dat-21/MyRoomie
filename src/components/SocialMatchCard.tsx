@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MessageCircle, UserPlus, Info } from "lucide-react";
 import type { Roommate } from "../data/mockData";
@@ -20,6 +21,7 @@ export default function SocialMatchCard({
   index = 0
 }: Props) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Circular progress stroke logic
   const radius = 22;
@@ -118,6 +120,7 @@ export default function SocialMatchCard({
       {/* Action Buttons: Side-by-side */}
       <div className="flex gap-2 mt-auto">
         <button
+          onClick={() => navigate(`/user/${roommate.id}`)}
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-buttons border border-primary text-primary font-h3 transition-all hover:bg-primary/5 cursor-pointer"
         >
           <Info size={16} />

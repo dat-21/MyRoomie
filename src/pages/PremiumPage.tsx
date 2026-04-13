@@ -24,6 +24,7 @@ import {
     Clock,
 } from "lucide-react";
 import { useInView } from "../hooks/useInView";
+import LandlordInteractivePricing from "../components/LandlordInteractivePricing";
 
 type Role = "student" | "landlord";
 
@@ -394,247 +395,183 @@ function StudentPricing() {
    LANDLORD — Pricing sections
    ═══════════════════════════════════════════════════════════ */
 
-function LandlordBoostPricing() {
-    const { t } = useTranslation();
-    const plans = [
-        {
-            id: "single",
-            name: t('premiumPage.boost1Listing'),
-            price: 19000,
-            unit: t('premiumPage.perListing'),
-            duration: t('premiumPage.duration24h'),
-            badge: null,
-            popular: false,
-            features: [
-                t('premiumPage.featuredFrontPage'),
-                t('premiumPage.boostedBadge'),
-                t('premiumPage.moreViews5x'),
-            ],
-        },
-        {
-            id: "bundle",
-            name: t('premiumPage.bundle10'),
-            price: 149000,
-            unit: t('premiumPage.perBundle'),
-            duration: t('premiumPage.duration10x24h'),
-            badge: t('premiumPage.save21'),
-            popular: true,
-            features: [
-                t('premiumPage.boostCredits10'),
-                t('premiumPage.eachListing24h'),
-                t('premiumPage.boostedBadge'),
-                t('premiumPage.moreViews5x'),
-                t('premiumPage.onlyPerListing'),
-            ],
-        },
-    ];
-
+function LandlordPricingBoard() {
     return (
         <section className="py-20 relative">
             <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-gradient-to-br from-gold-light/15 to-gold/10 rounded-full blur-[150px]" />
+                <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full blur-[150px]" />
+                <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-gradient-to-br from-amber-500/10 to-yellow-500/10 rounded-full blur-[150px]" />
             </div>
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <FadeSection className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/10 text-gold-dark text-xs font-medium mb-4 border border-gold-light/30">
-                        <Megaphone size={14} />
-                        {t('premiumPage.boostStayTop')}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <FadeSection className="text-center mb-16">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary-dark text-xs font-medium mb-4 border border-primary/20">
+                        <Building2 size={14} />
+                        Dành cho Chủ trọ
                     </div>
-                    <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        {t('premiumPage.boostListingTitle')}{" "}
-                        <span className="bg-gradient-to-r from-gold to-gold-dark bg-clip-text text-transparent">{t('premiumPage.boostListingTitleHighlight')}</span>
+                    <h2 className="text-3xl lg:text-4xl font-bold text-text font-[family-name:var(--font-family-heading)]">
+                        Bảng Giá <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Dịch Vụ Premium</span>
                     </h2>
-                    <p className="mt-3 text-text-light">{t('premiumPage.boostListingDesc')}</p>
+                    <p className="mt-4 text-text-light max-w-2xl mx-auto text-lg">
+                        Lựa chọn gói dịch vụ tối ưu để tăng hiệu quả tiếp cận sinh viên và cho thuê phòng nhanh chóng.
+                    </p>
                 </FadeSection>
 
-                <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
-                    {plans.map((plan, i) => (
-                        <FadeSection key={plan.id} delay={i * 0.1}>
-                            <motion.div
-                                whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                                className={`relative rounded-3xl p-6 transition-all duration-300 h-full flex flex-col ${plan.popular
-                                    ? "premium-glass border-2 border-gold/30 shadow-xl shadow-gold/10"
-                                    : "glass hover:shadow-lg"
-                                    }`}
-                            >
-                                {plan.badge && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-gold to-gold-dark text-white text-xs font-semibold shadow-lg whitespace-nowrap">
-                                            {plan.badge}
-                                        </span>
-                                    </div>
-                                )}
-
-                                <div className="text-center pt-2">
-                                    <Megaphone size={24} className="mx-auto text-gold mb-2" />
-                                    <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)]">{plan.name}</h3>
-                                    <div className="mt-3">
-                                        <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                            {new Intl.NumberFormat("vi-VN").format(plan.price)}
-                                        </span>
-                                        <span className="text-text-muted text-sm"> VND{plan.unit}</span>
-                                    </div>
-                                    <p className="text-xs text-text-muted mt-1.5 flex items-center justify-center gap-1">
-                                        <Clock size={12} /> {plan.duration}
-                                    </p>
+                <div className="grid lg:grid-cols-3 gap-8 items-start">
+                    {/* 1. Mở khóa liên hệ */}
+                    <div className="flex flex-col gap-5">
+                        <FadeSection>
+                            <div className="text-center mb-2 flex flex-col items-center">
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 text-primary">
+                                    <Unlock size={26} />
                                 </div>
+                                <h3 className="text-xl font-bold text-text">Mở khóa liên hệ</h3>
+                                <p className="text-sm text-text-muted mt-1">Lưu lượng tiếp cận sinh viên</p>
+                            </div>
+                        </FadeSection>
 
-                                <div className="space-y-2.5 mt-5 mb-5 flex-1">
-                                    {plan.features.map((f) => (
-                                        <div key={f} className="flex items-start gap-2 text-sm text-text-light">
-                                            <Check size={16} className="text-gold flex-shrink-0 mt-0.5" />
-                                            {f}
-                                        </div>
-                                    ))}
+                        <FadeSection delay={0.1}>
+                            <motion.div whileHover={{ y: -4 }} className="glass rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all flex flex-col h-full relative overflow-hidden">
+                                <h4 className="font-bold text-text text-lg">Gói 30 Liên hệ</h4>
+                                <div className="mt-2 mb-4">
+                                    <span className="text-3xl font-extrabold text-text">99.000</span>
+                                    <span className="text-text-muted font-medium"> đ</span>
                                 </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className={`w-full py-3 rounded-2xl font-semibold text-sm cursor-pointer border-0 transition-all ${plan.popular
-                                        ? "bg-gradient-to-r from-gold to-gold-dark text-white shadow-lg shadow-gold/25 hover:shadow-xl btn-glow"
-                                        : "bg-gold/10 text-gold-dark hover:bg-gold/20"
-                                        }`}
-                                >
-                                    {t('common.buyNow')}
+                                <ul className="space-y-2 mb-6 flex-1 text-sm text-text-light">
+                                    <li className="flex gap-2"><Check size={16} className="text-primary flex-shrink-0 mt-0.5"/> 30 lượt xem thông tin sinh viên</li>
+                                    <li className="flex gap-2"><Check size={16} className="text-primary flex-shrink-0 mt-0.5"/> Liên hệ không bao giờ hết hạn</li>
+                                </ul>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full py-3 rounded-xl font-semibold text-sm bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer border-0">
+                                    Mua gói này
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
 
-function LandlordContactPricing() {
-    const { t } = useTranslation();
-    const plans = [
-        {
-            id: "free",
-            name: t('premiumPage.freeContacts'),
-            price: 0,
-            contacts: 3,
-            badge: null,
-            popular: false,
-            perContact: t('premiumPage.freeLabel'),
-        },
-        {
-            id: "30",
-            name: t('premiumPage.contacts30'),
-            price: 99000,
-            contacts: 30,
-            badge: t('premiumPage.mostPopular'),
-            popular: true,
-            perContact: "~3,300 VND" + t('premiumPage.perContact'),
-        },
-        {
-            id: "100",
-            name: t('premiumPage.contacts100'),
-            price: 249000,
-            contacts: 100,
-            badge: t('premiumPage.bestValue'),
-            popular: false,
-            perContact: "~2,490 VND" + t('premiumPage.perContact'),
-        },
-    ];
-
-    return (
-        <section className="py-20 relative">
-            <div className="absolute inset-0 -z-10 overflow-hidden">
-                <div className="absolute top-1/2 right-1/3 w-[500px] h-[500px] bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full blur-[150px]" />
-            </div>
-
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <FadeSection className="text-center mb-14">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary-50 text-primary-dark text-xs font-medium mb-4 border border-secondary-100">
-                        <Unlock size={14} />
-                        {t('premiumPage.unlockStudentContacts')}
-                    </div>
-                    <h2 className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                        {t('premiumPage.unlockStudentContactsTitle').split(' ').slice(0, 2).join(' ')}{" "}
-                        <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">{t('premiumPage.unlockStudentContactsTitle').split(' ').slice(2).join(' ')}</span>
-                    </h2>
-                    <p className="mt-3 text-text-light">{t('premiumPage.unlockStudentContactsDesc')}</p>
-                </FadeSection>
-
-                <div className="grid sm:grid-cols-3 gap-6 items-stretch">
-                    {plans.map((plan, i) => (
-                        <FadeSection key={plan.id} delay={i * 0.1}>
-                            <motion.div
-                                whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                                className={`relative rounded-3xl p-6 transition-all duration-300 h-full flex flex-col ${plan.popular
-                                    ? "premium-glass border-2 border-secondary/30 shadow-xl shadow-secondary/10 sm:scale-105 z-10"
-                                    : "glass hover:shadow-lg"
-                                    }`}
-                            >
-                                {plan.badge && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                                        <span className="px-4 py-1 rounded-full bg-gradient-to-r from-secondary to-primary text-white text-xs font-semibold shadow-lg whitespace-nowrap">
-                                            {plan.badge}
-                                        </span>
-                                    </div>
-                                )}
-
-                                <div className="text-center pt-2">
-                                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3 ${plan.id === "free" ? "bg-gray-100" : "bg-gradient-to-br from-secondary/20 to-primary/20"}`}>
-                                        <Users size={22} className={plan.id === "free" ? "text-text-muted" : "text-secondary"} />
-                                    </div>
-                                    <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)]">{plan.name}</h3>
-                                    <div className="mt-3">
-                                        {plan.price === 0 ? (
-                                            <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">0 VND</span>
-                                        ) : (
-                                            <>
-                                                <span className="text-3xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                                    {new Intl.NumberFormat("vi-VN").format(plan.price)}
-                                                </span>
-                                                <span className="text-text-muted text-sm"> VND</span>
-                                            </>
-                                        )}
-                                    </div>
-                                    <p className="text-xs text-text-muted mt-1">{plan.perContact}</p>
+                        <FadeSection delay={0.2}>
+                            <motion.div whileHover={{ y: -4 }} className="glass rounded-3xl p-6 border-2 border-secondary/30 bg-gradient-to-b from-white to-secondary/5 hover:shadow-xl hover:shadow-secondary/10 transition-all flex flex-col h-full relative">
+                                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-bold px-4 py-1 rounded-full shadow-md whitespace-nowrap">
+                                    🚀 85% chủ trọ đang mua gói này
                                 </div>
-
-                                <div className="space-y-2.5 mt-5 mb-5 flex-1">
-                                    <div className="flex items-center gap-2 text-sm text-text-light">
-                                        <Check size={16} className="text-secondary flex-shrink-0" />
-                                        <span dangerouslySetInnerHTML={{ __html: t('premiumPage.unlockStudents', { count: plan.contacts }) }} />
-                                    </div>
-                                    <div className="flex items-center gap-2 text-sm text-text-light">
-                                        <Check size={16} className="text-secondary flex-shrink-0" />
-                                        {t('premiumPage.viewPhoneEmail')}
-                                    </div>
-                                    {plan.price > 0 && (
-                                        <>
-                                            <div className="flex items-center gap-2 text-sm text-text-light">
-                                                <Check size={16} className="text-secondary flex-shrink-0" />
-                                                {t('premiumPage.contactsNeverExpire')}
-                                            </div>
-                                            <div className="flex items-center gap-2 text-sm text-text-light">
-                                                <Check size={16} className="text-secondary flex-shrink-0" />
-                                                {t('premiumPage.priorityListing')}
-                                            </div>
-                                        </>
-                                    )}
+                                <h4 className="font-bold text-text text-lg pt-2">Gói 100 Liên hệ</h4>
+                                <div className="mt-2 mb-4">
+                                    <span className="text-3xl font-extrabold text-text">249.000</span>
+                                    <span className="text-text-muted font-medium"> đ</span>
                                 </div>
-
-                                <motion.button
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                    className={`w-full py-3 rounded-2xl font-semibold text-sm cursor-pointer border-0 transition-all ${plan.popular
-                                        ? "bg-gradient-to-r from-secondary to-primary text-white shadow-lg shadow-secondary/25 hover:shadow-xl btn-glow"
-                                        : plan.id === "free"
-                                            ? "bg-gray-100 text-text-light hover:bg-gray-200"
-                                            : "bg-secondary/10 text-secondary hover:bg-secondary/20"
-                                        }`}
-                                >
-                                    {plan.id === "free" ? t('premiumPage.currentPlan') : t('premiumPage.upgrade')}
+                                <ul className="space-y-2 mb-6 flex-1 text-sm text-text-light">
+                                    <li className="flex gap-2"><Check size={16} className="text-secondary flex-shrink-0 mt-0.5"/> 100 lượt xem thông tin sinh viên</li>
+                                    <li className="flex gap-2"><Check size={16} className="text-secondary flex-shrink-0 mt-0.5"/> Giá siêu ưu đãi tiết kiệm</li>
+                                </ul>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary to-secondary text-white shadow-md hover:shadow-lg transition-all btn-glow cursor-pointer border-0">
+                                    Mua gói này
                                 </motion.button>
                             </motion.div>
                         </FadeSection>
-                    ))}
+                    </div>
+
+                    {/* 2. Tăng hiển thị tin đăng */}
+                    <div className="flex flex-col gap-5">
+                        <FadeSection>
+                            <div className="text-center mb-2 flex flex-col items-center">
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mb-4 text-secondary">
+                                    <TrendingUp size={26} />
+                                </div>
+                                <h3 className="text-xl font-bold text-text">Tăng hiển thị</h3>
+                                <p className="text-sm text-text-muted mt-1">Đẩy tin nổi bật trên trang chủ</p>
+                                <div className="text-[11px] text-primary-dark font-semibold px-3 py-1 bg-primary/10 border border-primary/20 rounded-full mt-2 inline-block">Chỉ dành cho chủ trọ chưa có Gold</div>
+                            </div>
+                        </FadeSection>
+
+                        <FadeSection delay={0.1}>
+                            <motion.div whileHover={{ y: -4 }} className="glass rounded-3xl p-6 border-2 border-primary/20 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all flex flex-col h-full">
+                                <h4 className="font-bold text-text text-lg">Gói Thường (1 Tin)</h4>
+                                <div className="mt-2 mb-4">
+                                    <span className="text-3xl font-extrabold text-text">19.000</span>
+                                    <span className="text-text-muted font-medium"> đ</span>
+                                    <span className="text-text-muted text-xs"> /24h</span>
+                                </div>
+                                <ul className="space-y-2 mb-6 flex-1 text-sm text-text-light">
+                                    <li className="flex gap-2"><Check size={16} className="text-primary flex-shrink-0 mt-0.5"/> Đẩy 1 tin lên bảng xếp hạng</li>
+                                    <li className="flex gap-2"><Check size={16} className="text-primary flex-shrink-0 mt-0.5"/> Thu hút gấp 3 lần lượt xem</li>
+                                </ul>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full py-3 rounded-xl font-semibold text-sm bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer border-0">
+                                    Mua gói này
+                                </motion.button>
+                            </motion.div>
+                        </FadeSection>
+
+                        <FadeSection delay={0.2}>
+                            <motion.div whileHover={{ y: -4 }} className="glass rounded-3xl p-6 border-2 border-secondary/30 hover:border-secondary/50 hover:shadow-xl hover:shadow-secondary/10 transition-all flex flex-col h-full relative overflow-hidden">
+                                <div className="absolute top-0 right-0 bg-secondary/10 text-secondary text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">Tiết kiệm 20%</div>
+                                <h4 className="font-bold text-text text-lg">Gói Cao Cấp (10 Tin)</h4>
+                                <div className="mt-2 mb-4">
+                                    <span className="text-3xl font-extrabold text-text">149.000</span>
+                                    <span className="text-text-muted font-medium"> đ</span>
+                                </div>
+                                <ul className="space-y-2 mb-6 flex-1 text-sm text-text-light">
+                                    <li className="flex gap-2"><Check size={16} className="text-secondary flex-shrink-0 mt-0.5"/> 10 lượt đẩy tin 24h tùy chọn</li>
+                                    <li className="flex gap-2"><Check size={16} className="text-secondary flex-shrink-0 mt-0.5"/> Huy hiệu "Tin đẩy" nổi bật</li>
+                                </ul>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full py-3 rounded-xl font-semibold text-sm bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer border-0">
+                                    Mua gói này
+                                </motion.button>
+                            </motion.div>
+                        </FadeSection>
+                    </div>
+
+                    {/* 3. Gói Gold Subscription */}
+                    <div className="flex flex-col gap-5 lg:pl-4">
+                        <FadeSection>
+                            <div className="text-center mb-2 flex flex-col items-center">
+                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 flex items-center justify-center mb-4 text-white shadow-lg shadow-amber-500/30">
+                                    <Crown size={26} />
+                                </div>
+                                <h3 className="text-xl font-bold bg-gradient-to-r from-amber-500 to-yellow-600 bg-clip-text text-transparent">Gold Subscription</h3>
+                                <p className="text-sm text-text-muted mt-1">Giải pháp tất cả trong một</p>
+                            </div>
+                        </FadeSection>
+
+                        <FadeSection delay={0.1} className="flex-1">
+                            <motion.div whileHover={{ y: -8 }} className="premium-glass rounded-3xl p-8 border-2 border-amber-400/50 hover:shadow-2xl hover:shadow-amber-500/20 bg-gradient-to-b from-amber-50/50 to-white transition-all flex flex-col h-full relative overflow-visible z-10 scale-100 sm:scale-105 mt-2 lg:mt-6">
+                                {/* BEST CHOICE Badge */}
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                    <span className="px-6 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-xs font-black tracking-widest shadow-lg shadow-amber-500/40 flex items-center gap-1.5 border border-white/20">
+                                        <Star size={12} className="fill-white" /> BEST CHOICE
+                                    </span>
+                                </div>
+
+                                <div className="text-center pt-2 mb-6">
+                                    <div className="flex justify-center items-end gap-1">
+                                        <span className="text-4xl lg:text-5xl font-extrabold text-amber-600">699.000</span>
+                                        <span className="text-amber-700/70 font-semibold mb-1">đ/<span className="text-sm">tháng</span></span>
+                                    </div>
+                                </div>
+
+                                <ul className="space-y-4 mb-8 flex-1 text-base text-text-light font-medium">
+                                    <li className="flex gap-3 items-start">
+                                        <div className="bg-amber-100 text-amber-600 p-1 rounded-full flex-shrink-0 mt-0.5"><Check size={16} className="stroke-[3]"/></div>
+                                        <span><strong className="text-amber-700">Không giới hạn</strong> mở khóa liên hệ sinh viên</span>
+                                    </li>
+                                    <li className="flex gap-3 items-start">
+                                        <div className="bg-amber-100 text-amber-600 p-1 rounded-full flex-shrink-0 mt-0.5"><Check size={16} className="stroke-[3]"/></div>
+                                        <span><strong className="text-amber-700">10 lượt đẩy tin</strong> tự động mỗi tháng</span>
+                                    </li>
+                                    <li className="flex gap-3 items-start">
+                                        <div className="bg-amber-100 text-amber-600 p-1 rounded-full flex-shrink-0 mt-0.5"><Check size={16} className="stroke-[3]"/></div>
+                                        <span>Ưu tiên hiển thị tin đăng trên trang kết quả</span>
+                                    </li>
+                                    <li className="flex gap-3 items-start">
+                                        <div className="bg-amber-100 text-amber-600 p-1 rounded-full flex-shrink-0 mt-0.5"><Check size={16} className="stroke-[3]"/></div>
+                                        <span>Huy hiệu <strong>Chủ Trọ Xác Thực</strong></span>
+                                    </li>
+                                </ul>
+
+                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full py-4 rounded-xl font-bold text-base bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/40 transition-all btn-glow premium-glow border-0 uppercase tracking-wide cursor-pointer">
+                                    Đăng ký Gold Ngay
+                                </motion.button>
+                            </motion.div>
+                        </FadeSection>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -870,8 +807,7 @@ export default function PremiumPage() {
                         </>
                     ) : (
                         <>
-                            <LandlordBoostPricing />
-                            <LandlordContactPricing />
+                            <LandlordPricingBoard />
                         </>
                     )}
 

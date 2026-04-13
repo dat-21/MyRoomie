@@ -292,6 +292,8 @@ export interface RoomListing {
   reviewCount: number;
   verified: boolean;
   petsAllowed: boolean;
+  lat: number;
+  lng: number;
 }
 
 export const rooms: RoomListing[] = [
@@ -331,6 +333,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 12,
     verified: true,
     petsAllowed: true,
+    lat: 16.0611,
+    lng: 108.2302,
   },
   {
     id: "r2",
@@ -365,6 +369,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 8,
     verified: true,
     petsAllowed: false,
+    lat: 16.0471,
+    lng: 108.2198,
   },
   {
     id: "r3",
@@ -396,6 +402,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 6,
     verified: true,
     petsAllowed: true,
+    lat: 16.0198,
+    lng: 108.2528,
   },
   {
     id: "r4",
@@ -431,6 +439,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 15,
     verified: true,
     petsAllowed: false,
+    lat: 16.0485,
+    lng: 108.2210,
   },
   {
     id: "r5",
@@ -464,6 +474,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 4,
     verified: false,
     petsAllowed: false,
+    lat: 16.0744,
+    lng: 108.1503,
   },
   {
     id: "r6",
@@ -496,6 +508,8 @@ export const rooms: RoomListing[] = [
     reviewCount: 9,
     verified: true,
     petsAllowed: true,
+    lat: 16.0156,
+    lng: 108.2068,
   },
 ];
 

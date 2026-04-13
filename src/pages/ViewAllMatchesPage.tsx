@@ -2,7 +2,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown, Sparkles, X, RotateCcw } from "lucide-react";
-import { roommates, lifestyleOptions } from "../data/mockData";
+import { roommates, lifestyleOptions, conversations as allConversations } from "../data/mockData";
 import SocialMatchCard from "../components/SocialMatchCard";
 import ChatPanel from "../components/ChatPanel";
 
@@ -55,8 +55,21 @@ export default function ViewAllMatchesPage() {
     }).sort((a, b) => b.compatibility - a.compatibility);
   }, [filters]);
 
-  const handleConnect = (id: string) => setConnectedIds((prev) => new Set(prev).add(id));
-  const handleMessage = () => { setChatConvoId("c1"); setChatOpen(true); };
+  const handleConnect = (id: string) => {
+    setConnectedIds((prev) => new Set(prev).add(id));
+    const existingConvo = allConversations.find(
+      (c) => c.participantId === id
+    );
+    setChatConvoId(existingConvo?.id || "c1");
+    setTimeout(() => setChatOpen(true), 400);
+  };
+  const handleMessage = (id: string) => {
+    const existingConvo = allConversations.find(
+      (c) => c.participantId === id
+    );
+    setChatConvoId(existingConvo?.id || "c1");
+    setChatOpen(true);
+  };
 
   const toggleLifestyle = (tag: string) => {
     setFilters((p) => ({

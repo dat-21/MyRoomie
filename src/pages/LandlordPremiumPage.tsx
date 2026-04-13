@@ -4,15 +4,12 @@ import {
     Crown,
     Check,
     X as XIcon,
-    Sparkles,
     Shield,
     TrendingUp,
     Unlock,
     Rocket,
     Star,
-    ArrowRight,
     Zap,
-    Flame,
     Building2,
     Eye,
     MessageCircle,
@@ -25,6 +22,7 @@ import {
 } from "lucide-react";
 import { formatCurrency } from "../data/mockData";
 import { useInView } from "../hooks/useInView";
+import LandlordInteractivePricing from "../components/LandlordInteractivePricing";
 
 /* ─── FadeSection ─── */
 function FadeSection({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -43,7 +41,7 @@ function FadeSection({ children, className = "", delay = 0 }: { children: React.
 }
 
 /* ─── Types ─── */
-type PlanId = "free" | "silver" | "gold" | "platinum";
+type PlanId = "free" | "silver" | "gold";
 
 interface SubscriptionPlan {
     id: PlanId;
@@ -127,27 +125,6 @@ const plans: SubscriptionPlan[] = [
         contactUnlocks: "Không giới hạn",
         priorityDisplay: true,
     },
-    {
-        id: "platinum",
-        name: "Platinum",
-        price: 1299000,
-        period: "/ tháng",
-        icon: Sparkles,
-        color: "text-violet-600",
-        gradientFrom: "from-violet-600",
-        gradientTo: "to-purple-500",
-        features: [
-            { text: "Đăng không giới hạn phòng", included: true },
-            { text: "Unlimited liên hệ", included: true },
-            { text: "Unlimited đẩy tin", included: true, highlight: true },
-            { text: "Ưu tiên hiển thị #1", included: true, highlight: true },
-            { text: "Huy hiệu xác thực VIP", included: true },
-            { text: "Thống kê nâng cao + Xuất báo cáo", included: true },
-        ],
-        boostsPerMonth: -1, // unlimited
-        contactUnlocks: "Không giới hạn",
-        priorityDisplay: true,
-    },
 ];
 
 /* ══════════════════════════════════════════
@@ -225,7 +202,7 @@ function CurrentPlanStatus() {
 
     return (
         <FadeSection>
-            <div className="glass rounded-2xl p-6 mb-10 border border-amber-200/40">
+            <div className="glass rounded-2xl p-6 mb-10 border border-amber-200/40 max-w-4xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
@@ -233,34 +210,34 @@ function CurrentPlanStatus() {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h3 className="text-lg font-bold text-text">Gói hiện tại: <span className="text-gray-500">Miễn phí</span></h3>
+                                <h3 className="text-lg font-bold text-slate-800">Gói hiện tại: <span className="text-gray-500">Miễn phí</span></h3>
                             </div>
-                            <p className="text-text-muted text-sm mt-0.5">Nâng cấp để mở khóa thêm tính năng</p>
+                            <p className="text-slate-500 text-sm mt-0.5">Nâng cấp để mở khóa thêm tính năng</p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-6">
                         {/* Boost counter */}
                         <div className="text-center">
-                            <div className="flex items-center gap-1.5 text-text-muted text-xs font-medium mb-1">
+                            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium mb-1">
                                 <Rocket size={12} />
                                 Đẩy tin
                             </div>
-                            <p className="text-lg font-bold text-text">{boostsUsed}/{boostsTotal}</p>
+                            <p className="text-lg font-bold text-slate-800">{boostsUsed}/{boostsTotal}</p>
                         </div>
-                        <div className="w-px h-10 bg-border" />
+                        <div className="w-px h-10 bg-slate-200" />
                         {/* Contact counter */}
                         <div className="text-center">
-                            <div className="flex items-center gap-1.5 text-text-muted text-xs font-medium mb-1">
+                            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium mb-1">
                                 <MessageCircle size={12} />
                                 Liên hệ
                             </div>
-                            <p className="text-lg font-bold text-text">{contactsUsed}/{contactsTotal}</p>
+                            <p className="text-lg font-bold text-slate-800">{contactsUsed}/{contactsTotal}</p>
                         </div>
-                        <div className="w-px h-10 bg-border" />
+                        <div className="w-px h-10 bg-slate-200" />
                         {/* Status */}
                         <div className="text-center">
-                            <div className="flex items-center gap-1.5 text-text-muted text-xs font-medium mb-1">
+                            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-medium mb-1">
                                 <Clock size={12} />
                                 Trạng thái
                             </div>
@@ -293,7 +270,7 @@ function PricingSection() {
                 <p className="mt-3 text-text-light">Chọn gói phù hợp với nhu cầu quản lý phòng trọ của bạn</p>
             </FadeSection>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch max-w-6xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch max-w-5xl mx-auto">
                 {plans.map((plan, i) => {
                     const Icon = plan.icon;
                     const isGold = plan.id === "gold";
@@ -488,14 +465,14 @@ function GoldHighlight() {
    ══════════════════════════════════════════ */
 function ComparisonTable() {
     const rows = [
-        { feature: "Số phòng đăng", free: "2", silver: "10", gold: "Không giới hạn", platinum: "Không giới hạn" },
-        { feature: "Lượt liên hệ / tháng", free: "3", silver: "30", gold: "Unlimited", platinum: "Unlimited" },
-        { feature: "Đẩy tin / tháng", free: "—", silver: "3", gold: "10", platinum: "Unlimited" },
-        { feature: "Ưu tiên hiển thị", free: false, silver: false, gold: true, platinum: true },
-        { feature: "Huy hiệu xác thực", free: false, silver: false, gold: true, platinum: true },
-        { feature: "Thống kê nâng cao", free: false, silver: true, gold: true, platinum: true },
-        { feature: "Xuất báo cáo", free: false, silver: false, gold: false, platinum: true },
-        { feature: "Hỗ trợ ưu tiên", free: false, silver: false, gold: true, platinum: true },
+        { feature: "Số phòng đăng", free: "2", silver: "10", gold: "Không giới hạn" },
+        { feature: "Lượt liên hệ / tháng", free: "3", silver: "30", gold: "Unlimited" },
+        { feature: "Đẩy tin / tháng", free: "—", silver: "3", gold: "10" },
+        { feature: "Ưu tiên hiển thị", free: false, silver: false, gold: true },
+        { feature: "Huy hiệu xác thực", free: false, silver: false, gold: true },
+        { feature: "Thống kê nâng cao", free: false, silver: true, gold: true },
+        { feature: "Xuất báo cáo", free: false, silver: false, gold: true },
+        { feature: "Hỗ trợ ưu tiên", free: false, silver: false, gold: true },
     ];
 
     return (
@@ -510,7 +487,7 @@ function ComparisonTable() {
                 <div className="max-w-5xl mx-auto overflow-x-auto">
                     <div className="min-w-[600px] glass rounded-2xl overflow-hidden">
                         {/* Header */}
-                        <div className="grid grid-cols-5 border-b border-border/50">
+                        <div className="grid grid-cols-4 border-b border-border/50">
                             <div className="p-4 text-sm font-semibold text-text">Tính năng</div>
                             {plans.map(p => (
                                 <div
@@ -530,10 +507,10 @@ function ComparisonTable() {
                         {rows.map((row, i) => (
                             <div
                                 key={row.feature}
-                                className={`grid grid-cols-5 items-center border-b border-border/30 last:border-0 hover:bg-primary/3 transition-colors ${i % 2 === 0 ? "" : "bg-white/30"}`}
+                                className={`grid grid-cols-4 items-center border-b border-border/30 last:border-0 hover:bg-primary/3 transition-colors ${i % 2 === 0 ? "" : "bg-white/30"}`}
                             >
                                 <div className="p-4 text-sm text-text">{row.feature}</div>
-                                {(["free", "silver", "gold", "platinum"] as PlanId[]).map(planId => {
+                                {(["free", "silver", "gold"] as PlanId[]).map(planId => {
                                     const val = row[planId as keyof typeof row];
                                     const isGoldCol = planId === "gold";
                                     return (
@@ -631,7 +608,7 @@ function BottomCTA() {
                     {/* Decorative elements */}
                     <div className="absolute top-4 left-8 opacity-20"><Star size={32} className="text-white fill-white" /></div>
                     <div className="absolute bottom-6 right-12 opacity-20"><Crown size={40} className="text-white" /></div>
-                    <div className="absolute top-1/2 left-1/4 opacity-10"><Sparkles size={48} className="text-white" /></div>
+                    <div className="absolute top-1/2 left-1/4 opacity-10"><Zap size={48} className="text-white" /></div>
 
                     <div className="relative z-10">
                         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 font-[family-name:var(--font-family-heading)]">
@@ -661,12 +638,13 @@ function BottomCTA() {
    ══════════════════════════════════════════ */
 export default function LandlordPremiumPage() {
     return (
-        <div className="pb-12">
+        <div className="pb-12 bg-[#fafafa] min-h-screen">
             <PremiumHero />
             <CurrentPlanStatus />
-            <PricingSection />
+            <div className="py-8">
+                <LandlordInteractivePricing />
+            </div>
             <GoldHighlight />
-            <ComparisonTable />
             <LandlordFAQ />
             <BottomCTA />
         </div>

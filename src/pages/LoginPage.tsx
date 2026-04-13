@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
+import { Mail, Lock, Eye, EyeOff, LogIn, Building2, GraduationCap, ShieldCheck } from "lucide-react";
+import { useAuth, type Role } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+
+type LoginRole = Exclude<Role, null>;
+
+const roleOptions: Array<{ value: LoginRole; label: string; icon: React.ElementType }> = [
+    { value: "tenant", label: "Sinh vien", icon: GraduationCap },
+    { value: "landlord", label: "Chu tro", icon: Building2 },
+    { value: "admin", label: "Admin", icon: ShieldCheck },
+];
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -11,6 +19,7 @@ export default function LoginPage() {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [selectedRole, setSelectedRole] = useState<LoginRole>("tenant");
     const [showPassword, setShowPassword] = useState(false);
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState("");
@@ -27,9 +36,9 @@ export default function LoginPage() {
 
         setLoading(true);
         try {
-            const success = await login(email, password);
+            const success = await login(email, password, selectedRole);
             if (success) {
-                navigate("/");
+                navigate(selectedRole === "admin" ? "/admin" : "/");
             } else {
                 setError(t('login.errorInvalid'));
             }
@@ -87,6 +96,37 @@ export default function LoginPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+                        {/* Role */}
+                        <div>
+                            <label className="block text-sm font-medium text-text mb-2">Dang nhap voi vai tro</label>
+                            <div className="grid grid-cols-3 gap-2">
+                                {roleOptions.map((role) => {
+                                    const Icon = role.icon;
+                                    const active = selectedRole === role.value;
+
+                                    return (
+                                        <button
+                                            key={role.value}
+                                            type="button"
+                                            onClick={() => setSelectedRole(role.value)}
+                                            className={`flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${active
+                                                ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
+                                                : "bg-white/70 text-text-light border-border hover:border-primary/40"
+                                                }`}
+                                        >
+                                            <Icon size={14} />
+                                            <span>{role.label}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            {selectedRole === "admin" && (
+                                <p className="text-xs text-text-muted mt-2">
+                                    Demo admin: admin@myroomie.vn / admin123
+                                </p>
+                            )}
+                        </div>
+
                         {/* Email */}
                         <div>
                             <label className="block text-sm font-medium text-text mb-1.5">{t('login.email')}</label>
@@ -97,6 +137,7 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="you@example.com"
+                                    autoComplete="email"
                                     className="w-full pl-11 pr-4 py-3 rounded-xl bg-white/60 border border-border text-text placeholder:text-text-muted/60 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                                 />
                             </div>
@@ -112,6 +153,7 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••"
+                                    autoComplete="current-password"
                                     className="w-full pl-11 pr-11 py-3 rounded-xl bg-white/60 border border-border text-text placeholder:text-text-muted/60 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                                 />
                                 <button

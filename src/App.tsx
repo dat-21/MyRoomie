@@ -58,16 +58,32 @@ function AnimatedStandalonePage({ children }: { children: React.ReactNode }) {
 export default function App() {
   const { user } = useAuth();
 
+  const isAdmin = user?.role === "admin";
   const isLandlord = user?.role === "landlord";
   const isTenant = user?.role === "tenant";
   const isLoggedIn = !!user;
 
   return (
     <Routes>
-      {/* Auth & Admin Routes (Standalone Layout — always accessible) */}
+      {/* Auth & Admin Routes */}
       <Route path="/login" element={<AnimatedStandalonePage><LoginPage /></AnimatedStandalonePage>} />
       <Route path="/register" element={<AnimatedStandalonePage><RegisterPage /></AnimatedStandalonePage>} />
-      <Route path="/admin" element={<AnimatedStandalonePage><AdminPage /></AnimatedStandalonePage>} />
+      <Route
+        path="/admin"
+        element={
+          <AnimatedStandalonePage>
+            {isAdmin ? <AdminPage /> : <Navigate to="/login" replace />}
+          </AnimatedStandalonePage>
+        }
+      />
+
+      {/* ═══ Admin Routes ═══ */}
+      {isAdmin && (
+        <>
+          <Route path="/" element={<Navigate to="/admin" replace />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
+        </>
+      )}
 
       {/* ═══ Landlord Routes ═══ */}
       {isLandlord && (

@@ -9,7 +9,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -32,6 +33,14 @@ export default function AdminSidebar({
   collapsed,
   onToggleCollapse,
 }: AdminSidebarProps) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleExitAdmin = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <motion.aside
       initial={false}
@@ -70,11 +79,10 @@ export default function AdminSidebar({
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onTabChange(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer border-0 ${
-                isActive
+              className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer border-0 ${isActive
                   ? "bg-gradient-to-r from-primary to-primary-light text-white shadow-lg"
                   : "bg-transparent text-text-muted hover:bg-white/50 hover:text-text"
-              }`}
+                }`}
             >
               <Icon size={20} className="flex-shrink-0" />
               {!collapsed && (
@@ -93,16 +101,15 @@ export default function AdminSidebar({
 
       {/* Footer */}
       <div className="p-4 border-t border-white/20 space-y-2">
-        <Link to="/">
-          <motion.button
-            whileHover={{ x: 4 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-muted hover:bg-white/50 hover:text-text transition-all cursor-pointer border-0 bg-transparent"
-          >
-            <LogOut size={20} className="flex-shrink-0" />
-            {!collapsed && <span>Exit Admin</span>}
-          </motion.button>
-        </Link>
+        <motion.button
+          whileHover={{ x: 4 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={handleExitAdmin}
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-text-muted hover:bg-white/50 hover:text-text transition-all cursor-pointer border-0 bg-transparent"
+        >
+          <LogOut size={20} className="flex-shrink-0" />
+          {!collapsed && <span>Exit Admin</span>}
+        </motion.button>
       </div>
 
       {/* Collapse Toggle */}

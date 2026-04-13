@@ -20,15 +20,20 @@ export default function AdminLineChart({
   showArea = true,
   height = 200,
 }: Props) {
+  if (data.length === 0) {
+    return null;
+  }
+
   const maxValue = Math.max(...data.map((d) => d.value));
   const minValue = Math.min(...data.map((d) => d.value));
   const padding = { top: 20, right: 20, bottom: 30, left: 20 };
-  const chartWidth = 100; // percentage-based
+  const chartWidth = 100;
   const chartHeight = height - padding.top - padding.bottom;
+  const pointDivisor = Math.max(data.length - 1, 1);
 
   // Calculate points
   const points = data.map((item, index) => {
-    const x = (index / (data.length - 1)) * 100;
+    const x = (index / pointDivisor) * chartWidth;
     const y = ((maxValue - item.value) / (maxValue - minValue || 1)) * chartHeight + padding.top;
     return { x, y, ...item };
   });
@@ -37,12 +42,12 @@ export default function AdminLineChart({
   const linePath = points
     .map((point, index) => {
       const command = index === 0 ? "M" : "L";
-      return `${command} ${point.x}% ${point.y}`;
+      return `${command} ${point.x} ${point.y}`;
     })
     .join(" ");
 
   // Create area path
-  const areaPath = `${linePath} L 100% ${chartHeight + padding.top} L 0% ${chartHeight + padding.top} Z`;
+  const areaPath = `${linePath} L ${chartWidth} ${chartHeight + padding.top} L 0 ${chartHeight + padding.top} Z`;
 
   // Calculate trend
   const firstValue = data[0]?.value || 0;
@@ -53,13 +58,12 @@ export default function AdminLineChart({
   return (
     <div className="glass rounded-2xl p-6">
       <div className="flex items-start justify-between mb-4">
-        <h3 className="text-lg font-semibold text-text font-[family-name:var(--font-family-heading)]">
+        <h3 className="text-lg font-semibold text-text font-(family-name:--font-family-heading)">
           {title}
         </h3>
         <div
-          className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-            isPositive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-          }`}
+          className={`px-2.5 py-1 rounded-full text-xs font-medium ${isPositive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+            }`}
         >
           {isPositive ? "+" : ""}
           {trendPercent.toFixed(1)}%
@@ -117,7 +121,7 @@ export default function AdminLineChart({
           {points.map((point, index) => (
             <motion.circle
               key={index}
-              cx={`${point.x}%`}
+              cx={point.x}
               cy={point.y}
               r="3"
               fill="white"
@@ -153,7 +157,7 @@ export default function AdminLineChart({
               className="text-[10px] text-text-muted"
               style={{
                 position: "absolute",
-                left: `${(index / (data.length - 1)) * 100}%`,
+                left: `${(index / pointDivisor) * 100}%`,
                 transform: "translateX(-50%)",
               }}
             >

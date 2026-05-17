@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { MapPin, Star, BadgeCheck, Bed, Bath, Maximize, Wifi, Wind, Car, PawPrint, ChevronLeft, ChevronRight, Share2, Bookmark, Phone, Send, Users, MessageSquarePlus, ChevronDown } from "lucide-react";
-import type { RoomListing } from "../data/mockData";
-import { formatCurrency, currentUser } from "../data/mockData";
+import type { RoomListing } from "../types";
+import { formatCurrency } from "../lib/format";
 import MatchCircle from "./MatchCircle";
 import StarRating from "./StarRating";
 import ReviewForm from "./ReviewForm";
@@ -38,8 +38,8 @@ export default function RoomDetailContent({ room }: Props) {
 
     const handleAddReview = (newRating: number, text: string) => {
         const newReview: RoomReview = {
-            author: currentUser.name,
-            avatar: currentUser.avatar,
+            author: t('common.you', 'You'),
+            avatar: `https://api.dicebear.com/9.x/avataaars/svg?seed=CurrentUser`,
             date: new Date().toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: 'long', year: 'numeric' }),
             rating: newRating,
             text: text || t('rating.excellent'),

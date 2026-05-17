@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
@@ -22,8 +22,10 @@ import {
     MessageCircle,
     Check,
 } from "lucide-react";
-import { roommates, currentUser, formatCurrency, lifestyleOptions, getRoommateWithReviews, roommateReviews } from "../data/mockData";
-import type { Roommate, UserReview } from "../data/mockData";
+import { getRoommates, getRoommateById, getCurrentUser, getReviewsByRoommateId } from "../services";
+import { formatCurrency } from "../lib/format";
+import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
+import type { Roommate, UserReview } from "../types";
 import { useCountUp } from "../hooks/useCountUp";
 import ChatPanel from "../components/ChatPanel";
 import ProfileRatings from "../components/ProfileRatings";
@@ -82,10 +84,12 @@ function RoommateProfile({ person }: { person: Roommate }) {
     const { t, i18n } = useTranslation();
     const [connected, setConnected] = useState(false);
     const [chatOpen, setChatOpen] = useState(false);
+    const [reviews, setReviews] = useState<UserReview[]>([]);
 
-    // Get roommate with reviews
-    const roommateWithReviews = getRoommateWithReviews(person.id);
-    const [reviews, setReviews] = useState<UserReview[]>(roommateWithReviews?.reviews || []);
+    useEffect(() => {
+        getReviewsByRoommateId(person.id).then(setReviews);
+    }, [person.id]);
+
     const rating = reviews.length > 0
         ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
         : 0;
@@ -93,9 +97,9 @@ function RoommateProfile({ person }: { person: Roommate }) {
     const handleAddReview = (newRating: number, text: string) => {
         const newReview: UserReview = {
             id: `ur${Date.now()}`,
-            author: currentUser.name,
+            author: t('common.you', 'You'),
             authorId: "current",
-            avatar: currentUser.avatar,
+            avatar: `https://api.dicebear.com/9.x/avataaars/svg?seed=CurrentUser`,
             date: new Date().toISOString().split('T')[0],
             rating: newRating,
             text: text || "Great experience!",
@@ -267,8 +271,19 @@ function RoommateProfile({ person }: { person: Roommate }) {
 function OwnProfile() {
     const { t } = useTranslation();
     const [editing, setEditing] = useState(false);
-    const [bio, setBio] = useState(currentUser.bio);
-    const [tags, setTags] = useState(currentUser.lifestyleTags);
+    const [profileUser, setProfileUser] = useState<typeof import("../data/mockData").currentUser | null>(null);
+    const [bio, setBio] = useState("");
+    const [tags, setTags] = useState<string[]>([]);
+    const [previewRoommates, setPreviewRoommates] = useState<Roommate[]>([]);
+
+    useEffect(() => {
+        getCurrentUser().then((u) => {
+            setProfileUser(u);
+            setBio(u.bio);
+            setTags(u.lifestyleTags);
+        });
+        getRoommates().then((data) => setPreviewRoommates(data.slice(0, 4)));
+    }, []);
 
     const toggleTag = (tag: string) => {
         setTags((prev) =>
@@ -306,11 +321,11 @@ function OwnProfile() {
                     <div className="flex flex-col sm:flex-row items-start gap-6">
                         <div className="relative flex-shrink-0">
                             <img
-                                src={currentUser.avatar}
-                                alt={currentUser.name}
+                                src={profileUser?.avatar ?? ""}
+                                alt={profileUser?.name ?? ""}
                                 className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl object-cover bg-primary/10"
                             />
-                            {currentUser.verified && (
+                            {profileUser?.verified && (
                                 <div className="absolute -bottom-2 -right-2 w-7 h-7 bg-secondary rounded-full flex items-center justify-center shadow-md">
                                     <BadgeCheck size={16} className="text-white" />
                                 </div>
@@ -320,13 +335,13 @@ function OwnProfile() {
                         <div className="flex-1 w-full">
                             <div className="flex items-center gap-2 mb-1">
                                 <h2 className="text-xl font-bold text-text font-[family-name:var(--font-family-heading)]">
-                                    {currentUser.name === "You" ? t('profile.myProfile') : currentUser.name}
+                                    {profileUser?.name === "You" ? t('profile.myProfile') : profileUser?.name}
                                 </h2>
-                                <span className="text-sm text-text-muted">{currentUser.age}y, {currentUser.gender}</span>
+                                <span className="text-sm text-text-muted">{profileUser?.age}y, {profileUser?.gender}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-3 text-sm text-text-light mt-1">
-                                <span className="flex items-center gap-1"><Briefcase size={14} />{t(`occupation.${currentUser.occupation}`, currentUser.occupation)}</span>
-                                <span className="flex items-center gap-1"><MapPin size={14} />{t(`district.${currentUser.location}`, currentUser.location)}</span>
+                                <span className="flex items-center gap-1"><Briefcase size={14} />{t(`occupation.${profileUser?.occupation}`, profileUser?.occupation ?? "")}</span>
+                                <span className="flex items-center gap-1"><MapPin size={14} />{t(`district.${profileUser?.location}`, profileUser?.location ?? "")}</span>
                             </div>
 
                             {editing ? (
@@ -340,12 +355,14 @@ function OwnProfile() {
                                 <p className="mt-4 text-sm text-text-light leading-relaxed">{editing ? bio : t(`bio.current`, bio)}</p>
                             )}
 
+                            {profileUser && (
                             <div className="flex flex-wrap gap-4 mt-4 text-sm">
                                 <div>
                                     <span className="text-text-muted">{t('profile.budget')}: </span>
-                                    <span className="font-medium text-text">{formatCurrency(currentUser.budget.min)} - {formatCurrency(currentUser.budget.max)}</span>
+                                    <span className="font-medium text-text">{formatCurrency(profileUser.budget.min)} - {formatCurrency(profileUser.budget.max)}</span>
                                 </div>
                             </div>
+                            )}
                         </div>
                     </div>
                 </motion.div>
@@ -404,15 +421,15 @@ function OwnProfile() {
                     <h2 className="text-lg font-semibold text-text mb-4 font-[family-name:var(--font-family-heading)]">
                         {t('profile.livingPreferences')}
                     </h2>
-                    <div className="grid sm:grid-cols-2 gap-x-8">
-                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={t(`preference.${currentUser.preferences.sleepSchedule}`, currentUser.preferences.sleepSchedule)} />
-                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={t(`preference.${currentUser.preferences.cleanliness}`, currentUser.preferences.cleanliness)} />
-                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={t(`preference.${currentUser.preferences.noise}`, currentUser.preferences.noise)} />
-                        <PrefItem icon={Users} label={t('profile.guests')} value={t(`preference.${currentUser.preferences.guests}`, currentUser.preferences.guests)} />
-                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={t(`preference.${currentUser.preferences.smoking}`, currentUser.preferences.smoking)} />
-                        <PrefItem icon={Dog} label={t('profile.pets')} value={t(`preference.${currentUser.preferences.pets}`, currentUser.preferences.pets)} />
-                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={t(`preference.${currentUser.preferences.cooking}`, currentUser.preferences.cooking)} />
-                    </div>
+                    {profileUser && <div className="grid sm:grid-cols-2 gap-x-8">
+                        <PrefItem icon={Moon} label={t('profile.sleepSchedule')} value={t(`preference.${profileUser.preferences.sleepSchedule}`, profileUser.preferences.sleepSchedule)} />
+                        <PrefItem icon={Sparkles} label={t('profile.cleanliness')} value={t(`preference.${profileUser.preferences.cleanliness}`, profileUser.preferences.cleanliness)} />
+                        <PrefItem icon={Volume2} label={t('profile.noiseLevel')} value={t(`preference.${profileUser.preferences.noise}`, profileUser.preferences.noise)} />
+                        <PrefItem icon={Users} label={t('profile.guests')} value={t(`preference.${profileUser.preferences.guests}`, profileUser.preferences.guests)} />
+                        <PrefItem icon={Cigarette} label={t('profile.smoking')} value={t(`preference.${profileUser.preferences.smoking}`, profileUser.preferences.smoking)} />
+                        <PrefItem icon={Dog} label={t('profile.pets')} value={t(`preference.${profileUser.preferences.pets}`, profileUser.preferences.pets)} />
+                        <PrefItem icon={CookingPot} label={t('profile.cooking')} value={t(`preference.${profileUser.preferences.cooking}`, profileUser.preferences.cooking)} />
+                    </div>}
                 </motion.div>
 
                 {/* Matching Preview */}
@@ -429,7 +446,7 @@ function OwnProfile() {
                         {t('profile.matchingPreviewDesc')}
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        {roommates.slice(0, 4).map((r) => (
+                        {previewRoommates.map((r) => (
                             <div key={r.id} className="text-center">
                                 <img src={r.avatar} alt={r.name} className="w-12 h-12 rounded-xl mx-auto mb-2 bg-primary/10" />
                                 <div className="text-xs font-medium text-text">{r.name.split(" ")[0]}</div>
@@ -466,10 +483,17 @@ function OwnProfile() {
 export default function ProfilePage() {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
+    const [person, setPerson] = useState<Roommate | null | undefined>(undefined);
+
+    useEffect(() => {
+        if (id) {
+            getRoommateById(id).then((r) => setPerson(r ?? null));
+        }
+    }, [id]);
 
     // If an id is provided, show that roommate's profile
     if (id) {
-        const person = roommates.find((r) => r.id === id);
+        if (person === undefined) return null; // loading
         if (!person) {
             return (
                 <div className="min-h-screen pt-20 flex items-center justify-center">

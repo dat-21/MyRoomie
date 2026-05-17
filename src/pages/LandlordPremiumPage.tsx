@@ -20,7 +20,7 @@ import {
     Gift,
     ChevronDown,
 } from "lucide-react";
-import { formatCurrency } from "../data/mockData";
+import { formatCurrency } from "../lib/format";
 import { useInView } from "../hooks/useInView";
 import LandlordInteractivePricing from "../components/LandlordInteractivePricing";
 

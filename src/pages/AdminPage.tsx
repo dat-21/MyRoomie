@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -24,15 +24,8 @@ import AdminUserModal from "../components/admin/AdminUserModal";
 import AdminPieChart from "../components/admin/AdminPieChart";
 import AdminBarChart from "../components/admin/AdminBarChart";
 import AdminLineChart from "../components/admin/AdminLineChart";
-import {
-  adminStats,
-  adminLandlords,
-  adminTenants,
-  adminReviews,
-  type AdminLandlord,
-  type AdminTenant,
-  type AdminReview,
-} from "../data/adminData";
+import { getAdminStats, getLandlords, getTenants, getAdminReviews, updateLandlord, updateTenant, deleteLandlord, deleteTenant, updateReviewStatus } from "../services";
+import type { AdminLandlord, AdminTenant, AdminReview } from "../types";
 
 type UserType = AdminLandlord | AdminTenant;
 
@@ -44,10 +37,17 @@ export default function AdminPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userType, setUserType] = useState<"landlord" | "tenant">("landlord");
 
-  // Local state for data (in real app, this would come from API)
-  const [landlords, setLandlords] = useState(adminLandlords);
-  const [tenants, setTenants] = useState(adminTenants);
-  const [reviews, setReviews] = useState(adminReviews);
+  const [landlords, setLandlords] = useState<AdminLandlord[]>([]);
+  const [tenants, setTenants] = useState<AdminTenant[]>([]);
+  const [reviews, setReviews] = useState<AdminReview[]>([]);
+  const [stats, setStats] = useState<import("../types").AdminStats | null>(null);
+
+  useEffect(() => {
+    getLandlords().then(setLandlords);
+    getTenants().then(setTenants);
+    getAdminReviews().then(setReviews);
+    getAdminStats().then(setStats);
+  }, []);
 
   const handleView = (user: UserType) => {
     setSelectedUser(user);
@@ -139,7 +139,7 @@ export default function AdminPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return <DashboardContent stats={adminStats} pendingLandlords={pendingLandlords} pendingTenants={pendingTenants} />;
+        return stats ? <DashboardContent stats={stats} pendingLandlords={pendingLandlords} pendingTenants={pendingTenants} /> : null;
       case "landlords":
         return (
           <div>
@@ -228,7 +228,7 @@ function DashboardContent({
   pendingLandlords,
   pendingTenants,
 }: {
-  stats: typeof adminStats;
+  stats: import("../types").AdminStats;
   pendingLandlords: number;
   pendingTenants: number;
 }) {

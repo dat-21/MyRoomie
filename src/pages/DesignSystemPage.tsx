@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
     Palette,
@@ -18,7 +18,8 @@ import {
     Eye,
 } from "lucide-react";
 import { useInView } from "../hooks/useInView";
-import { roommates } from "../data/mockData";
+import { getRoommates } from "../services";
+import type { Roommate } from "../types";
 import RoommateCard from "../components/RoommateCard";
 
 /* ── Section wrapper with fade-in ── */
@@ -108,6 +109,12 @@ function TOCLink({ href, label, icon: Icon }: { href: string; label: string; ico
 /*               MAIN PAGE                */
 /* ═══════════════════════════════════════ */
 export default function DesignSystemPage() {
+    const [roommates, setRoommates] = useState<Roommate[]>([]);
+
+    useEffect(() => {
+        getRoommates().then(setRoommates);
+    }, []);
+
     return (
         <div className="min-h-screen pt-28">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

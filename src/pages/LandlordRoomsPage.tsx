@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -25,7 +25,8 @@ import {
     ArrowDownRight,
     ChevronRight,
 } from "lucide-react";
-import { rooms, formatCurrency } from "../data/mockData";
+import { getLandlordRooms } from "../services";
+import { formatCurrency } from "../lib/format";
 import Modal from "../components/Modal";
 
 /* ─────────────── Types ─────────────── */
@@ -70,19 +71,22 @@ const boostPlans: BoostPlan[] = [
     { id: "7d", label: "Đẩy 7 ngày", duration: "7 ngày", price: 59000, icon: Rocket, color: "from-purple-600 to-pink-500", viewMultiplier: 5 },
 ];
 
-/* ─────────────── Mock Data ─────────────── */
-const initialRooms: LandlordRoom[] = rooms.slice(0, 5).map((r, i) => ({
-    id: r.id,
-    title: r.title,
-    district: r.district,
-    rent: r.rent,
-    thumbnail: r.thumbnail,
-    status: (i === 0 || i === 1 ? "active" : i === 4 ? "pending" : "rented") as RoomStatus,
-    views: [1245, 890, 3200, 450, 10][i] || 0,
-    inquiries: [15, 8, 45, 2, 0][i] || 0,
-    postedDate: ["2026-03-20", "2026-03-10", "2025-11-05", "2026-02-15", "2026-03-25"][i] || "2026-01-01",
-    revenue: i === 2 || i === 3 ? r.rent : 0,
-}));
+/* ─────────────── Mock Data builder ─────────────── */
+function buildLandlordRooms(apiRooms: { id: string; title: string; district: string; rent: number; thumbnail: string }[]): LandlordRoom[] {
+    return apiRooms.slice(0, 5).map((r, i) => ({
+        id: r.id,
+        title: r.title,
+        district: r.district,
+        rent: r.rent,
+        thumbnail: r.thumbnail,
+        status: (i === 0 || i === 1 ? "active" : i === 4 ? "pending" : "rented") as RoomStatus,
+        views: [1245, 890, 3200, 450, 10][i] ?? 0,
+        inquiries: [15, 8, 45, 2, 0][i] ?? 0,
+        postedDate: ["2026-03-20", "2026-03-10", "2025-11-05", "2026-02-15", "2026-03-25"][i] ?? "2026-01-01",
+        revenue: i === 2 || i === 3 ? r.rent : 0,
+        boosts: {},
+    }));
+}
 
 /* ─────────────── Helper: time remaining ─────────────── */
 function getTimeRemaining(endTime: number): string {
@@ -178,7 +182,11 @@ export default function LandlordRoomsPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [boostModalOpen, setBoostModalOpen] = useState(false);
     const [boostTargetRoom, setBoostTargetRoom] = useState<LandlordRoom | null>(null);
-    const [myRooms] = useState<LandlordRoom[]>(initialRooms);
+    const [myRooms, setMyRooms] = useState<LandlordRoom[]>([]);
+
+    useEffect(() => {
+        getLandlordRooms().then((data) => setMyRooms(buildLandlordRooms(data)));
+    }, []);
 
     const filteredRooms = myRooms.filter(r => {
         const matchesF = filter === "all" || r.status === filter;

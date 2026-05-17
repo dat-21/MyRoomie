@@ -8,8 +8,9 @@ import {
     ChevronDown, ArrowLeft, Calendar, Clock, Home, Shield, Zap, Droplets,
     Tv, Utensils, Dumbbell, Waves, Building, Eye, Heart, Users, Navigation
 } from "lucide-react";
-import { rooms, formatCurrency, currentUser } from "../data/mockData";
-import type { RoomListing } from "../data/mockData";
+import { getRoomById, getCurrentUser, submitRoomReview } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { RoomListing } from "../types";
 import MatchCircle from "../components/MatchCircle";
 import StarRating from "../components/StarRating";
 import ReviewForm from "../components/ReviewForm";
@@ -50,8 +51,7 @@ export default function RoomDetailPage() {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
-    const room = rooms.find((r) => r.id === id);
-
+    const [room, setRoom] = useState<RoomListing | undefined>(undefined);
     const [currentImage, setCurrentImage] = useState(0);
     const [contactMessage, setContactMessage] = useState("");
     const [showReviewForm, setShowReviewForm] = useState(false);
@@ -62,11 +62,15 @@ export default function RoomDetailPage() {
     const [fullscreenImage, setFullscreenImage] = useState<number | null>(null);
 
     useEffect(() => {
-        if (room) {
-            setReviews(room.reviews);
-            setContactMessage(t('roomDetail.defaultMessage'));
-        }
-    }, [room, t]);
+        if (!id) return;
+        getRoomById(id).then((data) => {
+            setRoom(data);
+            if (data) {
+                setReviews(data.reviews);
+                setContactMessage(t('roomDetail.defaultMessage'));
+            }
+        });
+    }, [id, t]);
 
     useEffect(() => {
         window.scrollTo(0, 0);

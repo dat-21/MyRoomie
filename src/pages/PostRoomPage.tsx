@@ -15,7 +15,7 @@ import {
     Send,
 } from "lucide-react";
 import { PiMoneyWavy } from "react-icons/pi";
-import { lifestyleOptions } from "../data/mockData";
+import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
 
 interface FormData {
     location: string;

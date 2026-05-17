@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Search, Smile, Phone, MoreVertical } from "lucide-react";
-import { conversations as initialConversations } from "../data/mockData";
-import type { Conversation, ChatMessage } from "../data/mockData";
+import { getConversations } from "../services";
+import type { Conversation, ChatMessage } from "../types";
 
 interface Props {
     isOpen: boolean;
@@ -13,13 +13,20 @@ interface Props {
 
 export default function ChatPanel({ isOpen, onClose, initialConversationId }: Props) {
     const { t, i18n } = useTranslation();
-    const [convos, setConvos] = useState<Conversation[]>(initialConversations);
-    const [activeId, setActiveId] = useState<string>(initialConversationId || convos[0]?.id || "");
+    const [convos, setConvos] = useState<Conversation[]>([]);
+    const [activeId, setActiveId] = useState<string>(initialConversationId || "");
     const [newMessage, setNewMessage] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const activeConvo = convos.find((c) => c.id === activeId);
+
+    useEffect(() => {
+        getConversations().then((data) => {
+            setConvos(data);
+            if (!activeId && data.length > 0) setActiveId(data[0].id);
+        });
+    }, []);
 
     useEffect(() => {
         if (initialConversationId) setActiveId(initialConversationId);

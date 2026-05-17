@@ -139,7 +139,7 @@ export default function AdminPage() {
   const renderContent = () => {
     switch (activeTab) {
       case "dashboard":
-        return stats ? <DashboardContent stats={stats} pendingLandlords={pendingLandlords} pendingTenants={pendingTenants} /> : null;
+        return stats ? <DashboardContent stats={stats} pendingLandlords={pendingLandlords} pendingTenants={pendingTenants} landlords={landlords} tenants={tenants} /> : null;
       case "landlords":
         return (
           <div>
@@ -227,10 +227,14 @@ function DashboardContent({
   stats,
   pendingLandlords,
   pendingTenants,
+  landlords,
+  tenants,
 }: {
   stats: import("../types").AdminStats;
   pendingLandlords: number;
   pendingTenants: number;
+  landlords: import("../types").AdminLandlord[];
+  tenants: import("../types").AdminTenant[];
 }) {
   // Data for charts
   const userDistributionData = [
@@ -532,7 +536,7 @@ function DashboardContent({
             Top Landlords
           </h3>
           <div className="space-y-3">
-            {adminLandlords
+            {landlords
               .filter((l) => l.status === "active")
               .sort((a, b) => b.rating - a.rating)
               .slice(0, 3)
@@ -567,7 +571,7 @@ function DashboardContent({
             Most Active Tenants
           </h3>
           <div className="space-y-3">
-            {adminTenants
+            {tenants
               .filter((t) => t.status === "active")
               .sort((a, b) => b.messagesCount - a.messagesCount)
               .slice(0, 3)

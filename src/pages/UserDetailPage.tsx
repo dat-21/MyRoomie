@@ -28,7 +28,7 @@ import {
   Zap,
   ChevronRight,
 } from "lucide-react";
-import { getRoommateWithReviews, getCurrentUser, getConversations } from "../services";
+import { getRoommateWithReviews, getCurrentUser, getConversations, getRoommates } from "../services";
 import { formatCurrency } from "../lib/format";
 import type { Roommate, UserReview, Conversation, ChatMessage } from "../types";
 import { useCountUp } from "../hooks/useCountUp";
@@ -200,6 +200,7 @@ export default function UserDetailPage() {
   const [chatConvoId, setChatConvoId] = useState<string | undefined>();
   const [showConnectAnim, setShowConnectAnim] = useState(false);
   const [person, setPerson] = useState<Roommate | null>(null);
+  const [allRoommates, setAllRoommates] = useState<Roommate[]>([]);
   const [currentUserData, setCurrentUserData] = useState<{ preferences: Roommate["preferences"]; lifestyleTags: string[] } | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [reviews, setReviews] = useState<UserReview[]>([]);
@@ -214,6 +215,7 @@ export default function UserDetailPage() {
     });
     getCurrentUser().then(setCurrentUserData);
     getConversations().then(setConversations);
+    getRoommates().then(setAllRoommates);
   }, [id]);
 
   const rating =
@@ -707,7 +709,7 @@ export default function UserDetailPage() {
                 Hồ sơ tương tự
               </h3>
               <div className="space-y-3">
-                {roommates
+                {allRoommates
                   .filter((r) => r.id !== person.id)
                   .sort((a, b) => b.compatibility - a.compatibility)
                   .slice(0, 3)

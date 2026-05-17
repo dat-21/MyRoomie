@@ -1,66 +1,11 @@
-// Admin mock data for landlords and students/tenants
+/**
+ * Mock data for Admin dashboard.
+ * Do NOT import this file directly in components — use src/services/ instead.
+ */
+import type { AdminLandlord, AdminTenant, AdminReview, AdminStats } from "../types";
 
-export interface AdminUser {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  role: "landlord" | "tenant";
-  status: "active" | "pending" | "suspended";
-  joinDate: string;
-  lastActive: string;
-  verified: boolean;
-}
-
-export interface AdminLandlord extends AdminUser {
-  role: "landlord";
-  totalRooms: number;
-  totalViews: number;
-  totalInquiries: number;
-  rating: number;
-  reviewCount: number;
-  responseTime: string;
-  area: string;
-}
-
-export interface AdminTenant extends AdminUser {
-  role: "tenant";
-  age: number;
-  occupation: string;
-  location: string;
-  budgetMin: number;
-  budgetMax: number;
-  moveInDate: string;
-  matchCount: number;
-  messagesCount: number;
-}
-
-export interface AdminReview {
-  id: string;
-  reviewerId: string;
-  reviewerName: string;
-  reviewerAvatar: string;
-  targetId: string;
-  targetName: string;
-  targetRole: "landlord" | "tenant";
-  rating: number;
-  text: string;
-  date: string;
-  status: "visible" | "hidden" | "flagged";
-}
-
-export interface AdminStats {
-  totalUsers: number;
-  totalLandlords: number;
-  totalTenants: number;
-  pendingApprovals: number;
-  totalRooms: number;
-  activeRooms: number;
-  totalMatches: number;
-  totalMessages: number;
-  monthlyGrowth: number;
-}
+// Re-export types for legacy imports
+export type { AdminUser, AdminLandlord, AdminTenant, AdminReview, AdminStats } from "../types";
 
 export const adminStats: AdminStats = {
   totalUsers: 1247,

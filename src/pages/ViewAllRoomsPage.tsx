@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, SlidersHorizontal, X, ArrowUpDown, Search, Bed, Bath, Maximize, Star, BadgeCheck } from "lucide-react";
-import { rooms, formatCurrency } from "../data/mockData";
-import type { RoomListing } from "../data/mockData";
+import { getRooms } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { RoomListing } from "../types";
 import MatchCircle from "../components/MatchCircle";
 import { useInView } from "../hooks/useInView";
 
@@ -117,9 +118,14 @@ export default function ViewAllRoomsPage() {
     const [filters, setFilters] = useState<Filters>(defaultFilters);
     const [sortBy, setSortBy] = useState<SortOption>("match");
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [allRooms, setAllRooms] = useState<RoomListing[]>([]);
+
+    useEffect(() => {
+        getRooms().then(setAllRooms);
+    }, []);
 
     const filtered = useMemo(() => {
-        let list = rooms.filter((r) => {
+        let list = allRooms.filter((r) => {
             if (r.rent < filters.budgetMin || r.rent > filters.budgetMax) return false;
             if (r.distance > filters.distance) return false;
             if (filters.roomType !== "All" && r.roomType !== filters.roomType) return false;

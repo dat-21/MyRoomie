@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -26,7 +26,9 @@ import {
     ArrowDownRight,
 } from "lucide-react";
 import { useInView } from "../hooks/useInView";
-import { rooms, formatCurrency } from "../data/mockData";
+import { getRooms } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { RoomListing } from "../types";
 import { useAuth } from "../contexts/AuthContext";
 
 /* ─── Fade-in section wrapper ─── */
@@ -71,16 +73,14 @@ function DashboardStat({ label, value, trend, trendUp, icon: Icon, color }: {
     );
 }
 
-/* ─── Mock data for landlord ─── */
-const myRooms = rooms.slice(0, 4).map((r, i) => ({
-    ...r,
-    status: i % 3 === 0 ? "active" : i % 3 === 1 ? "rented" : "pending",
-    views: [245, 120, 89, 210][i],
-    inquiries: [18, 5, 2, 12][i],
-    revenue: [4500000, 3500000, 0, 4200000][i],
-    occupancy: i % 3 === 1 ? 100 : 0,
-    boostRemaining: i === 0 ? "18h 30m" : null,
-}));
+type MyRoom = RoomListing & {
+    status: string;
+    views: number;
+    inquiries: number;
+    revenue: number;
+    occupancy: number;
+    boostRemaining: string | null;
+};
 
 const recentActivity = [
     { id: 1, type: "message", user: "Phạm Minh", action: "đã gửi tin nhắn cho", room: "Phòng trọ Hai Châu", time: "15 phút trước", avatar: "PM" },
@@ -93,6 +93,21 @@ const recentActivity = [
 export default function LandlordHomePage() {
     const { t } = useTranslation();
     const { user } = useAuth();
+    const [myRooms, setMyRooms] = useState<MyRoom[]>([]);
+
+    useEffect(() => {
+        getRooms().then((data) => {
+            setMyRooms(data.slice(0, 4).map((r, i) => ({
+                ...r,
+                status: i % 3 === 0 ? "active" : i % 3 === 1 ? "rented" : "pending",
+                views: [245, 120, 89, 210][i] ?? 0,
+                inquiries: [18, 5, 2, 12][i] ?? 0,
+                revenue: [4500000, 3500000, 0, 4200000][i] ?? 0,
+                occupancy: i % 3 === 1 ? 100 : 0,
+                boostRemaining: i === 0 ? "18h 30m" : null,
+            })));
+        });
+    }, []);
 
     return (
         <div className="pb-12 max-w-[1400px] mx-auto">

@@ -1,8 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { SlidersHorizontal, X, Search, ChevronDown, Filter, UserCheck, Calendar, Wallet, MapPin, Briefcase, Clock, Heart, Star } from "lucide-react";
-import { roommates, lifestyleOptions } from "../data/mockData";
+import { getRoommates } from "../services";
+import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
+import type { Roommate } from "../types";
 import RoommateCard from "../components/RoommateCard";
 
 /* ─── Filters Interface ─── */
@@ -52,16 +54,18 @@ export default function FindRoommatePage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [lifestyleExpanded, setLifestyleExpanded] = useState(true);
+  const [allRoommates, setAllRoommates] = useState<Roommate[]>([]);
   const { t } = useTranslation();
 
-  // Simulate loading
-  useState(() => {
-    const t = setTimeout(() => setLoading(false), 800);
-    return () => clearTimeout(t);
-  });
+  useEffect(() => {
+    getRoommates().then((data) => {
+      setAllRoommates(data);
+      setLoading(false);
+    });
+  }, []);
 
   const filtered = useMemo(() => {
-    let list = roommates.filter((r) => {
+    let list = allRoommates.filter((r) => {
       // Filter by selected tab type: we look for someone who has what we DON'T have
       // If we "HAS_ROOM", we look for "NEEDS_ROOM"
       if (r.status !== (roommateType === "HAS_ROOM" ? "NEEDS_ROOM" : "HAS_ROOM")) return false;

@@ -28,14 +28,9 @@ import {
   Zap,
   ChevronRight,
 } from "lucide-react";
-import {
-  roommates,
-  currentUser,
-  formatCurrency,
-  getRoommateWithReviews,
-  conversations as initialConversations,
-} from "../data/mockData";
-import type { Roommate, UserReview, Conversation, ChatMessage } from "../data/mockData";
+import { getRoommateWithReviews, getCurrentUser, getConversations, getRoommates } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { Roommate, UserReview, Conversation, ChatMessage } from "../types";
 import { useCountUp } from "../hooks/useCountUp";
 import ChatPanel from "../components/ChatPanel";
 import ProfileRatings from "../components/ProfileRatings";
@@ -204,16 +199,23 @@ export default function UserDetailPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [chatConvoId, setChatConvoId] = useState<string | undefined>();
   const [showConnectAnim, setShowConnectAnim] = useState(false);
-
-  // Find the user
-  const person = roommates.find((r) => r.id === id);
-  const roommateWithReviews = person ? getRoommateWithReviews(person.id) : undefined;
+  const [person, setPerson] = useState<Roommate | null>(null);
+  const [allRoommates, setAllRoommates] = useState<Roommate[]>([]);
+  const [currentUserData, setCurrentUserData] = useState<{ preferences: Roommate["preferences"]; lifestyleTags: string[] } | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [reviews, setReviews] = useState<UserReview[]>([]);
 
   useEffect(() => {
-    if (roommateWithReviews?.reviews) {
-      setReviews(roommateWithReviews.reviews);
-    }
+    if (!id) return;
+    getRoommateWithReviews(id).then((data) => {
+      if (data) {
+        setPerson(data);
+        setReviews(data.reviews);
+      }
+    });
+    getCurrentUser().then(setCurrentUserData);
+    getConversations().then(setConversations);
+    getRoommates().then(setAllRoommates);
   }, [id]);
 
   const rating =
@@ -222,15 +224,13 @@ export default function UserDetailPage() {
       : 0;
 
   // Check matching preferences
-  const getPreferenceMatch = (key: keyof typeof currentUser.preferences) => {
-    if (!person) return false;
-    return currentUser.preferences[key] === person.preferences[key];
+  const getPreferenceMatch = (key: keyof Roommate["preferences"]) => {
+    if (!person || !currentUserData) return false;
+    return currentUserData.preferences[key] === person.preferences[key];
   };
 
-  const matchingTags = person
-    ? currentUser.lifestyleTags.filter((tag) =>
-        person.lifestyleTags.includes(tag)
-      )
+  const matchingTags = person && currentUserData
+    ? currentUserData.lifestyleTags.filter((tag) => person.lifestyleTags.includes(tag))
     : [];
 
   // Handle connect → open chat
@@ -241,15 +241,11 @@ export default function UserDetailPage() {
       setConnected(true);
       setShowConnectAnim(false);
 
-      // Find or create a conversation for this user
-      const existingConvo = initialConversations.find(
-        (c) => c.participantId === person?.id
-      );
+      const existingConvo = conversations.find((c) => c.participantId === person?.id);
 
       if (existingConvo) {
         setChatConvoId(existingConvo.id);
       } else {
-        // Use a generated convo ID - in a real app this would be created server-side
         setChatConvoId("c1");
       }
 
@@ -261,9 +257,7 @@ export default function UserDetailPage() {
   };
 
   const handleMessage = () => {
-    const existingConvo = initialConversations.find(
-      (c) => c.participantId === person?.id
-    );
+    const existingConvo = conversations.find((c) => c.participantId === person?.id);
     setChatConvoId(existingConvo?.id || "c1");
     setChatOpen(true);
   };
@@ -271,9 +265,9 @@ export default function UserDetailPage() {
   const handleAddReview = (newRating: number, text: string) => {
     const newReview: UserReview = {
       id: `ur${Date.now()}`,
-      author: currentUser.name,
+      author: "You",
       authorId: "current",
-      avatar: currentUser.avatar,
+      avatar: `https://api.dicebear.com/9.x/avataaars/svg?seed=CurrentUser`,
       date: new Date().toISOString().split("T")[0],
       rating: newRating,
       text: text || "Great experience!",
@@ -715,7 +709,7 @@ export default function UserDetailPage() {
                 Hồ sơ tương tự
               </h3>
               <div className="space-y-3">
-                {roommates
+                {allRoommates
                   .filter((r) => r.id !== person.id)
                   .sort((a, b) => b.compatibility - a.compatibility)
                   .slice(0, 3)

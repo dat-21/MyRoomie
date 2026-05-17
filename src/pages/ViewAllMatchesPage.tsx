@@ -2,7 +2,9 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronDown, Sparkles, X, RotateCcw } from "lucide-react";
-import { roommates, lifestyleOptions, conversations as allConversations } from "../data/mockData";
+import { getRoommates, getConversations } from "../services";
+import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
+import type { Roommate, Conversation } from "../types";
 import SocialMatchCard from "../components/SocialMatchCard";
 import ChatPanel from "../components/ChatPanel";
 
@@ -36,12 +38,19 @@ export default function ViewAllMatchesPage() {
   const [connectedIds, setConnectedIds] = useState<Set<string>>(new Set());
   const [chatOpen, setChatOpen] = useState(false);
   const [chatConvoId, setChatConvoId] = useState<string | undefined>();
-  
+  const [allRoommates, setAllRoommates] = useState<Roommate[]>([]);
+  const [allConversations, setAllConversations] = useState<Conversation[]>([]);
+
   // Popover States
   const [activePopover, setActivePopover] = useState<string | null>(null);
 
+  useEffect(() => {
+    getRoommates().then(setAllRoommates);
+    getConversations().then(setAllConversations);
+  }, []);
+
   const filtered = useMemo(() => {
-    return roommates.filter((r) => {
+    return allRoommates.filter((r) => {
       if (filters.gender !== "All" && r.gender !== filters.gender) return false;
       if (filters.sleepSchedule !== "All" && !r.preferences.sleepSchedule.includes(filters.sleepSchedule)) return false;
       if (filters.cleanliness !== "All" && r.preferences.cleanliness !== filters.cleanliness) return false;
@@ -53,20 +62,16 @@ export default function ViewAllMatchesPage() {
       }
       return true;
     }).sort((a, b) => b.compatibility - a.compatibility);
-  }, [filters]);
+  }, [filters, allRoommates]);
 
   const handleConnect = (id: string) => {
     setConnectedIds((prev) => new Set(prev).add(id));
-    const existingConvo = allConversations.find(
-      (c) => c.participantId === id
-    );
+    const existingConvo = allConversations.find((c) => c.participantId === id);
     setChatConvoId(existingConvo?.id || "c1");
     setTimeout(() => setChatOpen(true), 400);
   };
   const handleMessage = (id: string) => {
-    const existingConvo = allConversations.find(
-      (c) => c.participantId === id
-    );
+    const existingConvo = allConversations.find((c) => c.participantId === id);
     setChatConvoId(existingConvo?.id || "c1");
     setChatOpen(true);
   };

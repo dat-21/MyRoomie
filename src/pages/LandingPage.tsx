@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useInView } from "../hooks/useInView";
-import { roommates, rooms, formatCurrency, roommateReviews } from "../data/mockData";
-import type { RoomListing } from "../data/mockData";
+import { getRoommates, getRooms } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { RoomListing, Roommate } from "../types";
 import MatchCircle from "../components/MatchCircle";
 import Modal from "../components/Modal";
 import RoomDetailContent from "../components/RoomDetailContent";
@@ -84,12 +85,10 @@ function NearbyRoomItem({ room, onClick }: { room: RoomListing; onClick: () => v
 }
 
 /* ─── Match Profile Item ─── */
-function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; index: number }) {
+function MatchProfileItem({ roommate, index }: { roommate: Roommate; index: number }) {
     const { t } = useTranslation();
-    const reviews = roommateReviews[roommate.id] || [];
-    const rating = reviews.length > 0
-        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-        : 0;
+    // Rating shown on landing page is derived from the roommate's own compatibility score
+    const rating = roommate.compatibility / 20; // maps 0-100 → 0-5
     return (
         <motion.div
             initial={{ opacity: 0, y: 15 }}
@@ -150,9 +149,16 @@ function MatchProfileItem({ roommate, index }: { roommate: typeof roommates[0]; 
 /* ─── Hero ─── */
 function Hero() {
     const [selectedRoom, setSelectedRoom] = useState<RoomListing | null>(null);
-    const topRooms = rooms.slice(0, 3);
-    const topMatches = [...roommates].sort((a, b) => b.compatibility - a.compatibility).slice(0, 3);
+    const [topRooms, setTopRooms] = useState<RoomListing[]>([]);
+    const [topMatches, setTopMatches] = useState<Roommate[]>([]);
     const { t } = useTranslation();
+
+    useEffect(() => {
+        getRooms().then((data) => setTopRooms(data.slice(0, 3)));
+        getRoommates().then((data) =>
+            setTopMatches([...data].sort((a, b) => b.compatibility - a.compatibility).slice(0, 3))
+        );
+    }, []);
 
     return (
         <section className="relative min-h-[92vh] flex items-center overflow-hidden pt-20">

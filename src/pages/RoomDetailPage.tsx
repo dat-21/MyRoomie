@@ -8,8 +8,9 @@ import {
     ChevronDown, ArrowLeft, Calendar, Clock, Home, Shield, Zap, Droplets,
     Tv, Utensils, Dumbbell, Waves, Building, Eye, Heart, Users, Navigation
 } from "lucide-react";
-import { rooms, formatCurrency, currentUser } from "../data/mockData";
-import type { RoomListing } from "../data/mockData";
+import { getRoomById, getRooms } from "../services";
+import { formatCurrency } from "../lib/format";
+import type { RoomListing } from "../types";
 import MatchCircle from "../components/MatchCircle";
 import StarRating from "../components/StarRating";
 import ReviewForm from "../components/ReviewForm";
@@ -50,8 +51,8 @@ export default function RoomDetailPage() {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 
-    const room = rooms.find((r) => r.id === id);
-
+    const [room, setRoom] = useState<RoomListing | undefined>(undefined);
+    const [allRooms, setAllRooms] = useState<RoomListing[]>([]);
     const [currentImage, setCurrentImage] = useState(0);
     const [contactMessage, setContactMessage] = useState("");
     const [showReviewForm, setShowReviewForm] = useState(false);
@@ -62,11 +63,19 @@ export default function RoomDetailPage() {
     const [fullscreenImage, setFullscreenImage] = useState<number | null>(null);
 
     useEffect(() => {
-        if (room) {
-            setReviews(room.reviews);
-            setContactMessage(t('roomDetail.defaultMessage'));
-        }
-    }, [room, t]);
+        getRooms().then(setAllRooms);
+    }, []);
+
+    useEffect(() => {
+        if (!id) return;
+        getRoomById(id).then((data) => {
+            setRoom(data);
+            if (data) {
+                setReviews(data.reviews);
+                setContactMessage(t('roomDetail.defaultMessage'));
+            }
+        });
+    }, [id, t]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -100,8 +109,8 @@ export default function RoomDetailPage() {
 
     const handleAddReview = (newRating: number, text: string) => {
         const newReview: RoomReview = {
-            author: currentUser.name,
-            avatar: currentUser.avatar,
+            author: "You",
+            avatar: `https://api.dicebear.com/9.x/avataaars/svg?seed=CurrentUser`,
             date: new Date().toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: 'long', year: 'numeric' }),
             rating: newRating,
             text: text || t('rating.excellent'),
@@ -119,7 +128,7 @@ export default function RoomDetailPage() {
     const displayedAmenities = showAllAmenities ? room.amenities : room.amenities.slice(0, 8);
 
     // Similar rooms (same district or room type)
-    const similarRooms = rooms
+    const similarRooms = allRooms
         .filter((r) => r.id !== room.id && (r.district === room.district || r.roomType === room.roomType))
         .slice(0, 3);
 
@@ -748,10 +757,10 @@ export default function RoomDetailPage() {
                                             </div>
                                         </div>
                                         <div className="p-4 space-y-2">
-                                            <h3 className="text-sm font-semibold text-text truncate">{t(`room.${r.id}.title`, r.title)}</h3>
+                                            <h3 className="text-sm font-semibold text-text truncate">{String(t(`room.${r.id}.title`, r.title))}</h3>
                                             <div className="flex items-center gap-1 text-text-muted">
                                                 <MapPin size={12} />
-                                                <span className="text-xs">{t(`roomDistrict.${r.district}`, r.district)}</span>
+                                                <span className="text-xs">{String(t(`roomDistrict.${r.district}`, r.district))}</span>
                                             </div>
                                             <div className="flex items-center justify-between pt-2 border-t border-white/40">
                                                 <span className="text-sm font-bold text-text">{formatCurrency(r.rent)}<span className="text-xs font-normal text-text-muted">{t('common.perMonth')}</span></span>

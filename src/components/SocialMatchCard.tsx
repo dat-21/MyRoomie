@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MessageCircle, UserPlus, Info } from "lucide-react";
-import type { Roommate } from "../data/mockData";
-import { formatCurrency } from "../data/mockData";
+import type { Roommate } from "../types";
+import { formatCurrency } from "../lib/format";
 
 interface Props {
   roommate: Roommate;

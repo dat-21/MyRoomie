@@ -24,8 +24,8 @@ import {
   MessageCircle,
   Heart,
 } from "lucide-react";
-import { formatCurrency } from "../../data/mockData";
-import type { AdminLandlord, AdminTenant } from "../../data/adminData";
+import { formatCurrency } from "../../lib/format";
+import type { AdminLandlord, AdminTenant } from "../../types";
 
 type UserType = AdminLandlord | AdminTenant;
 

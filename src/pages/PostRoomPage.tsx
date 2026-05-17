@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -13,6 +13,8 @@ import {
     ChevronLeft,
     Check,
     Send,
+    Info,
+    X,
 } from "lucide-react";
 import { PiMoneyWavy } from "react-icons/pi";
 import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
@@ -59,6 +61,19 @@ export default function PostRoomPage() {
     const [formData, setFormData] = useState<FormData>(initialFormData);
     const [submitted, setSubmitted] = useState(false);
     const [direction, setDirection] = useState(1);
+    const [showDemoNotice, setShowDemoNotice] = useState(true);
+
+    // Prevent scrolling when modal is open
+    useEffect(() => {
+        if (showDemoNotice) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showDemoNotice]);
 
     const update = (field: keyof FormData, value: string | string[]) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -425,6 +440,47 @@ export default function PostRoomPage() {
                     )}
                 </div>
             </div>
+
+            {/* Demo Notice Popup */}
+            <AnimatePresence>
+                {showDemoNotice && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+                            onClick={() => setShowDemoNotice(false)}
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-white/90 backdrop-blur-md border border-white rounded-3xl p-8 max-w-md w-full relative z-10 text-center shadow-2xl"
+                        >
+                            <button
+                                onClick={() => setShowDemoNotice(false)}
+                                className="absolute top-4 right-4 p-2 text-text-muted hover:text-text-primary rounded-full hover:bg-black/5 transition-colors border-0 cursor-pointer bg-transparent"
+                            >
+                                <X size={20} />
+                            </button>
+                            <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-6">
+                                <Info size={30} className="text-accent" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-text mb-3 font-[family-name:var(--font-family-heading)]">Tính Năng Thử Nghiệm</h3>
+                            <p className="text-text-light mb-8">
+                                Phần đăng phòng hiện tại đang trong quá trình hoàn thiện và chưa sẵn sàng đưa vào hoạt động chính thức. Bạn vẫn có thể trải nghiệm giao diện demo!
+                            </p>
+                            <button
+                                onClick={() => setShowDemoNotice(false)}
+                                className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-semibold cursor-pointer border-0 shadow-md hover:shadow-lg transition-shadow"
+                            >
+                                Tiếp tục xem Demo
+                            </button>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

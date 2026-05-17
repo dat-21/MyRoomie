@@ -1,11 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
-import { SlidersHorizontal, X, Search, ChevronDown, Filter, UserCheck, Calendar, Wallet, MapPin, Briefcase, Clock, Heart, Star } from "lucide-react";
-import { getRoommates } from "../services";
+import { SlidersHorizontal, X, Search, ChevronDown, Filter, UserCheck, Calendar, Wallet, MapPin, Briefcase, Clock, Heart, Star, LayoutGrid, Users } from "lucide-react";
+import { getRoommates, getConversations } from "../services";
 import { LIFESTYLE_OPTIONS as lifestyleOptions } from "../lib/constants";
-import type { Roommate } from "../types";
+import type { Roommate, Conversation } from "../types";
 import RoommateCard from "../components/RoommateCard";
+import SocialMatchCard from "../components/SocialMatchCard";
+import ChatPanel from "../components/ChatPanel";
 
 /* ─── Filters Interface ─── */
 interface Filters {
@@ -41,6 +43,7 @@ const defaultFilters: Filters = {
 };
 
 type SortOption = "compatibility" | "budget-low" | "budget-high" | "date";
+type ViewMode = "grid" | "social";
 
 const OCCUPATIONS = ["Sinh viên", "Đi làm", "Freelancer", "Giáo viên", "Kỹ sư", "Thiết kế", "Marketing", "Khác"];
 const DISTRICTS = ["Hải Châu", "Sơn Trà", "Ngũ Hành Sơn", "Thanh Khê", "Cẩm Lệ", "Liên Chiểu", "Hòa Vang"];
@@ -55,13 +58,21 @@ export default function FindRoommatePage() {
   const [loading, setLoading] = useState(true);
   const [lifestyleExpanded, setLifestyleExpanded] = useState(true);
   const [allRoommates, setAllRoommates] = useState<Roommate[]>([]);
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const { t } = useTranslation();
+
+  /* ─── Connect & Chat state (from ViewAllMatchesPage) ─── */
+  const [connectedIds, setConnectedIds] = useState<Set<string>>(new Set());
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatConvoId, setChatConvoId] = useState<string | undefined>();
+  const [allConversations, setAllConversations] = useState<Conversation[]>([]);
 
   useEffect(() => {
     getRoommates().then((data) => {
       setAllRoommates(data);
       setLoading(false);
     });
+    getConversations().then(setAllConversations);
   }, []);
 
   const filtered = useMemo(() => {
@@ -97,7 +108,7 @@ export default function FindRoommatePage() {
     }
 
     return list;
-  }, [filters, sortBy, roommateType]);
+  }, [filters, sortBy, roommateType, allRoommates]);
 
   const toggleFilterItem = (category: keyof Filters, item: string) => {
     setFilters(prev => {
@@ -110,6 +121,20 @@ export default function FindRoommatePage() {
   };
 
   const resetFilters = () => setFilters(defaultFilters);
+
+  /* ─── Connect & Chat handlers ─── */
+  const handleConnect = (id: string) => {
+    setConnectedIds((prev) => new Set(prev).add(id));
+    const existingConvo = allConversations.find((c) => c.participantId === id);
+    setChatConvoId(existingConvo?.id || "c1");
+    setTimeout(() => setChatOpen(true), 400);
+  };
+
+  const handleMessage = (id: string) => {
+    const existingConvo = allConversations.find((c) => c.participantId === id);
+    setChatConvoId(existingConvo?.id || "c1");
+    setChatOpen(true);
+  };
 
   /* ─── Sidebar Content (Filter Panel) ─── */
   const FilterContent = () => (
@@ -342,7 +367,7 @@ export default function FindRoommatePage() {
         <div className="mb-12 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
             <div className="space-y-2">
-              <h1 className="font-display text-text-primary uppercase tracking-tight">Tìm người ở ghép</h1>
+              <h1 className="font-display text-text-primary uppercase tracking-tight">Tìm bạn cùng phòng</h1>
               <p className="font-body text-text-secondary max-w-xl">
                 Khám phá những người bạn cùng phòng lý tưởng dựa trên sở thích và phong cách sống của bạn.
               </p>
@@ -382,7 +407,7 @@ export default function FindRoommatePage() {
 
           {/* Main Content Area */}
           <div className="flex-1 space-y-8">
-            {/* Search & Sort Bar */}
+            {/* Search & Sort & View Mode Bar */}
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1">
                 <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary/60" />
@@ -405,27 +430,77 @@ export default function FindRoommatePage() {
                   <option value="budget-high">Ngân sách cao</option>
                   <option value="date">Ngày chuyển vào</option>
                 </select>
+
+                {/* View Mode Toggle */}
+                <div className="flex p-1 bg-white border border-border rounded-xl">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    title="Xem dạng lưới"
+                    className={`p-3 rounded-lg transition-all border-0 cursor-pointer ${
+                      viewMode === "grid" ? "bg-primary text-white shadow-sm" : "bg-transparent text-text-secondary hover:text-text-primary"
+                    }`}
+                  >
+                    <LayoutGrid size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("social")}
+                    title="Xem dạng kết nối"
+                    className={`p-3 rounded-lg transition-all border-0 cursor-pointer ${
+                      viewMode === "social" ? "bg-primary text-white shadow-sm" : "bg-transparent text-text-secondary hover:text-text-primary"
+                    }`}
+                  >
+                    <Users size={20} />
+                  </button>
+                </div>
+
                 <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-4 rounded-xl bg-white border border-border text-text-primary hover:bg-gray-50 cursor-pointer">
                   <SlidersHorizontal size={20} />
                 </button>
               </div>
             </div>
 
-            {/* Listing Grid: 2-column consistent */}
+            {/* Results count */}
+            <div className="flex items-center gap-4">
+              <span className="font-tag text-text-secondary font-bold uppercase tracking-widest">
+                {filtered.length} kết quả phù hợp
+              </span>
+              <div className="h-px bg-border/40 flex-1" />
+            </div>
+
+            {/* Listing Grid */}
             {loading ? (
-              <div className="grid sm:grid-cols-2 gap-8">
+              <div className={`grid ${viewMode === "grid" ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"} gap-8`}>
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="h-[480px] rounded-cards skeleton" />
                 ))}
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 gap-8">
-                <AnimatePresence mode="popLayout">
-                  {filtered.map((roommate, idx) => (
-                    <RoommateCard key={roommate.id} roommate={roommate} index={idx} />
-                  ))}
-                </AnimatePresence>
-                
+              <>
+                {viewMode === "grid" ? (
+                  /* ─── Grid View: RoommateCard (2 columns) ─── */
+                  <div className="grid sm:grid-cols-2 gap-8">
+                    <AnimatePresence mode="popLayout">
+                      {filtered.map((roommate, idx) => (
+                        <RoommateCard key={roommate.id} roommate={roommate} index={idx} />
+                      ))}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  /* ─── Social View: SocialMatchCard (3 columns) with Connect/Chat ─── */
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {filtered.map((rm, i) => (
+                      <SocialMatchCard
+                        key={rm.id}
+                        roommate={rm}
+                        index={i}
+                        connected={connectedIds.has(rm.id)}
+                        onConnect={handleConnect}
+                        onMessage={handleMessage}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 {filtered.length === 0 && (
                   <div className="col-span-full py-24 flex flex-col items-center text-center bg-white rounded-cards border border-border border-dashed">
                     <div className="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-4 text-text-secondary">
@@ -435,7 +510,7 @@ export default function FindRoommatePage() {
                     <p className="font-body text-text-secondary mt-2 max-w-xs mx-auto">Hãy thử thay đổi tiêu chí tìm kiếm hoặc đặt lại bộ lọc.</p>
                   </div>
                 )}
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -457,6 +532,9 @@ export default function FindRoommatePage() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Chat Panel (from ViewAllMatchesPage) */}
+      <ChatPanel isOpen={chatOpen} onClose={() => setChatOpen(false)} initialConversationId={chatConvoId} />
     </div>
   );
 }

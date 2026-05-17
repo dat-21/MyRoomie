@@ -280,7 +280,7 @@ function Hero() {
                                     <Users size={16} className="text-secondary" />
                                     {t('landing.bestMatches')}
                                 </h3>
-                                <Link to="/matches" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
+                                <Link to="/find" className="text-xs text-primary font-medium hover:text-primary-dark transition-colors flex items-center gap-0.5 no-underline">
                                     {t('common.viewAll')} <ChevronRight size={14} />
                                 </Link>
                             </div>

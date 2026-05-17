@@ -10,7 +10,6 @@ const tenantNavLinks = [
     { to: "/", labelKey: "common.home", icon: Home },
     { to: "/find", labelKey: "common.findRoommate", icon: Search },
     { to: "/rooms", labelKey: "common.rooms", icon: Building },
-    { to: "/matches", labelKey: "common.matches", icon: Users },
     { to: "/post", labelKey: "common.postRoom", icon: PlusCircle },
     { to: "/premium", labelKey: "common.premium", icon: Crown },
 ];

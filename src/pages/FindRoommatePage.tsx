@@ -8,6 +8,7 @@ import type { Roommate, Conversation } from "../types";
 import RoommateCard from "../components/RoommateCard";
 import SocialMatchCard from "../components/SocialMatchCard";
 import ChatPanel from "../components/ChatPanel";
+import RangeSlider from "../components/RangeSlider";
 
 /* ─── Filters Interface ─── */
 interface Filters {
@@ -156,14 +157,12 @@ export default function FindRoommatePage() {
       <div className="space-y-4">
         <label className="filter-section-header">KHOẢNG NGÂN SÁCH</label>
         <div className="space-y-3">
-          <input
-            type="range"
-            min="0"
-            max="10000000"
-            step="500000"
+          <RangeSlider
+            min={0}
+            max={10000000}
+            step={100000}
             value={filters.budgetMax}
-            onChange={(e) => setFilters((p) => ({ ...p, budgetMax: parseInt(e.target.value) }))}
-            className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
+            onChange={(v) => setFilters((p) => ({ ...p, budgetMax: v }))}
           />
           <p className="font-caption text-text-secondary text-right">
             {filters.budgetMin.toLocaleString()}đ – {filters.budgetMax.toLocaleString()}đ
@@ -358,13 +357,11 @@ export default function FindRoommatePage() {
       <div className="space-y-4">
         <label className="filter-section-header">ĐỘ TƯƠNG THÍCH TỐI THIỂU</label>
         <div className="space-y-3">
-           <input
-            type="range"
-            min="50"
-            max="100"
+          <RangeSlider
+            min={50}
+            max={100}
             value={filters.minCompatibility}
-            onChange={(e) => setFilters((p) => ({ ...p, minCompatibility: parseInt(e.target.value) }))}
-            className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
+            onChange={(v) => setFilters((p) => ({ ...p, minCompatibility: v }))}
           />
           <p className="font-caption text-text-secondary font-bold">
             Chỉ hiển thị người có độ phù hợp ≥ {filters.minCompatibility}%
@@ -414,7 +411,7 @@ export default function FindRoommatePage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar: expanded with categories */}
           <aside className="hidden lg:block w-72 flex-shrink-0">
-            <div className="bg-[#F8FAFA] rounded-filter-panel border border-border p-6 sticky top-28 max-h-[calc(100vh-140px)] overflow-y-auto hide-scrollbar">
+            <div className="bg-[#F8FAFA] rounded-filter-panel border border-border p-6 sticky top-28 max-h-[calc(100vh-140px)] overflow-y-auto hide-scrollbar" style={{ overscrollBehavior: "contain" }}>
               <FilterContent />
             </div>
           </aside>

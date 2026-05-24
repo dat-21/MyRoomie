@@ -59,8 +59,8 @@ export default function App() {
   const { user } = useAuth();
 
   const isAdmin = user?.role === "admin";
-  const isLandlord = user?.role === "landlord";
   const isTenant = user?.role === "tenant";
+  const isLandlord = user?.role === "landlord";
   const isLoggedIn = !!user;
 
   return (
@@ -105,7 +105,7 @@ export default function App() {
       {isTenant && (
         <Route element={<TenantLayout />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/find" element={<FindRoommatePage />} />
+          <Route path="/find" element={<Navigate to="/" replace />} />
           <Route path="/post" element={<PostRoomPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:id" element={<ProfilePage />} />
@@ -125,6 +125,10 @@ export default function App() {
           <Route path="/" element={<RoleSelectionPage />} />
           <Route path="/rooms" element={<ViewAllRoomsPage />} />
           <Route path="/rooms/:id" element={<RoomDetailPage />} />
+          {/* Đăng phòng → chuyển đến đăng ký với role landlord */}
+          <Route path="/post" element={<Navigate to="/login" replace />} />
+          {/* Tìm bạn cùng phòng → về trang chủ */}
+          <Route path="/find" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       )}

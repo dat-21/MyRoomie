@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Building, Users, ArrowRight, ArrowLeft, Mail, Lock, Eye, EyeOff,
-    User, Phone, MapPin, DollarSign, Home, FileText, CheckCircle2
+    User, Phone, MapPin, DollarSign, Home, FileText, CheckCircle2, RotateCcw, ShieldCheck
 } from "lucide-react";
 import { useAuth, type Role, type UserData } from "../contexts/AuthContext";
+import { verifyOtp, resendOtp } from "../services/auth.service";
 import { useTranslation } from "react-i18next";
 
 /* ─── Success Popup ─── */
@@ -206,12 +207,20 @@ export default function RegisterPage() {
 
     const { t } = useTranslation();
 
-    const [step, setStep] = useState(0); // 0=role, 1=form
+    const [step, setStep] = useState(0); // 0=role, 1=form, 2=otp
     const [role, setRole] = useState<Role>(null);
     const [showSuccess, setShowSuccess] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [registeredEmail, setRegisteredEmail] = useState("");
+
+    // OTP state
+    const [otpDigits, setOtpDigits] = useState(["" , "", "", "", "", ""]);
+    const [otpError, setOtpError] = useState("");
+    const [otpLoading, setOtpLoading] = useState(false);
+    const [resendCooldown, setResendCooldown] = useState(0);
+    const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     // Common fields
     const [email, setEmail] = useState("");
@@ -264,18 +273,84 @@ export default function RegisterPage() {
                     : { budget, area: desiredArea, intro }
                 ),
             };
-            await register(userData);
-            setShowSuccess(true);
-        } catch {
-            setError(t('registerPage.errorGeneral'));
+            await register(userData, password);
+            setRegisteredEmail(email);
+            // Start resend cooldown
+            setResendCooldown(60);
+            const timer = setInterval(() => {
+                setResendCooldown(prev => {
+                    if (prev <= 1) { clearInterval(timer); return 0; }
+                    return prev - 1;
+                });
+            }, 1000);
+            setStep(2); // Go to OTP step
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : "";
+            setError(msg || t('registerPage.errorGeneral'));
         } finally {
             setLoading(false);
         }
     };
 
-    const handleSuccessClose = () => {
-        setShowSuccess(false);
-        navigate("/");
+    const handleOtpChange = (index: number, value: string) => {
+        if (!/^\d*$/.test(value)) return;
+        const newDigits = [...otpDigits];
+        newDigits[index] = value.slice(-1);
+        setOtpDigits(newDigits);
+        if (value && index < 5) otpRefs.current[index + 1]?.focus();
+    };
+
+    const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+        if (e.key === "Backspace" && !otpDigits[index] && index > 0) {
+            otpRefs.current[index - 1]?.focus();
+        }
+    };
+
+    const handleOtpPaste = (e: React.ClipboardEvent) => {
+        const paste = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+        if (paste.length === 6) {
+            setOtpDigits(paste.split(""));
+            otpRefs.current[5]?.focus();
+        }
+    };
+
+    const handleVerifyOtp = async () => {
+        const code = otpDigits.join("");
+        if (code.length !== 6) { setOtpError("Vui lòng nhập đủ 6 chữ số."); return; }
+        setOtpError("");
+        setOtpLoading(true);
+        try {
+            const user = await verifyOtp({ email: registeredEmail, code });
+            if (user) {
+                setShowSuccess(true);
+            } else {
+                setOtpError("Xác thực không thành công. Vui lòng thử lại.");
+            }
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : "";
+            setOtpError(msg || "Mã OTP không đúng hoặc đã hết hạn.");
+        } finally {
+            setOtpLoading(false);
+        }
+    };
+
+    const handleResendOtp = async () => {
+        if (resendCooldown > 0) return;
+        try {
+            await resendOtp(registeredEmail);
+            setResendCooldown(60);
+            const timer = setInterval(() => {
+                setResendCooldown(prev => {
+                    if (prev <= 1) { clearInterval(timer); return 0; }
+                    return prev - 1;
+                });
+            }, 1000);
+            setOtpError("");
+            setOtpDigits(["", "", "", "", "", ""]);
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : "";
+            setOtpError(msg || "Không thể gửi lại OTP.");
+        }
     };
 
     return (
@@ -304,7 +379,7 @@ export default function RegisterPage() {
                 <div className="glass-strong rounded-3xl shadow-2xl shadow-primary/5 p-8 relative overflow-hidden">
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary/0 via-primary to-secondary/0" />
 
-                    <StepIndicator current={step} total={2} />
+                    <StepIndicator current={step} total={3} />
 
                     <AnimatePresence mode="wait">
                         {step === 0 ? (
@@ -316,6 +391,92 @@ export default function RegisterPage() {
                                 transition={{ duration: 0.3 }}
                             >
                                 <RoleSelection onSelect={handleRoleSelect} />
+                            </motion.div>
+                        ) : step === 2 ? (
+                            /* ─── OTP Step ─── */
+                            <motion.div
+                                key="otp"
+                                initial={{ opacity: 0, x: 30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 30 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <div className="text-center mb-8">
+                                    <div className="mx-auto mb-4 w-16 h-16 rounded-2xl flex items-center justify-center"
+                                        style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}>
+                                        <ShieldCheck size={30} className="text-white" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-text font-[family-name:var(--font-family-heading)]">
+                                        Xác thực email
+                                    </h2>
+                                    <p className="text-text-light text-sm mt-2">
+                                        Mã OTP đã được gửi đến<br />
+                                        <span className="font-semibold text-primary">{registeredEmail}</span>
+                                    </p>
+                                </div>
+
+                                {otpError && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm text-center"
+                                    >
+                                        {otpError}
+                                    </motion.div>
+                                )}
+
+                                {/* OTP Input Boxes */}
+                                <div className="flex justify-center gap-3 mb-8" onPaste={handleOtpPaste}>
+                                    {otpDigits.map((digit, i) => (
+                                        <input
+                                            key={i}
+                                            ref={el => { otpRefs.current[i] = el; }}
+                                            type="text"
+                                            inputMode="numeric"
+                                            maxLength={1}
+                                            value={digit}
+                                            onChange={e => handleOtpChange(i, e.target.value)}
+                                            onKeyDown={e => handleOtpKeyDown(i, e)}
+                                            className="w-12 h-14 text-center text-xl font-bold rounded-xl border-2 transition-all outline-none"
+                                            style={{
+                                                borderColor: digit ? "#4F46E5" : "#e5e7eb",
+                                                background: digit ? "#f0f0ff" : "rgba(255,255,255,0.7)",
+                                                color: "#1f2937"
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* Verify Button */}
+                                <motion.button
+                                    onClick={handleVerifyOtp}
+                                    disabled={otpLoading || otpDigits.join("").length !== 6}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full py-3.5 rounded-xl text-white font-semibold text-base flex items-center justify-center gap-2 cursor-pointer border-0 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed transition-all mb-4"
+                                    style={{ background: "linear-gradient(135deg,#4F46E5,#7C3AED)" }}
+                                >
+                                    {otpLoading ? (
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    ) : (
+                                        <><ShieldCheck size={18} /> Xác thực OTP</>
+                                    )}
+                                </motion.button>
+
+                                {/* Resend OTP */}
+                                <div className="text-center">
+                                    <button
+                                        onClick={handleResendOtp}
+                                        disabled={resendCooldown > 0}
+                                        className="flex items-center gap-1.5 mx-auto text-sm font-medium transition-colors bg-transparent border-0 cursor-pointer p-0 disabled:cursor-not-allowed"
+                                        style={{ color: resendCooldown > 0 ? "#9ca3af" : "#4F46E5" }}
+                                    >
+                                        <RotateCcw size={14} />
+                                        {resendCooldown > 0
+                                            ? `Gửi lại sau ${resendCooldown}s`
+                                            : "Gửi lại mã OTP"}
+                                    </button>
+                                </div>
                             </motion.div>
                         ) : (
                             <motion.div
@@ -425,7 +586,7 @@ export default function RegisterPage() {
             </motion.div>
 
             {/* Success Modal */}
-            <SuccessModal isOpen={showSuccess} onClose={handleSuccessClose} />
+            <SuccessModal isOpen={showSuccess} onClose={() => { setShowSuccess(false); navigate("/"); }} />
         </div>
     );
 }

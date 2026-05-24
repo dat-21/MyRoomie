@@ -67,7 +67,7 @@ export async function login(payload: LoginPayload): Promise<UserData | null> {
     return mockDelay(user);
   }
 
-  const result = await apiRequest<AuthResult>("/auth/login", {
+  const result = await apiRequest<AuthResult>("/api/auth/login", {
     method: "POST",
     body: payload,
   });
@@ -82,20 +82,66 @@ export async function login(payload: LoginPayload): Promise<UserData | null> {
  * Mock mode: stores the user in localStorage with status "pending".
  * Real mode: POST /auth/register → { user, token }
  */
-export async function register(data: UserData): Promise<UserData> {
+export async function register(data: UserData, password?: string): Promise<UserData> {
   if (IS_MOCK_MODE) {
     const user: UserData = { ...data, status: "pending" };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     return mockDelay(user);
   }
 
-  const result = await apiRequest<AuthResult>("/auth/register", {
+  // Real mode: POST /api/auth/register → { message, email }
+  // Backend cần password, nhưng UserData không lưu password
+  await apiRequest<{ message: string; email: string }>("/api/auth/register", {
     method: "POST",
-    body: data,
+    body: { ...data, password },
+  });
+  const pendingUser: UserData = { ...data, status: "pending" };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(pendingUser));
+  return pendingUser;
+}
+
+export interface VerifyOtpPayload {
+  email: string;
+  code: string;
+}
+
+/**
+ * Xác thực OTP sau khi đăng ký.
+ * Real mode: POST /api/auth/verify-otp → { user, token }
+ */
+export async function verifyOtp(payload: VerifyOtpPayload): Promise<UserData | null> {
+  if (IS_MOCK_MODE) {
+    // Mock: giả lập xác thực thành công
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const user: UserData = { ...JSON.parse(stored), status: "active" };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+      return mockDelay(user);
+    }
+    return null;
+  }
+
+  const result = await apiRequest<AuthResult>("/api/auth/verify-otp", {
+    method: "POST",
+    body: payload,
   });
   localStorage.setItem(TOKEN_KEY, result.token);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(result.user));
   return result.user;
+}
+
+/**
+ * Gửi lại OTP (rate limit 60s).
+ * Real mode: POST /api/auth/resend-otp
+ */
+export async function resendOtp(email: string): Promise<void> {
+  if (IS_MOCK_MODE) {
+    return mockDelay(undefined);
+  }
+  await apiRequest<{ message: string }>("/api/auth/resend-otp", {
+    method: "POST",
+    body: { email },
+  });
 }
 
 /** Clear session data from localStorage. */

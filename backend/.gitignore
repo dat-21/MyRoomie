@@ -1,0 +1,10 @@
+obj/
+bin/
+*.user
+.vs/
+
+# Firebase service account key (NEVER commit to git!)
+firebase-service-account.json
+
+# Local config overrides
+appsettings.Local.json

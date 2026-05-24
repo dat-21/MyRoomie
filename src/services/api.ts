@@ -44,10 +44,23 @@ export async function apiRequest<T>(
   });
 
   if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({}));
-    throw new Error(
-      errorBody?.message ?? `API error: ${response.status} ${response.statusText}`
-    );
+    let errorMessage = `API error: ${response.status} ${response.statusText}`;
+    try {
+      const errorBody = await response.json();
+      if (errorBody?.message) {
+        // MyRoomie API error format: { message, code }
+        errorMessage = errorBody.message;
+      } else if (errorBody?.errors) {
+        // ASP.NET ValidationProblemDetails: { errors: { field: [msg] } }
+        const firstField = Object.keys(errorBody.errors)[0];
+        errorMessage = errorBody.errors[firstField]?.[0] ?? errorBody.title ?? errorMessage;
+      } else if (errorBody?.title) {
+        errorMessage = errorBody.title;
+      }
+    } catch {
+      // không parse được body — dùng status text
+    }
+    throw new Error(errorMessage);
   }
 
   return response.json() as Promise<T>;

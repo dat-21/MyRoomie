@@ -20,3 +20,19 @@ dist-ssr
 *.log
 .env*
 !.env.example
+
+# ─── Backend .NET ────────────────────────────────────────────────────────────
+# Build artifacts
+backend/**/bin/
+backend/**/obj/
+
+# Secrets — KHÔNG được commit lên GitHub
+backend/**/firebase-service-account.json
+backend/**/appsettings.Development.json
+backend/**/appsettings.*.json
+!backend/**/appsettings.json
+
+# .NET user secrets & local overrides
+*.user
+*.suo
+.vs/

@@ -83,63 +83,11 @@ function HeroRoleSelection() {
 
                 {/* Role Selection Cards */}
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    {/* Student Card */}
+                    {/* Landlord Card */}
                     <motion.div
                         initial={{ opacity: 0, x: -40 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.7, delay: 0.3 }}
-                    >
-                        <Link to="/register?role=tenant" className="no-underline block h-full">
-                            <motion.div
-                                whileHover={{ y: -10, scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="relative h-full rounded-3xl p-8 pb-6 bg-gradient-to-br from-white/80 via-white/60 to-primary/5 backdrop-blur-xl border-2 border-primary/20 hover:border-primary/40 shadow-lg hover:shadow-2xl hover:shadow-primary/15 transition-all cursor-pointer overflow-hidden group"
-                            >
-                                {/* Decorative */}
-                                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/10 transition-colors" />
-
-                                {/* Icon */}
-                                <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-6 shadow-xl shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
-                                    <GraduationCap size={36} className="text-white" />
-                                </div>
-
-                                <h2 className="text-2xl font-bold text-text mb-2 font-[family-name:var(--font-family-heading)]">
-                                    Tôi là Sinh viên
-                                </h2>
-                                <p className="text-text-light text-sm mb-6 leading-relaxed">
-                                    Tìm phòng trọ phù hợp, kết nối bạn cùng phòng, và khám phá khu vực lý tưởng
-                                </p>
-
-                                {/* Feature pills */}
-                                <div className="space-y-2.5 mb-6">
-                                    {[
-                                        { icon: Search, text: "Tìm phòng theo khu vực & giá" },
-                                        { icon: Users, text: "Tìm bạn ở ghép phù hợp" },
-                                        { icon: Heart, text: "Gợi ý thông minh theo lifestyle" },
-                                    ].map((item) => (
-                                        <div key={item.text} className="flex items-center gap-3 text-sm text-text-light">
-                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                                                <item.icon size={16} className="text-primary" />
-                                            </div>
-                                            {item.text}
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* CTA */}
-                                <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
-                                    Bắt đầu tìm phòng
-                                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                                </div>
-                            </motion.div>
-                        </Link>
-                    </motion.div>
-
-                    {/* Landlord Card */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.7, delay: 0.4 }}
                     >
                         <Link to="/register?role=landlord" className="no-underline block h-full">
                             <motion.div
@@ -181,6 +129,58 @@ function HeroRoleSelection() {
                                 {/* CTA */}
                                 <div className="flex items-center gap-2 text-amber-600 font-semibold text-sm group-hover:gap-3 transition-all">
                                     Bắt đầu đăng phòng
+                                    <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </motion.div>
+                        </Link>
+                    </motion.div>
+
+                    {/* Student Card */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.7, delay: 0.4 }}
+                    >
+                        <Link to="/register?role=tenant" className="no-underline block h-full">
+                            <motion.div
+                                whileHover={{ y: -10, scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="relative h-full rounded-3xl p-8 pb-6 bg-gradient-to-br from-white/80 via-white/60 to-primary/5 backdrop-blur-xl border-2 border-primary/20 hover:border-primary/40 shadow-lg hover:shadow-2xl hover:shadow-primary/15 transition-all cursor-pointer overflow-hidden group"
+                            >
+                                {/* Decorative */}
+                                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/10 transition-colors" />
+
+                                {/* Icon */}
+                                <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-primary-light flex items-center justify-center mb-6 shadow-xl shadow-primary/20 group-hover:scale-110 transition-transform duration-300">
+                                    <GraduationCap size={36} className="text-white" />
+                                </div>
+
+                                <h2 className="text-2xl font-bold text-text mb-2 font-[family-name:var(--font-family-heading)]">
+                                    Tôi là Sinh viên
+                                </h2>
+                                <p className="text-text-light text-sm mb-6 leading-relaxed">
+                                    Tìm phòng trọ phù hợp, kết nối bạn cùng phòng, và khám phá khu vực lý tưởng
+                                </p>
+
+                                {/* Feature pills */}
+                                <div className="space-y-2.5 mb-6">
+                                    {[
+                                        { icon: Search, text: "Tìm phòng theo khu vực & giá" },
+                                        { icon: Users, text: "Tìm bạn ở ghép phù hợp" },
+                                        { icon: Heart, text: "Gợi ý thông minh theo lifestyle" },
+                                    ].map((item) => (
+                                        <div key={item.text} className="flex items-center gap-3 text-sm text-text-light">
+                                            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                                                <item.icon size={16} className="text-primary" />
+                                            </div>
+                                            {item.text}
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* CTA */}
+                                <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                                    Bắt đầu tìm phòng
                                     <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
                             </motion.div>
@@ -381,24 +381,24 @@ function BottomCTA() {
                                 Tham gia cộng đồng hàng nghìn sinh viên và chủ trọ trên My Roomie
                             </p>
                             <div className="flex flex-wrap justify-center gap-4">
-                                <Link to="/register?role=tenant">
+                                <Link to="/register?role=landlord">
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.97 }}
-                                        className="btn-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-primary font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
+                                        className="btn-glow inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white text-amber-600 font-semibold shadow-xl hover:shadow-2xl transition-shadow cursor-pointer border-0 text-base"
                                     >
-                                        <GraduationCap size={18} />
-                                        Tôi là Sinh viên
+                                        <Building2 size={18} />
+                                        Tôi là Chủ trọ
                                     </motion.button>
                                 </Link>
-                                <Link to="/register?role=landlord">
+                                <Link to="/register?role=tenant">
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.97 }}
                                         className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-white/20 backdrop-blur text-white font-semibold border border-white/30 hover:bg-white/30 transition-all cursor-pointer text-base"
                                     >
-                                        <Building2 size={18} />
-                                        Tôi là Chủ trọ
+                                        <GraduationCap size={18} />
+                                        Tôi là Sinh viên
                                     </motion.button>
                                 </Link>
                             </div>

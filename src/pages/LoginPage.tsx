@@ -8,8 +8,8 @@ import { useTranslation } from "react-i18next";
 type LoginRole = Exclude<Role, null>;
 
 const roleOptions: Array<{ value: LoginRole; label: string; icon: React.ElementType }> = [
-    { value: "tenant", label: "Sinh vien", icon: GraduationCap },
     { value: "landlord", label: "Chu tro", icon: Building2 },
+    { value: "tenant", label: "Sinh vien", icon: GraduationCap },
     { value: "admin", label: "Admin", icon: ShieldCheck },
 ];
 
@@ -19,7 +19,7 @@ export default function LoginPage() {
     const { t } = useTranslation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [selectedRole, setSelectedRole] = useState<LoginRole>("tenant");
+    const [selectedRole, setSelectedRole] = useState<LoginRole>("landlord");
     const [showPassword, setShowPassword] = useState(false);
     const [remember, setRemember] = useState(false);
     const [error, setError] = useState("");

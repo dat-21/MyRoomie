@@ -8,6 +8,7 @@ import type { Roommate, Conversation } from "../types";
 import RoommateCard from "../components/RoommateCard";
 import SocialMatchCard from "../components/SocialMatchCard";
 import ChatPanel from "../components/ChatPanel";
+import RangeSlider from "../components/RangeSlider";
 
 /* ─── Filters Interface ─── */
 interface Filters {
@@ -22,6 +23,7 @@ interface Filters {
   minDuration: string;
   lifestyleTags: string[];
   habits: string[];
+  petPreference: string;
   minCompatibility: number;
   search: string;
 }
@@ -38,6 +40,7 @@ const defaultFilters: Filters = {
   minDuration: "All",
   lifestyleTags: [],
   habits: [],
+  petPreference: "",
   minCompatibility: 50,
   search: "",
 };
@@ -45,10 +48,11 @@ const defaultFilters: Filters = {
 type SortOption = "compatibility" | "budget-low" | "budget-high" | "date";
 type ViewMode = "grid" | "social";
 
-const OCCUPATIONS = ["Sinh viên", "Đi làm", "Freelancer", "Giáo viên", "Kỹ sư", "Thiết kế", "Marketing", "Khác"];
+const OCCUPATIONS = ["Sinh viên", "Freelancer", "Giáo viên", "Nhân viên văn phòng", "Kỹ sư", "Thiết kế", "Marketing", "Influencer / KOLs", "Khác"];
 const DISTRICTS = ["Hải Châu", "Sơn Trà", "Ngũ Hành Sơn", "Thanh Khê", "Cẩm Lệ", "Liên Chiểu", "Hòa Vang"];
 const DURATIONS = ["1 tháng", "3 tháng", "6 tháng", "1 năm+"];
-const HABITS = ["Nấu ăn ở nhà", "Đặt đồ ăn", "Có thú cưng", "Không thú cưng", "Học khuya", "Tiệc tùng thỉnh thoảng", "Không tiệc"];
+const HABITS = ["Nấu ăn ở nhà", "Đặt đồ ăn", "Thức khuya", "Học khuya", "Tiệc tùng thỉnh thoảng", "Không tiệc"];
+const PET_OPTIONS = ["Có thú cưng", "Không thú cưng"];
 
 export default function FindRoommatePage() {
   const [roommateType, setRoommateType] = useState<"HAS_ROOM" | "NEEDS_ROOM">("HAS_ROOM");
@@ -152,35 +156,13 @@ export default function FindRoommatePage() {
       {/* 1. KHOẢNG NGÂN SÁCH */}
       <div className="space-y-4">
         <label className="filter-section-header">KHOẢNG NGÂN SÁCH</label>
-        <div className="space-y-5">
-          <div className="flex gap-3">
-            <div className="flex-1 space-y-1">
-              <span className="font-tag text-text-secondary">Tối thiểu</span>
-              <input 
-                type="number" 
-                value={filters.budgetMin}
-                onChange={e => setFilters(p => ({...p, budgetMin: Number(e.target.value)}))}
-                className="w-full p-2 bg-white border border-border rounded-lg font-body text-text-primary"
-              />
-            </div>
-            <div className="flex-1 space-y-1">
-              <span className="font-tag text-text-secondary">Tối đa</span>
-              <input 
-                type="number"
-                value={filters.budgetMax}
-                onChange={e => setFilters(p => ({...p, budgetMax: Number(e.target.value)}))}
-                className="w-full p-2 bg-white border border-border rounded-lg font-body text-text-primary"
-              />
-            </div>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="10000000"
-            step="500000"
+        <div className="space-y-3">
+          <RangeSlider
+            min={0}
+            max={10000000}
+            step={100000}
             value={filters.budgetMax}
-            onChange={(e) => setFilters((p) => ({ ...p, budgetMax: parseInt(e.target.value) }))}
-            className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
+            onChange={(v) => setFilters((p) => ({ ...p, budgetMax: v }))}
           />
           <p className="font-caption text-text-secondary text-right">
             {filters.budgetMin.toLocaleString()}đ – {filters.budgetMax.toLocaleString()}đ
@@ -209,24 +191,43 @@ export default function FindRoommatePage() {
       {/* 3. ĐỘ TUỔI */}
       <div className="space-y-4">
         <label className="filter-section-header">ĐỘ TUỔI</label>
-        <div className="space-y-2">
-           <input
-            type="range"
-            min="18"
-            max="60"
-            value={filters.ageMax}
-            onChange={(e) => setFilters((p) => ({ ...p, ageMax: parseInt(e.target.value) }))}
-            className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
-          />
-          <p className="font-caption text-text-secondary text-center font-semibold">
-            {filters.ageMin} – {filters.ageMax} tuổi
-          </p>
+        <div className="flex gap-3 items-center">
+          <div className="flex-1 space-y-1">
+            <span className="font-tag text-text-secondary">Từ</span>
+            <input
+              type="number"
+              min="18"
+              max={filters.ageMax}
+              value={filters.ageMin}
+              onChange={(e) => {
+                const val = Math.max(18, Math.min(Number(e.target.value), filters.ageMax));
+                setFilters((p) => ({ ...p, ageMin: val }));
+              }}
+              className="w-full p-2 bg-white border border-border rounded-lg font-body text-text-primary focus:ring-2 focus:ring-primary/20 outline-none"
+            />
+          </div>
+          <span className="font-tag text-text-secondary mt-5">–</span>
+          <div className="flex-1 space-y-1">
+            <span className="font-tag text-text-secondary">Đến</span>
+            <input
+              type="number"
+              min={filters.ageMin}
+              max="60"
+              value={filters.ageMax}
+              onChange={(e) => {
+                const val = Math.min(60, Math.max(Number(e.target.value), filters.ageMin));
+                setFilters((p) => ({ ...p, ageMax: val }));
+              }}
+              className="w-full p-2 bg-white border border-border rounded-lg font-body text-text-primary focus:ring-2 focus:ring-primary/20 outline-none"
+            />
+          </div>
+          <span className="font-tag text-text-secondary mt-5">tuổi</span>
         </div>
       </div>
 
-      {/* 4. NGHỀ NGHIỆP / HỌC VẤN */}
+      {/* 4. NGHỀ NGHIỆP */}
       <div className="space-y-4">
-        <label className="filter-section-header">NGHỀ NGHIỆP / HỌC VẤN</label>
+        <label className="filter-section-header">NGHỀ NGHIỆP</label>
         <div className="flex flex-wrap gap-2">
           {OCCUPATIONS.map(occ => (
             <button
@@ -262,7 +263,7 @@ export default function FindRoommatePage() {
 
       {/* 6. CHUYỂN VÀO TRƯỚC */}
       <div className="space-y-4">
-        <label className="filter-section-header">CHUYỂN VÀO TRƯỚC</label>
+        <label className="filter-section-header">NGÀY CHUYỂN VÀO</label>
         <div className="relative">
           <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
           <input
@@ -294,7 +295,7 @@ export default function FindRoommatePage() {
 
       {/* 8. LỐI SỐNG (Expanded Accordion) */}
       <div className="space-y-4">
-        <button 
+        <button
           onClick={() => setLifestyleExpanded(!lifestyleExpanded)}
           className="w-full flex items-center justify-between group cursor-pointer border-0 bg-transparent p-0"
         >
@@ -304,7 +305,7 @@ export default function FindRoommatePage() {
         <AnimatePresence>
           {lifestyleExpanded && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-               <div className="flex flex-wrap gap-1.5 pt-2">
+              <div className="flex flex-wrap gap-1.5 pt-2">
                 {lifestyleOptions.map(tag => (
                   <button
                     key={tag}
@@ -314,6 +315,18 @@ export default function FindRoommatePage() {
                     }`}
                   >
                     {t(`lifestyle.${tag}`, tag)}
+                  </button>
+                ))}
+                {/* Thú cưng */}
+                {PET_OPTIONS.map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => setFilters(p => ({ ...p, petPreference: p.petPreference === opt ? "" : opt }))}
+                    className={`font-tag px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
+                      filters.petPreference === opt ? "bg-primary text-white border-primary" : "bg-gray-100/50 text-text-secondary border-transparent hover:border-primary/20"
+                    }`}
+                  >
+                    {opt}
                   </button>
                 ))}
               </div>
@@ -344,13 +357,11 @@ export default function FindRoommatePage() {
       <div className="space-y-4">
         <label className="filter-section-header">ĐỘ TƯƠNG THÍCH TỐI THIỂU</label>
         <div className="space-y-3">
-           <input
-            type="range"
-            min="50"
-            max="100"
+          <RangeSlider
+            min={50}
+            max={100}
             value={filters.minCompatibility}
-            onChange={(e) => setFilters((p) => ({ ...p, minCompatibility: parseInt(e.target.value) }))}
-            className="w-full accent-primary h-1.5 bg-border rounded-lg appearance-none cursor-pointer"
+            onChange={(v) => setFilters((p) => ({ ...p, minCompatibility: v }))}
           />
           <p className="font-caption text-text-secondary font-bold">
             Chỉ hiển thị người có độ phù hợp ≥ {filters.minCompatibility}%
@@ -400,7 +411,7 @@ export default function FindRoommatePage() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar: expanded with categories */}
           <aside className="hidden lg:block w-72 flex-shrink-0">
-            <div className="bg-[#F8FAFA] rounded-filter-panel border border-border p-6 sticky top-28 max-h-[calc(100vh-140px)] overflow-y-auto hide-scrollbar">
+            <div className="bg-[#F8FAFA] rounded-filter-panel border border-border p-6 sticky top-28 max-h-[calc(100vh-140px)] overflow-y-auto hide-scrollbar" style={{ overscrollBehavior: "contain" }}>
               <FilterContent />
             </div>
           </aside>

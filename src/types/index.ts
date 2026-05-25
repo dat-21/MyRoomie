@@ -198,11 +198,46 @@ export interface AdminStats {
 export type Role = "landlord" | "tenant" | "admin" | null;
 export type AccountStatus = "active" | "pending" | null;
 
+export type EkycStatus = "none" | "pending" | "verified" | "rejected";
+
+export type EkycStep = "cccd" | "liveness" | "result";
+
+export interface EkycStatusResponse {
+  status: EkycStatus;
+  verifiedAt?: string;
+}
+
+export interface CccdInfo {
+  cccdNumber: string;
+  fullName: string;
+  dateOfBirth?: string;
+  sex?: string;
+  nationality?: string;
+  placeOfOrigin?: string;
+  placeOfResidence?: string;
+  expiryDate?: string;
+}
+
+export interface ScanCccdResponse {
+  success: boolean;
+  sessionId?: string;
+  info?: CccdInfo;
+  error?: string;
+}
+
+export interface VerifyFaceResponse {
+  success: boolean;
+  match: boolean;
+  similarity: number;
+  error?: string;
+}
+
 export interface UserData {
   email: string;
   name: string;
   role: Role;
   status: AccountStatus;
+  ekycStatus?: EkycStatus;
   phone?: string;
   area?: string;
   rooms?: string;

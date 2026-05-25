@@ -32,7 +32,27 @@ git push origin main
 
 ---
 
-## 🚂 Backend → Railway
+## 🐍 Python AI Service → Railway (Service thứ 2)
+
+### Lần đầu setup
+1. Trong cùng Railway project (đã có .NET service), nhấn **+ Create** → **GitHub repo**
+2. Chọn cùng repo `MyRoomie`
+3. Tab **Settings** → **Root Directory** → nhập: `ai-service`
+4. Thêm **Environment Variables**:
+
+   | Key | Value |
+   |-----|-------|
+   | `ALLOWED_ORIGINS` | `https://your-dotnet-service.up.railway.app` |
+
+5. Railway sẽ detect Dockerfile và tự build
+6. Lấy domain của AI service (vd: `https://ai-xxx.up.railway.app`)
+7. Vào service .NET → Variables → thêm: `AI_SERVICE_URL` = domain vừa lấy
+
+> ⚠️ Lần build đầu mất 10-15 phút vì download model InsightFace (~500MB)
+
+---
+
+## 🚂 Backend (.NET) → Railway
 
 ### Lần đầu setup
 1. Vào https://railway.app → **"New Project"** → **"Deploy from GitHub repo"**
@@ -97,6 +117,14 @@ cd D:\EXE\MyRoomie\backend\MyRoomie.API
 dotnet run --launch-profile http
 # http://localhost:5021
 ```
+
+**Terminal 3 — AI Service (Python):**
+```powershell
+cd D:\EXE\MyRoomie\ai-service
+.\.venv\Scripts\uvicorn main:app --port 8000 --reload
+# http://localhost:8000
+```
+
 
 ---
 

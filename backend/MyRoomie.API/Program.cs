@@ -105,6 +105,18 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEkycService, EkycService>();
+
+// ─── HttpClient cho Python AI Service ────────────────────────────────────────
+var aiServiceUrl = builder.Configuration["AiService:BaseUrl"]
+    ?? Environment.GetEnvironmentVariable("AI_SERVICE_URL")
+    ?? "http://localhost:8000";
+
+builder.Services.AddHttpClient("AiService", client =>
+{
+    client.BaseAddress = new Uri(aiServiceUrl);
+    client.Timeout = TimeSpan.FromSeconds(60); // OCR + face compare có thể mất thời gian
+});
 
 // ─── Controllers ──────────────────────────────────────────────────────────
 builder.Services.AddControllers();
@@ -153,16 +165,14 @@ var app = builder.Build();
 // ─── Pipeline ─────────────────────────────────────────────────────────────
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-if (app.Environment.IsDevelopment())
+// Swagger luôn bật để dễ test (cả Production trên Railway)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Roomie API v1");
-        c.RoutePrefix = "swagger";
-        c.DocumentTitle = "My Roomie API";
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My Roomie API v1");
+    c.RoutePrefix = "swagger";
+    c.DocumentTitle = "My Roomie API";
+});
 
 app.UseHttpsRedirection();
 app.UseCors("FrontendPolicy");

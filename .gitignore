@@ -36,3 +36,16 @@ backend/**/appsettings.*.json
 *.user
 *.suo
 .vs/
+
+# ─── Python AI Service ───────────────────────────────────────────────────────
+# Python cache
+ai-service/__pycache__/
+ai-service/**/__pycache__/
+ai-service/**/*.pyc
+# Virtual environment
+ai-service/.venv/
+ai-service/venv/
+# InsightFace model weights (sẽ download tự động khi deploy)
+ai-service/.insightface/
+# PaddleOCR model cache
+ai-service/inference/

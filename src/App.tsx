@@ -20,6 +20,8 @@ import LandlordRoomsPage from "./pages/LandlordRoomsPage";
 import LandlordPremiumPage from "./pages/LandlordPremiumPage";
 import AdminPage from "./pages/AdminPage";
 import UserDetailPage from "./pages/UserDetailPage";
+import EkycPage from "./pages/EkycPage";
+import EkycGuard from "./components/EkycGuard";
 
 // Layouts
 import TenantLayout from "./layouts/TenantLayout";
@@ -89,7 +91,8 @@ export default function App() {
       {isLandlord && (
         <Route element={<LandlordLayout />}>
           <Route path="/" element={<LandlordHomePage />} />
-          <Route path="/post" element={<PostRoomPage />} />
+          <Route path="/post" element={<EkycGuard><PostRoomPage /></EkycGuard>} />
+          <Route path="/ekyc" element={<EkycPage />} />
           <Route path="/rooms" element={<LandlordRoomsPage />} />
           <Route path="/explore" element={<ViewAllRoomsPage />} />
           <Route path="/rooms/:id" element={<RoomDetailPage />} />

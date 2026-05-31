@@ -10,6 +10,7 @@ interface AuthContextType {
   isPending: boolean;
   login: (email: string, password: string, role: Exclude<Role, null>) => Promise<boolean>;
   register: (data: UserData, password: string) => Promise<boolean>;
+  verifyOtp: (payload: { email: string; code: string }) => Promise<UserData | null>;
   logout: () => void;
 }
 
@@ -37,6 +38,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
+  const verifyOtp = async (payload: { email: string; code: string }): Promise<UserData | null> => {
+    const result = await authService.verifyOtp(payload);
+    if (result) {
+      setUser(result);
+    }
+    return result;
+  };
+
   const logout = () => {
     authService.logout();
     setUser(null);
@@ -50,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isPending: user?.status === "pending",
         login,
         register,
+        verifyOtp,
         logout,
       }}
     >

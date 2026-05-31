@@ -72,9 +72,18 @@ public class EkycService : IEkycService
         }
 
         if (aiResult is null || !aiResult.Success || aiResult.Data is null)
+        {
+            _logger.LogWarning(
+                "AI OCR kết quả không thành công: aiResult={AiResult}, success={Success}, data={Data}, error={Error}",
+                aiResult is not null, aiResult?.Success, aiResult?.Data is not null, aiResult?.Error);
             return new ScanCccdResponse { Success = false, Error = aiResult?.Error ?? "Không đọc được thông tin CCCD." };
+        }
 
         var cccdInfo = aiResult.Data;
+        _logger.LogInformation(
+            "AI OCR thành công: CCCD={CccdNumber}, Name='{FullName}', DOB={DOB}, Sex={Sex}, Face={HasFace}",
+            cccdInfo.CccdNumber, cccdInfo.FullName, cccdInfo.DateOfBirth, cccdInfo.Sex,
+            !string.IsNullOrEmpty(cccdInfo.FaceImageBase64));
 
         // 2. Kiểm tra số CCCD đã được dùng bởi tài khoản khác chưa
         var cccdRef = _firestore.Collection(VerifiedCccdCollection).Document(cccdInfo.CccdNumber);

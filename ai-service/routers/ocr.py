@@ -224,12 +224,27 @@ def _strip_label_prefix(text: str) -> str:
     return text.strip()
 
 
+def _clean_ocr_text(text: str) -> str:
+    """
+    Loại bỏ ký tự rác mà Tesseract thường thêm vào: dấu chấm, phẩy,
+    dấu gạch ngang, ngoặc, dấu nháy... ở đầu/cuối chuỗi.
+    VD: "TRINH VIỆT HOÀNG ." → "TRINH VIỆT HOÀNG"
+        "'NGUYEN VAN A'" → "NGUYEN VAN A"
+    """
+    # Bỏ ký tự không phải chữ cái/khoảng trắng ở đầu và cuối
+    text = re.sub(r"^[^a-zA-ZÀ-ỹĐđ]+", "", text)
+    text = re.sub(r"[^a-zA-ZÀ-ỹĐđ]+$", "", text)
+    # Collapse khoảng trắng thừa
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
+
+
 def _is_vietnamese_name(text: str) -> bool:
     """
     Kiểm tra xem chuỗi có khả năng là tên người Việt không.
     Tên VN: 2-6 từ, chỉ chữ cái Unicode + khoảng trắng, >= 4 ký tự.
     """
-    text = text.strip()
+    text = _clean_ocr_text(text)
     if not text or len(text) < 4:
         return False
     if re.search(r"\d", text):
@@ -296,7 +311,7 @@ def parse_cccd_from_ocr_results(results: list) -> tuple[list[str], CccdInfo]:
 
         # Case A: tên nằm CÙNG dòng với label
         # VD: "Họ và tên / Full name: TRỊNH VIỆT HOÀNG"
-        candidate = _strip_label_prefix(line)
+        candidate = _clean_ocr_text(_strip_label_prefix(line))
         if candidate and not _is_label_line(candidate) \
                 and _is_vietnamese_name(candidate):
             name = candidate
@@ -308,14 +323,14 @@ def parse_cccd_from_ocr_results(results: list) -> tuple[list[str], CccdInfo]:
             next_line = lines[j].strip()
             if _is_label_line(next_line):
                 continue
-            next_candidate = _strip_label_prefix(next_line)
+            next_candidate = _clean_ocr_text(_strip_label_prefix(next_line))
             if _is_vietnamese_name(next_candidate):
                 name = next_candidate
                 logger.info(f"✅ Tên (dòng kế #{j}): '{name}'")
                 break
             # Thử ghép 2 dòng (tên dài bị wrap)
             if j + 1 < len(lines) and not _is_label_line(lines[j + 1]):
-                merged = next_candidate + " " + lines[j + 1].strip()
+                merged = next_candidate + " " + _clean_ocr_text(lines[j + 1].strip())
                 if _is_vietnamese_name(merged):
                     name = merged
                     logger.info(f"✅ Tên (ghép 2 dòng): '{name}'")
@@ -325,7 +340,7 @@ def parse_cccd_from_ocr_results(results: list) -> tuple[list[str], CccdInfo]:
     # Pass 2 fallback: quét tất cả, tìm dòng ALL CAPS giống tên VN
     if not name:
         for line in lines:
-            candidate = _strip_label_prefix(line)
+            candidate = _clean_ocr_text(_strip_label_prefix(line))
             if _is_label_line(line):
                 continue
             # Tên trên CCCD luôn viết HOA

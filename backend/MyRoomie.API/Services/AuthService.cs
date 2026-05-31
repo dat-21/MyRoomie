@@ -259,7 +259,14 @@ public class AuthService : IAuthService
             ["CreatedAt"] = Timestamp.FromDateTime(otp.CreatedAt)
         });
 
-        await _email.SendOtpEmailAsync(email, name, code);
+        try
+        {
+            await _email.SendOtpEmailAsync(email, name, code);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "[Email] Failed to send OTP email to {Email}. OTP Code is: {Code}", email, code);
+        }
     }
 
     private static string GenerateOtpCode()

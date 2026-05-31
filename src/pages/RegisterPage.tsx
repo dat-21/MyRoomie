@@ -6,7 +6,7 @@ import {
     User, Phone, MapPin, DollarSign, Home, FileText, CheckCircle2, RotateCcw, ShieldCheck
 } from "lucide-react";
 import { useAuth, type Role, type UserData } from "../contexts/AuthContext";
-import { verifyOtp, resendOtp } from "../services/auth.service";
+import { resendOtp } from "../services/auth.service";
 import { useTranslation } from "react-i18next";
 
 /* ─── Success Popup ─── */
@@ -203,7 +203,7 @@ function FormField({ label, icon: Icon, value, onChange, placeholder, type = "te
 export default function RegisterPage() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const { register } = useAuth();
+    const { register, verifyOtp } = useAuth();
 
     const { t } = useTranslation();
 

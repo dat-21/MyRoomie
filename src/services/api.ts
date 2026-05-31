@@ -6,10 +6,18 @@
  * service module falls back to local data from src/data/.
  */
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL ?? "";
+export const API_BASE_URL = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
 /** True when running against local mock data (no backend). */
 export const IS_MOCK_MODE = !API_BASE_URL;
+
+// Hybrid flags for Production
+export const IS_AUTH_MOCK = IS_MOCK_MODE;
+export const IS_EKYC_MOCK = IS_MOCK_MODE;
+export const IS_ROOM_MOCK = true;
+export const IS_ROOMMATE_MOCK = true;
+export const IS_CHAT_MOCK = true;
+export const IS_ADMIN_MOCK = true;
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 

@@ -1,5 +1,5 @@
 import type { Roommate, RoommateWithReviews, UserReview } from "../types";
-import { apiRequest, IS_MOCK_MODE, mockDelay } from "./api";
+import { apiRequest, IS_ROOMMATE_MOCK, mockDelay } from "./api";
 import {
   roommates as mockRoommates,
   roommateReviews as mockReviews,
@@ -11,13 +11,13 @@ import {
 
 /** Fetch all roommates (with optional server-side filtering in real mode). */
 export async function getRoommates(): Promise<Roommate[]> {
-  if (IS_MOCK_MODE) return mockDelay([...mockRoommates]);
+  if (IS_ROOMMATE_MOCK) return mockDelay([...mockRoommates]);
   return apiRequest<Roommate[]>("/roommates");
 }
 
 /** Fetch a single roommate by id. */
 export async function getRoommateById(id: string): Promise<Roommate | undefined> {
-  if (IS_MOCK_MODE) return mockDelay(mockRoommates.find((r) => r.id === id));
+  if (IS_ROOMMATE_MOCK) return mockDelay(mockRoommates.find((r) => r.id === id));
   return apiRequest<Roommate>(`/roommates/${id}`);
 }
 
@@ -25,7 +25,7 @@ export async function getRoommateById(id: string): Promise<Roommate | undefined>
 export async function getRoommateWithReviews(
   id: string
 ): Promise<RoommateWithReviews | undefined> {
-  if (IS_MOCK_MODE) return mockDelay(getMockRoommateWithReviews(id));
+  if (IS_ROOMMATE_MOCK) return mockDelay(getMockRoommateWithReviews(id));
   return apiRequest<RoommateWithReviews>(`/roommates/${id}/reviews`);
 }
 
@@ -33,7 +33,7 @@ export async function getRoommateWithReviews(
 
 /** Fetch reviews for a roommate. */
 export async function getReviewsByRoommateId(id: string): Promise<UserReview[]> {
-  if (IS_MOCK_MODE) return mockDelay(mockReviews[id] ?? []);
+  if (IS_ROOMMATE_MOCK) return mockDelay(mockReviews[id] ?? []);
   return apiRequest<UserReview[]>(`/roommates/${id}/reviews`);
 }
 
@@ -42,7 +42,7 @@ export async function submitRoommateReview(
   roommateId: string,
   review: Omit<UserReview, "id" | "date">
 ): Promise<UserReview> {
-  if (IS_MOCK_MODE) {
+  if (IS_ROOMMATE_MOCK) {
     const newReview: UserReview = {
       ...review,
       id: `ur_${Date.now()}`,
@@ -60,7 +60,7 @@ export async function submitRoommateReview(
 
 /** Fetch the profile of the currently authenticated user. */
 export async function getCurrentUser() {
-  if (IS_MOCK_MODE) return mockDelay(mockCurrentUser);
+  if (IS_ROOMMATE_MOCK) return mockDelay(mockCurrentUser);
   return apiRequest<typeof mockCurrentUser>("/users/me");
 }
 
@@ -68,7 +68,7 @@ export async function getCurrentUser() {
 export async function updateCurrentUser(
   updates: Partial<typeof mockCurrentUser>
 ): Promise<typeof mockCurrentUser> {
-  if (IS_MOCK_MODE) return mockDelay({ ...mockCurrentUser, ...updates });
+  if (IS_ROOMMATE_MOCK) return mockDelay({ ...mockCurrentUser, ...updates });
   return apiRequest<typeof mockCurrentUser>("/users/me", {
     method: "PATCH",
     body: updates,

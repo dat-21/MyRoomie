@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrender-dev \
     libgomp1 \
     libglu1-mesa \
-    libgl1-mesa-glx \
+    libgl1 \
+    libglx-mesa0 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 

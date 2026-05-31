@@ -25,6 +25,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
+# Tải sẵn các mô hình AI (EasyOCR & InsightFace) để cache vào Docker image
+RUN python -c "import easyocr; easyocr.Reader(['vi', 'en'], gpu=False)"
+RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_l'); app.prepare(ctx_id=-1)"
+
 # Copy source code
 COPY . .
 

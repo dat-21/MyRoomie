@@ -124,7 +124,7 @@ if (!aiServiceUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
 builder.Services.AddHttpClient("AiService", client =>
 {
     client.BaseAddress = new Uri(aiServiceUrl);
-    client.Timeout = TimeSpan.FromSeconds(60); // OCR + face compare có thể mất thời gian
+    client.Timeout = TimeSpan.FromSeconds(180); // Cold start lần đầu có thể mất 1-2 phút để tải mô hình AI
 });
 
 // ─── Controllers ──────────────────────────────────────────────────────────

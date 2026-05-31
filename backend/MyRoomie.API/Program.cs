@@ -110,8 +110,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEkycService, EkycService>();
 
 // ─── HttpClient cho Python AI Service ────────────────────────────────────────
-var aiServiceUrl = builder.Configuration["AiService:BaseUrl"]
-    ?? Environment.GetEnvironmentVariable("AI_SERVICE_URL")
+var aiServiceUrl = Environment.GetEnvironmentVariable("AI_SERVICE_URL")
+    ?? builder.Configuration["AiService:BaseUrl"]
     ?? "http://localhost:8000";
 
 builder.Services.AddHttpClient("AiService", client =>

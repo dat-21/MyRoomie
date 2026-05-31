@@ -5,7 +5,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Cài các system dependencies cho OpenCV, PaddleOCR
+# Cài các system dependencies cho OpenCV, Tesseract OCR
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     libsm6 \
@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglx-mesa0 \
     curl \
+    tesseract-ocr \
+    tesseract-ocr-vie \
+    tesseract-ocr-eng \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements trước để tận dụng Docker layer cache
@@ -25,9 +28,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Tải sẵn các mô hình AI (EasyOCR & InsightFace) để cache vào Docker image
-RUN python -c "import easyocr; easyocr.Reader(['vi', 'en'], gpu=False)"
-RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_l'); app.prepare(ctx_id=-1)"
+# Tải sẵn mô hình AI InsightFace (chỉ nạp các modules cần thiết) để cache vào Docker image
+RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_l', allowed_modules=['detection', 'recognition']); app.prepare(ctx_id=-1)"
 
 # Copy source code
 COPY . .

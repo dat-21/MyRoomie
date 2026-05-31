@@ -1,6 +1,6 @@
 """
 OCR Router — Trích xuất thông tin từ CCCD Việt Nam
-Sử dụng: EasyOCR (hỗ trợ tiếng Việt, chạy tốt trên Python 3.13 + Windows)
+Sử dụng: Tesseract OCR (Nhẹ nhàng, tiết kiệm RAM dưới 512MB)
 """
 
 import re
@@ -20,20 +20,12 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # ─── Model singleton ──────────────────────────────────────────────────────────
-_ocr_reader = None
+_ocr_reader = "Tesseract"
 
 
 def load_ocr_model():
-    """Load EasyOCR model (gọi 1 lần khi startup)."""
-    global _ocr_reader
-    if _ocr_reader is None:
-        try:
-            import easyocr
-            _ocr_reader = easyocr.Reader(["vi", "en"], gpu=False, verbose=False)
-            logger.info("✅ EasyOCR model đã load xong.")
-        except Exception as e:
-            logger.error(f"❌ Không thể load EasyOCR: {e}")
-            _ocr_reader = None
+    """Tesseract không cần tải trước mô hình vào RAM."""
+    logger.info("✅ Tesseract OCR đã sẵn sàng (chạy qua CLI).")
 
 
 # ─── Schemas ──────────────────────────────────────────────────────────────────
@@ -414,14 +406,18 @@ async def extract_cccd(request: ExtractCccdRequest):
         # Tiền xử lý ảnh để tăng độ chính xác
         img_processed = preprocess_for_ocr(img)
 
-        results = _ocr_reader.readtext(
-            img_processed, detail=1, paragraph=False)
+        import pytesseract
+        # Chạy Tesseract OCR trích xuất văn bản tiếng Việt và tiếng Anh
+        text_ocr = pytesseract.image_to_string(img_processed, lang="vie+eng")
+        lines_raw = [line.strip() for line in text_ocr.split("\n") if line.strip()]
 
-        if not results:
+        if not lines_raw:
             return ExtractCccdResponse(
                 success=False,
                 error="Không nhận diện được văn bản trong ảnh.")
 
+        # Mock kết quả EasyOCR để tái sử dụng hàm parse_cccd_from_ocr_results
+        results = [ ( [ [0,0], [0,0], [0,0], [0,0] ], line, 0.99 ) for line in lines_raw ]
         lines, cccd_info = parse_cccd_from_ocr_results(results)
 
         if not cccd_info.cccd_number:
@@ -458,23 +454,19 @@ async def extract_cccd_debug(request: ExtractCccdRequest):
     Debug endpoint: trả về toàn bộ kết quả OCR thô kèm bbox.
     Dùng khi cần xem tại sao parse tên bị sai.
     """
-    global _ocr_reader
-    if _ocr_reader is None:
-        load_ocr_model()
-    if _ocr_reader is None:
-        raise HTTPException(status_code=503, detail="Không thể tải mô hình OCR (hết bộ nhớ).")
     try:
         img = decode_base64_image(request.image_base64)
         img_processed = preprocess_for_ocr(img)
-        results = _ocr_reader.readtext(
-            img_processed, detail=1, paragraph=False)
+        import pytesseract
+        text_ocr = pytesseract.image_to_string(img_processed, lang="vie+eng")
+        lines_raw = [line.strip() for line in text_ocr.split("\n") if line.strip()]
         output = [
             {
-                "text": item[1],
-                "confidence": round(item[2], 3),
-                "bbox_y": round(sum(p[1] for p in item[0]) / 4, 1),
+                "text": line,
+                "confidence": 0.99,
+                "bbox_y": float(idx),
             }
-            for item in results
+            for idx, line in enumerate(lines_raw)
         ]
         output.sort(key=lambda x: x["bbox_y"])
         return {"count": len(output), "items": output}

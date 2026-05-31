@@ -65,6 +65,7 @@ public class EmailService : IEmailService
         message.Body = bodyBuilder.ToMessageBody();
 
         using var client = new SmtpClient();
+        client.Timeout = 5000; // Giới hạn chờ 5 giây để tránh bị treo (loading) lâu nếu cổng SMTP bị chặn
         try
         {
             await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);

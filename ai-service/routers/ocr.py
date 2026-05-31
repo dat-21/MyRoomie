@@ -127,9 +127,11 @@ def extract_face_from_cccd(img: np.ndarray) -> Optional[str]:
 
         # Thử dùng InsightFace để auto-detect mặt
         try:
-            from routers.face import _face_app
-            if _face_app is not None:
-                faces = _face_app.get(work_img)
+            import routers.face
+            if routers.face._face_app is None:
+                routers.face.load_face_model()
+            if routers.face._face_app is not None:
+                faces = routers.face._face_app.get(work_img)
                 if faces:
                     # Lấy mặt lớn nhất
                     face = max(faces, key=lambda f: 
@@ -169,9 +171,11 @@ def extract_face_from_cccd(img: np.ndarray) -> Optional[str]:
             if face_region.size > 0:
                 # Kiểm tra xem vùng crop có chứa mặt không
                 try:
-                    from routers.face import _face_app
-                    if _face_app is not None:
-                        test_faces = _face_app.get(face_region)
+                    import routers.face
+                    if routers.face._face_app is None:
+                        routers.face.load_face_model()
+                    if routers.face._face_app is not None:
+                        test_faces = routers.face._face_app.get(face_region)
                         if test_faces:
                             logger.info(f"✅ Tìm mặt bằng fallback crop: ({y_start},{y_end},{x_start},{x_end})")
                             return encode_image_to_base64(face_region)
@@ -392,10 +396,13 @@ async def extract_cccd(request: ExtractCccdRequest):
     """
     Nhận ảnh CCCD (base64) → Preprocess → OCR → trích xuất thông tin + ảnh mặt.
     """
+    global _ocr_reader
+    if _ocr_reader is None:
+        load_ocr_model()
     if _ocr_reader is None:
         raise HTTPException(
             status_code=503,
-            detail="OCR model chưa được load. Thử lại sau.")
+            detail="Không thể tải mô hình OCR (hết bộ nhớ). Thử lại sau.")
 
     try:
         img = decode_base64_image(request.image_base64)
@@ -451,8 +458,11 @@ async def extract_cccd_debug(request: ExtractCccdRequest):
     Debug endpoint: trả về toàn bộ kết quả OCR thô kèm bbox.
     Dùng khi cần xem tại sao parse tên bị sai.
     """
+    global _ocr_reader
     if _ocr_reader is None:
-        raise HTTPException(status_code=503, detail="OCR model chưa load.")
+        load_ocr_model()
+    if _ocr_reader is None:
+        raise HTTPException(status_code=503, detail="Không thể tải mô hình OCR (hết bộ nhớ).")
     try:
         img = decode_base64_image(request.image_base64)
         img_processed = preprocess_for_ocr(img)

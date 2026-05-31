@@ -28,7 +28,7 @@ _face_app = None
 
 
 def load_face_model():
-    """Load InsightFace model (gọi 1 lần khi startup)."""
+    """Load InsightFace model."""
     global _face_app
     if _face_app is None:
         try:
@@ -36,9 +36,10 @@ def load_face_model():
             _face_app = FaceAnalysis(
                 name="buffalo_l",
                 providers=["CPUExecutionProvider"],
+                allowed_modules=["detection", "recognition"],
             )
             _face_app.prepare(ctx_id=-1, det_size=(640, 640))
-            logger.info("✅ InsightFace (buffalo_l) model đã load xong.")
+            logger.info("✅ InsightFace (buffalo_l) model đã load xong (chỉ detection & recognition).")
         except Exception as e:
             logger.error(f"❌ Không thể load InsightFace: {e}")
             _face_app = None
@@ -97,8 +98,11 @@ async def compare_faces(request: CompareFaceRequest):
     So sánh khuôn mặt selfie với ảnh mặt trong CCCD.
     Trả về similarity score và kết quả match.
     """
+    global _face_app
     if _face_app is None:
-        raise HTTPException(status_code=503, detail="Face model chưa được load. Thử lại sau.")
+        load_face_model()
+    if _face_app is None:
+        raise HTTPException(status_code=503, detail="Không thể tải mô hình so sánh khuôn mặt (hết bộ nhớ). Thử lại sau.")
 
     # Decode ảnh selfie
     try:

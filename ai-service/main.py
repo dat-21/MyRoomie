@@ -19,12 +19,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("🚀 Đang khởi động AI Service...")
-    # Load models khi startup để tránh cold start mỗi request
-    from routers.face import load_face_model
-    from routers.ocr import load_ocr_model
-    load_face_model()
-    load_ocr_model()
-    logger.info("✅ AI Service đã sẵn sàng!")
+    logger.info("✅ AI Service đã sẵn sàng (Mô hình sẽ tải động khi có yêu cầu)!")
     yield
     logger.info("🛑 AI Service đang tắt...")
 

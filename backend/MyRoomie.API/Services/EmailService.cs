@@ -18,12 +18,39 @@ public class EmailService : IEmailService
 
     public async Task SendOtpEmailAsync(string toEmail, string toName, string otpCode)
     {
-        var smtpHost = _config["Email:SmtpHost"] ?? "smtp.gmail.com";
-        var smtpPort = int.Parse(_config["Email:SmtpPort"] ?? "587");
-        var senderEmail = _config["Email:SenderEmail"]
+        var smtpHost = _config["Email:SmtpHost"];
+        if (string.IsNullOrWhiteSpace(smtpHost))
+        {
+            smtpHost = "smtp.gmail.com";
+        }
+        smtpHost = smtpHost.Trim();
+        if (smtpHost.Contains("://"))
+        {
+            try
+            {
+                var uri = new Uri(smtpHost);
+                smtpHost = uri.Host;
+            }
+            catch 
+            {
+                smtpHost = "smtp.gmail.com";
+            }
+        }
+
+        var smtpPortStr = _config["Email:SmtpPort"];
+        int smtpPort = 587;
+        if (!string.IsNullOrWhiteSpace(smtpPortStr))
+        {
+            if (!int.TryParse(smtpPortStr.Trim(), out smtpPort))
+            {
+                smtpPort = 587;
+            }
+        }
+
+        var senderEmail = _config["Email:SenderEmail"]?.Trim()
             ?? throw new InvalidOperationException("Email:SenderEmail not configured.");
         var senderName = _config["Email:SenderName"] ?? "My Roomie";
-        var appPassword = _config["Email:AppPassword"]
+        var appPassword = _config["Email:AppPassword"]?.Trim()
             ?? throw new InvalidOperationException("Email:AppPassword not configured.");
 
         var message = new MimeMessage();

@@ -1,3 +1,7 @@
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -18,6 +22,40 @@ public class EmailService : IEmailService
 
     public async Task SendOtpEmailAsync(string toEmail, string toName, string otpCode)
     {
+        var senderName = _config["Email:SenderName"] ?? "My Roomie";
+        var resendApiKey = _config["Email:ResendApiKey"]?.Trim();
+
+        if (!string.IsNullOrEmpty(resendApiKey))
+        {
+            // Gửi qua Resend REST API (Thích hợp cho Production trên Railway)
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resendApiKey);
+
+            var payload = new
+            {
+                from = $"{senderName} <onboarding@resend.dev>",
+                to = new[] { toEmail },
+                subject = $"[My Roomie] Mã xác thực OTP: {otpCode}",
+                html = BuildOtpEmailHtml(toName, otpCode)
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("https://api.resend.com/emails", content);
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("OTP email sent successfully via Resend API to {Email}", toEmail);
+                return;
+            }
+            else
+            {
+                var errorText = await response.Content.ReadAsStringAsync();
+                throw new InvalidOperationException($"Resend API error: {response.StatusCode} - {errorText}");
+            }
+        }
+
+        // --- Fallback sang SMTP (Dùng cho local dev hoặc khi không có ResendApiKey) ---
         var smtpHost = _config["Email:SmtpHost"];
         if (string.IsNullOrWhiteSpace(smtpHost))
         {
@@ -49,7 +87,6 @@ public class EmailService : IEmailService
 
         var senderEmail = _config["Email:SenderEmail"]?.Trim()
             ?? throw new InvalidOperationException("Email:SenderEmail not configured.");
-        var senderName = _config["Email:SenderName"] ?? "My Roomie";
         var appPassword = _config["Email:AppPassword"]?.Trim()
             ?? throw new InvalidOperationException("Email:AppPassword not configured.");
 
@@ -72,7 +109,7 @@ public class EmailService : IEmailService
             await client.ConnectAsync(smtpHost, smtpPort, socketOption);
             await client.AuthenticateAsync(senderEmail, appPassword);
             await client.SendAsync(message);
-            _logger.LogInformation("OTP email sent to {Email}", toEmail);
+            _logger.LogInformation("OTP email sent to {Email} via SMTP", toEmail);
         }
         finally
         {

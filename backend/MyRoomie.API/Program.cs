@@ -114,6 +114,13 @@ var aiServiceUrl = Environment.GetEnvironmentVariable("AI_SERVICE_URL")
     ?? builder.Configuration["AiService:BaseUrl"]
     ?? "http://localhost:8000";
 
+aiServiceUrl = aiServiceUrl.Trim();
+if (!aiServiceUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && 
+    !aiServiceUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+{
+    aiServiceUrl = "https://" + aiServiceUrl;
+}
+
 builder.Services.AddHttpClient("AiService", client =>
 {
     client.BaseAddress = new Uri(aiServiceUrl);

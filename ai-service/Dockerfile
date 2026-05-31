@@ -1,4 +1,4 @@
-# MyRoomie AI Service — Dockerfile
+# MyRoomie AI Service — Dockerfile (Bust cache to download models)
 # Dùng Python 3.11 slim để giảm kích thước image
 
 FROM python:3.11-slim

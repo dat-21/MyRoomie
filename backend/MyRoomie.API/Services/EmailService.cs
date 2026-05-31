@@ -24,10 +24,55 @@ public class EmailService : IEmailService
     {
         var senderName = _config["Email:SenderName"] ?? "My Roomie";
         var resendApiKey = _config["Email:ResendApiKey"]?.Trim();
+        var brevoApiKey = _config["Email:BrevoApiKey"]?.Trim();
+        var senderEmail = _config["Email:SenderEmail"]?.Trim();
 
+        // --- Gửi qua Brevo REST API (Thích hợp cho Production trên Railway) ---
+        if (!string.IsNullOrEmpty(brevoApiKey))
+        {
+            if (string.IsNullOrEmpty(senderEmail))
+            {
+                throw new InvalidOperationException("Email:SenderEmail must be configured to use Brevo API.");
+            }
+
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("accept", "application/json");
+            httpClient.DefaultRequestHeaders.Add("api-key", brevoApiKey);
+
+            var payload = new
+            {
+                sender = new
+                {
+                    name = senderName,
+                    email = senderEmail
+                },
+                to = new[]
+                {
+                    new { email = toEmail, name = toName }
+                },
+                subject = $"[My Roomie] Mã xác thực OTP: {otpCode}",
+                htmlContent = BuildOtpEmailHtml(toName, otpCode)
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            using var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("https://api.brevo.com/v3/smtp/email", content);
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("OTP email sent successfully via Brevo API to {Email}", toEmail);
+                return;
+            }
+            else
+            {
+                var errorText = await response.Content.ReadAsStringAsync();
+                throw new InvalidOperationException($"Brevo API error: {response.StatusCode} - {errorText}");
+            }
+        }
+
+        // --- Gửi qua Resend REST API (Thích hợp cho Production trên Railway) ---
         if (!string.IsNullOrEmpty(resendApiKey))
         {
-            // Gửi qua Resend REST API (Thích hợp cho Production trên Railway)
             using var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resendApiKey);
 
@@ -85,8 +130,10 @@ public class EmailService : IEmailService
             }
         }
 
-        var senderEmail = _config["Email:SenderEmail"]?.Trim()
-            ?? throw new InvalidOperationException("Email:SenderEmail not configured.");
+        if (string.IsNullOrEmpty(senderEmail))
+        {
+            throw new InvalidOperationException("Email:SenderEmail not configured.");
+        }
         var appPassword = _config["Email:AppPassword"]?.Trim()
             ?? throw new InvalidOperationException("Email:AppPassword not configured.");
 

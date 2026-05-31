@@ -44,18 +44,20 @@ FirestoreDb firestoreDb;
 
 if (!string.IsNullOrEmpty(serviceAccountJsonEnv))
 {
-    // Cloud deploy: đọc credentials từ env var (JSON string)
+    // Cloud deploy: đọc credentials trực tiếp từ env var (JSON string) mà không cần ghi file tạm
     using var jsonDoc = System.Text.Json.JsonDocument.Parse(serviceAccountJsonEnv);
     var projectIdFromJson = jsonDoc.RootElement.GetProperty("project_id").GetString()
         ?? firebaseProjectId;
 
-    // Ghi tạm ra file để GOOGLE_APPLICATION_CREDENTIALS có thể đọc
-    var tmpPath = Path.Combine(Path.GetTempPath(), "firebase-sa.json");
-    File.WriteAllText(tmpPath, serviceAccountJsonEnv);
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", tmpPath);
-    Environment.SetEnvironmentVariable("GOOGLE_CLOUD_PROJECT", projectIdFromJson);
+#pragma warning disable CS0618
+    var credential = Google.Apis.Auth.OAuth2.GoogleCredential.FromJson(serviceAccountJsonEnv);
+#pragma warning restore CS0618
+    firestoreDb = new FirestoreDbBuilder
+    {
+        ProjectId = projectIdFromJson,
+        Credential = credential
+    }.Build();
 
-    firestoreDb = FirestoreDb.Create(projectIdFromJson);
     Console.WriteLine($"[Firebase] Initialized from env var for project: {projectIdFromJson}");
 }
 else if (!string.IsNullOrEmpty(credentialPath) && File.Exists(credentialPath))

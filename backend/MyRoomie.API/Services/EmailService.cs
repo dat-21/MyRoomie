@@ -68,7 +68,8 @@ public class EmailService : IEmailService
         client.Timeout = 5000; // Giới hạn chờ 5 giây để tránh bị treo (loading) lâu nếu cổng SMTP bị chặn
         try
         {
-            await client.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+            var socketOption = smtpPort == 465 ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.StartTls;
+            await client.ConnectAsync(smtpHost, smtpPort, socketOption);
             await client.AuthenticateAsync(senderEmail, appPassword);
             await client.SendAsync(message);
             _logger.LogInformation("OTP email sent to {Email}", toEmail);

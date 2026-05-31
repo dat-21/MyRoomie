@@ -65,10 +65,8 @@ def preprocess_for_ocr(img: np.ndarray) -> np.ndarray:
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # Denoise
-    gray = cv2.fastNlMeansDenoising(gray, h=10,
-                                     templateWindowSize=7,
-                                     searchWindowSize=21)
+    # Denoise (Dùng GaussianBlur siêu nhẹ thay cho fastNlMeansDenoising cực kỳ nặng CPU)
+    gray = cv2.GaussianBlur(gray, (3, 3), 0)
 
     # CLAHE (tăng tương phản)
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))

@@ -37,9 +37,10 @@ def load_face_model():
                 name="buffalo_l",
                 providers=["CPUExecutionProvider"],
                 allowed_modules=["detection", "recognition"],
+                root="/app/models",
             )
             _face_app.prepare(ctx_id=-1, det_size=(640, 640))
-            logger.info("✅ InsightFace (buffalo_l) model đã load xong (chỉ detection & recognition).")
+            logger.info("✅ InsightFace (buffalo_l) model đã load xong (chỉ detection & recognition từ /app/models).")
         except Exception as e:
             logger.error(f"❌ Không thể load InsightFace: {e}")
             _face_app = None

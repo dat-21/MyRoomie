@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Tải sẵn mô hình AI InsightFace (chỉ nạp các modules cần thiết) để cache vào Docker image
-RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_l', allowed_modules=['detection', 'recognition']); app.prepare(ctx_id=-1)"
+RUN python -c "from insightface.app import FaceAnalysis; app = FaceAnalysis(name='buffalo_l', root='/app/models', allowed_modules=['detection', 'recognition']); app.prepare(ctx_id=-1)"
 
 # Copy source code
 COPY . .
